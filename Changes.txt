@@ -1,3 +1,12 @@
+Changes from AlgoRhythmia Version 3 to 4:
+
+1) Replaced the DirectMusic sound generation engine with XAudio2. DirectMusic
+is no longer supported by Microsoft and does not work on 64-bit systems. 
+AlgoRhythmia 4 now works on 64-bit Windows.
+2) User interface was modified to properly handle the 125% zoom level on Windows 
+7 and Vista.
+3) Added more samples to the full version.
+
 Changes version 2 to 3:
 
 1) Added Fibonacci, Sierpinski, and Sierpinski inverted to base pattern list.
@@ -10,7 +19,8 @@ Changes version 2 to 3:
 8) *Added 58 samples recorded from the Yamaha TG-55 tone generator.
 9) Now accepts mutation rate values of 0.
 10)*Added ability to save to MIDI.
-11)*Added 8 different effect types: Chorus, compression, distortion, echo, flange, gargle, parameteric eq, and reverb
+11)*Added 8 different effect types: Chorus, compression, distortion, echo, flange, 
+gargle, parameteric eq, and reverb
 
 Changes version 1 to 2:
 
