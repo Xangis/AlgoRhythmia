@@ -23,7 +23,7 @@
 #define INITGUID
 #include <XAudio2.h>
 #endif
-#include "../AudioFile/wavefile.h"
+#include "wavefile.h"
 
 #define ID_ALGORHYTHMIA_DIALOG 11000
 #define SYMBOL_ALGORHYTHMIA_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX

@@ -1,8 +1,15 @@
-# Compiled Object files
+# Compiled Object files and Intermediate Files
 *.slo
 *.lo
 *.o
 *.obj
+*.tlog
+*.pdb
+*.idb
+*.log
+*.lastbuildstate
+*.unsuccessfulbuild
+*.user
 
 # Precompiled Headers
 *.gch

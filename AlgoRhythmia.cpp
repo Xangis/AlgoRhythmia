@@ -2867,8 +2867,6 @@ void AlgoRhythmia::OnCloseWindow( wxCloseEvent& event )
 	Sleep(40);
 	wxThread::Pause();
 	Sleep(10);
-	//Delete();
-	//Wait();
     Destroy();
     event.Skip();
 }
@@ -2930,37 +2928,29 @@ void AlgoRhythmia::LoadPattern( wxString& filename )
 	int count;
 	for( count = 0; count < DRUM_MAX; count++ )
 	{
-		_drumControl[count]->_drumOn = atoi(_configData->GetValue( wxString::Format(_("/drumcontrol%d/drumon"), count ) ).mb_str());
+		_drumControl[count]->_drumOn = atoi(_configData->GetValue( wxString::Format(_("drumcontrol%d/drumon"), count ) ).mb_str());
 		_drumControl[count]->_onButton->SetValue( _drumControl[count]->_drumOn );
 		_drumControl[count]->_offButton->SetValue( !_drumControl[count]->_drumOn );
-		_drumControl[count]->_sampleOn = atoi(_configData->GetValue( wxString::Format(_("/drumcontrol%d/sampleon"), count ) ).mb_str());
+		_drumControl[count]->_sampleOn = atoi(_configData->GetValue( wxString::Format(_("drumcontrol%d/sampleon"), count ) ).mb_str());
 		_drumControl[count]->_chkOn->SetValue( _drumControl[count]->_sampleOn );
-		_drumControl[count]->_drumNote = atoi(_configData->GetValue( wxString::Format(_("/drumcontrol%d/drumnote"), count ) ).mb_str());
-		value = atoi(_configData->GetValue( wxString::Format(_("/drumcontrol%d/drumselection"), count ) ).mb_str());
+		_drumControl[count]->_drumNote = atoi(_configData->GetValue( wxString::Format(_("drumcontrol%d/drumnote"), count ) ).mb_str());
+		value = atoi(_configData->GetValue( wxString::Format(_("drumcontrol%d/drumselection"), count ) ).mb_str());
 		_drumControl[count]->_drumSelection->SetSelection( value );
 		wxString name;
-		name = _configData->GetValue( wxString::Format(_("/drumcontrol%d/samplename"), count ) );
+		name = _configData->GetValue( wxString::Format(_("drumcontrol%d/samplename"), count ) );
 		_drumControl[count]->_sampleName->SetValue( name );
-		name = _configData->GetValue( wxString::Format(_("/drumcontrol%d/avgdensity"), count ) );
+		name = _configData->GetValue( wxString::Format(_("drumcontrol%d/avgdensity"), count ) );
 		_drumControl[count]->_avgDensity->SetStringSelection( name );
-		value = atoi(_configData->GetValue( wxString::Format(_("/drumcontrol%d/densityselection"), count ) ).mb_str());
+		value = atoi(_configData->GetValue( wxString::Format(_("drumcontrol%d/densityselection"), count ) ).mb_str());
 		_drumControl[count]->_avgDensity->SetSelection( value );
 		int note;
 		for ( note = 0; note < MAX_PATTERN_SIZE; note++ )
 		{
-           bool state = atoi(_configData->GetValue( wxString::Format(_("/drumcontrol%d/notedata/%d"), count, note )).mb_str());
+           bool state = atoi(_configData->GetValue( wxString::Format(_("drumcontrol%d/notedata/%d"), count, note )).mb_str());
 		   _drumControl[count]->_noteData[note] = state;
 		}
-		// Store effects settings.
-		//_drumControl[count]->_fxManager->ReadConfigurationSettings( count, _configData );
 		int fxnum;
 		bool state;
-		//for( fxnum = 0; fxnum < EFFECT_MAX; fxnum++ )
-		//{
-		//	state = atoi(_configData->getValue( wxString::Format( "/drumcontrol%d/fx%denabled", count, fxnum )));
-		//	//_drumControl[count]->_fxDialog->EnableEffect( fxnum, state );
-		//}
-		//_drumControl[count]->_fxDialog->RefreshSettings();
 	}
 	_mutex.Unlock();
 	if( _measureEditDlg != NULL )
@@ -3009,31 +2999,20 @@ void AlgoRhythmia::SavePattern( wxString& filename )
 	int count;
 	for( count = 0; count < DRUM_MAX; count++ )
 	{
-		_configData->SetValue( wxString::Format(_("/drumcontrol%d/drumon"), count ), wxString::Format( _("%d"), _drumControl[count]->_drumOn ));
-		_configData->SetValue( wxString::Format(_("/drumcontrol%d/sampleon"), count ), wxString::Format( _("%d"), _drumControl[count]->_sampleOn )); 
-		_configData->SetValue( wxString::Format(_("/drumcontrol%d/drumnote"), count ), wxString::Format( _("%d"), _drumControl[count]->_drumNote ));
-		_configData->SetValue( wxString::Format(_("/drumcontrol%d/drumselection"), count ), wxString::Format( _("%d"), _drumControl[count]->_drumSelection->GetSelection() ));
-		_configData->SetValue( wxString::Format(_("/drumcontrol%d/samplename"), count ), _drumControl[count]->_sampleName->GetValue() );
-		_configData->SetValue( wxString::Format(_("/drumcontrol%d/avgdensity"), count ), _drumControl[count]->_avgDensity->GetStringSelection() );
-		_configData->SetValue( wxString::Format(_("/drumcontrol%d/densityselection"), count ), wxString::Format( _("%d"), _drumControl[count]->_avgDensity->GetSelection() ));
+		_configData->SetValue( wxString::Format(_("drumcontrol%d/drumon"), count ), wxString::Format( _("%d"), _drumControl[count]->_drumOn ));
+		_configData->SetValue( wxString::Format(_("drumcontrol%d/sampleon"), count ), wxString::Format( _("%d"), _drumControl[count]->_sampleOn )); 
+		_configData->SetValue( wxString::Format(_("drumcontrol%d/drumnote"), count ), wxString::Format( _("%d"), _drumControl[count]->_drumNote ));
+		_configData->SetValue( wxString::Format(_("drumcontrol%d/drumselection"), count ), wxString::Format( _("%d"), _drumControl[count]->_drumSelection->GetSelection() ));
+		_configData->SetValue( wxString::Format(_("drumcontrol%d/samplename"), count ), _drumControl[count]->_sampleName->GetValue() );
+		_configData->SetValue( wxString::Format(_("drumcontrol%d/avgdensity"), count ), _drumControl[count]->_avgDensity->GetStringSelection() );
+		_configData->SetValue( wxString::Format(_("drumcontrol%d/densityselection"), count ), wxString::Format( _("%d"), _drumControl[count]->_avgDensity->GetSelection() ));
 		int note;
 		for ( note = 0; note < MAX_PATTERN_SIZE; note++ )
 		{
-			_configData->SetValue( wxString::Format(_("/drumcontrol%d/notedata/%d"), count, note ),
+			_configData->SetValue( wxString::Format(_("drumcontrol%d/notedata/%d"), count, note ),
 				wxString::Format( _("%d"), _drumControl[count]->_noteData[note] ) );
 		}
-		// Store effects settings.
-		//_drumControl[count]->_fxManager->WriteConfigurationSettings( count, _configData );
 		int fxnum;
-		//for( fxnum = 0; fxnum < EFFECT_MAX; fxnum++ )
-		//{
-  //          bool effectState = false;
-  //          //if( _drumControl[count]->_fxDialog != NULL )
-  //          //{
-  //          //    effectState = _drumControl[count]->_fxDialog->IsEffectEnabled(fxnum);
-  //          //}
-		//	_configData->setValue( wxString::Format( "/drumcontrol%d/fx%denabled", count, fxnum ), wxString::Format( "%d", effectState ));
-		//}
 	}
 	_mutex.Unlock();
     if( !_configData->Save( filename.c_str() ))

@@ -26,7 +26,15 @@ download site to download or update the DirectX redistributable.
 
 A prebuilt installer for Windows is available in the installer folder.
 
-No samples are included in this project. Your best source of free .wav samples is 
-http://freewavesamples.com and that's where all of the original samples came from.
-However, that site has far more samples than were ever included in AlgoRhythmia
-thanks massive growth of the sample library in 2015.
+76 royalty-free samples created by me are included in this project. Your best source 
+of free .wav samples is http://freewavesamples.com and that's where all of the 
+original samples came from. However, that site has far more samples than were ever 
+included in AlgoRhythmia thanks massive growth of the free sample library in 2015.
+
+## Problems
+
+The app does not currently build. There are some missing files that need to be tracked
+down.
+
+In the installer version, saving and loading of data files does not currently work. 
+The app uses XML files to save and load data, but they aren't written correctly.
