@@ -1,0 +1,4 @@
+TODO:
+
+Test to see that a pattern loads exactly as it has been saved.
+   

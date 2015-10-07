@@ -1,0 +1,29 @@
+Changes version 2 to 3:
+
+1) Added Fibonacci, Sierpinski, and Sierpinski inverted to base pattern list.
+2) Converted application to use wxWidgets.
+3) Kick sample (first sample) also plays when 'kick on first beat' is selected.
+4) *Added save and load of settings.
+5) *Added ability to edit individual drum notes on a grid.
+6) Added swing setting.
+7) Added volume setting for individual samples which affects both MIDI and sample volume.
+8) *Added 58 samples recorded from the Yamaha TG-55 tone generator.
+9) Now accepts mutation rate values of 0.
+10)*Added ability to save to MIDI.
+11)*Added 8 different effect types: Chorus, compression, distortion, echo, flange, gargle, parameteric eq, and reverb
+
+Changes version 1 to 2:
+
+1) Added invert buttons.
+2) Changed from fixed drum sounds to user-selectable drum sounds.
+3) Switched to a multithreaded model so that changes could be made
+to settings without causing playback to stop or stutter.
+4) Added sample playback.
+5) Added ability to select MIDI channel and device.
+6) Added mutation every X bars.
+7) Added display and hand-editing of pattern data.
+8) Added ability to vary volume to make pattern sound vaguely more "Human".
+9) Added "emphasize beats" option to emphasize the one beat of each measure.
+   Technically it actually de-emphasizes every other beat.
+10) Added base patterns so that drum beats could be initialized with "normal"
+   sounding beats and tweaked from there.
