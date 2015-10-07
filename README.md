@@ -5,11 +5,11 @@ evolving beats. It was originally available at http://zetacentauri.com
 
 Main Window:
 
-https://github.com/Xangis/AlgoRhythmia/blob/master/images/AlgoRhythmia4.png
+![AlgoRhythmia Screenshot](https://github.com/Xangis/AlgoRhythmia/blob/master/images/AlgoRhythmia4.png)
 
 Pattern Editor:
 
-https://github.com/Xangis/AlgoRhythmia/blob/master/images/AlgoRhythmia4DrumGrid.png
+![AlgoRhythmia Drum Grid](https://github.com/Xangis/AlgoRhythmia/blob/master/images/AlgoRhythmia4DrumGrid.png)
 
 It is an 8-channel drum machine and beat generator. It supports .wav sample playback 
 and MIDI. It generates patterns up to 4 measures long in any of six time signatures 
