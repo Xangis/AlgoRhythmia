@@ -1,6 +1,8 @@
 # Sigmatizm makefile.  Requires wxWidgets.
-# Uses wxWidgets 2.8, non-unicode build. (--disable-unicode)
-WX_CONFIG := /usr/bin/wx-config
+# Uses wxWidgets 3.0
+# wx-config must be on the path. If it's not, change wx-config to wherever it is,
+# such as /usr/local/wx/wx-config
+WX_CONFIG := wx-config
 
 # Main executable file
 PROGRAM = AlgoRhythmia

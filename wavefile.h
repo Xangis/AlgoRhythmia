@@ -1,8 +1,9 @@
 #pragma once
 
+// If this fails, get libsndfile-dev (or whatever the windows equivalent is)
 #include "sndfile.h"
 #include "wx/wx.h"
-#ifdef linux
+#ifndef linux
 #include <audiodefs.h>
 #include <xaudio2.h>
 #endif
