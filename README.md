@@ -31,10 +31,18 @@ of free .wav samples is http://freewavesamples.com and that's where all of the
 original samples came from. However, that site has far more samples than were ever 
 included in AlgoRhythmia thanks massive growth of the free sample library in 2015.
 
+# Requirements
+
+This requires wxWidgets 2.8 or newer (preferably 3.0), libportaudio-dev, libasound2-dev,
+and libsndfile-dev.
+
 ## Problems
 
-The app does not currently build. There are some missing files that need to be tracked
-down.
+On Windows, the app does not currently build. There are some missing files that need to
+be tracked down.
+
+On Linux, the app builds, but does not produce any sound. That's because the Windows uses
+XAudio2 and the Linux version doesn't have a replacement (that code is just commented out).
 
 In the installer version, saving and loading of data files does not currently work. 
 The app uses XML files to save and load data, but they aren't written correctly.
