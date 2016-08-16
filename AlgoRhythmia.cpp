@@ -283,7 +283,13 @@ bool AlgoRhythmia::Create( wxWindow* parent, wxWindowID id, const wxString& capt
 			delete pLoader;
 			pLoader = NULL;
 		}
-		pLoader = WaveFile::Load(filenames[count].mb_str(), false);
+		pLoader = WaveFile::Load(filenames[count].mb_str(), true);
+
+		if( !pLoader )
+		{
+			wxMessageBox(filenames[count], _("File not found"));
+			continue;
+		}
 
 #ifdef WIN32
 		if( FAILED(hr = pXAudio2->CreateSourceVoice( &pSourceVoice[count], pLoader->GetWaveFormatEx(),
@@ -2698,8 +2704,11 @@ void AlgoRhythmia::OnStopClick( wxCommandEvent& event )
 #ifdef WIN32
 	for( int i = 0; i < DRUM_MAX; i++ )
 	{
-		pSourceVoice[i]->Stop();
-		pSourceVoice[i]->FlushSourceBuffers();
+		if( pSourceVoice[i] != NULL )
+		{
+			pSourceVoice[i]->Stop();
+			pSourceVoice[i]->FlushSourceBuffers();
+		}
 	}
 	// Make sure all notes are off.
 	midiOutShortMsg(_outHandle, 0x00007BB0);

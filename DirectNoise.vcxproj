@@ -74,8 +74,8 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules />
     <CodeAnalysisRuleAssemblies />
-    <LibraryPath>E:\code\wxAudioControls\Release;E:\code\wxWidgets-3.0.2\lib\vc_lib;E:\code\libsndfile-1.0.25\lib;$(LibraryPath);$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
-    <IncludePath>E:\code\libsndfile-1.0.25\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;E:\code\wxWidgets-3.0.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Xangis\code\AudioFile;C:\Users\Xangis\code\wxAudioControls\Debug;F:\lib\wxWidgets-3.0.2\lib\vc_lib;F:\lib\libsndfile-1.0.25\lib;$(LibraryPath);$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
+    <IncludePath>C:\Users\Xangis\code\AudioFile;F:\lib\libsndfile-1.0.25\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;F:\lib\wxWidgets-3.0.2\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>Release\</OutDir>
@@ -84,8 +84,8 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules />
     <CodeAnalysisRuleAssemblies />
-    <IncludePath>E:\code\libsndfile-1.0.25\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;E:\code\wxWidgets-3.0.2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\code\wxAudioControls\Release;E:\code\wxWidgets-3.0.2\lib\vc_lib;E:\code\libsndfile-1.0.25\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Xangis\code\AudioFile;F:\lib\libsndfile-1.0.25\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;F:\lib\wxWidgets-3.0.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Xangis\code\AudioFile;C:\Users\Xangis\code\wxAudioControls\Release;F:\lib\wxWidgets-3.0.2\lib\vc_lib;F:\lib\libsndfile-1.0.25\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Demo Release|Win32'">
     <OutDir>$(Configuration)\</OutDir>
@@ -116,7 +116,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>winmm.lib;wxmsw30ud_core.lib;wxmsw30ud_adv.lib;wxbase30u_dxml.lib;wxbase30ud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comctl32.lib;rpcrt4.lib;wxtiff.lib;wxpng.lib;wxjpeg.lib;wxzlib.lib;AudioFile.lib;libsndfile-1.lib;wxAudioControls.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;wxmsw30ud_core.lib;wxmsw30ud_adv.lib;wxbase30ud_xml.lib;wxbase30ud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comctl32.lib;rpcrt4.lib;wxtiff.lib;wxpng.lib;wxjpeg.lib;wxzlib.lib;AudioFiled.lib;libsndfile-1.lib;wxAudioControlsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)AlgoRhythmia.exe</OutputFile>
       <AdditionalLibraryDirectories>F:\Zeta Centauri\trunk\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -209,7 +209,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Demo Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="wavefile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AboutDlg.h" />
@@ -221,7 +220,6 @@
     <ClInclude Include="Iterator.h" />
     <ClInclude Include="SoundFxManager.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="wavefile.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="algo.ico" />
