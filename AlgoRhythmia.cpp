@@ -365,6 +365,76 @@ void AlgoRhythmia::CreateControls()
 		_drumControl[count] = new DrumControl;
 	}
 
+    wxString midiNoteChoices[] = {
+        _("Bass Drum 1"),
+        _("Acoustic Kick"),
+        _("Acoustic Snare"),
+        _("Electric Snare"),
+        _("Closed Hi-Hat"),
+        _("Pedal Hi-Hat"),
+        _("Open Hi-Hat"),
+        _("Crash Cymbal"),
+        _("Crash Cymbal 2"),
+        _("Ride Cymbal"),
+        _("Ride Cymbal 2"),
+        _("Splash Cymbal"),
+        _("Chinese Cymbal"),
+        _("Ride Bell"),
+        _("Low Floor Tom"),
+        _("High Floor Tom"),
+        _("Low Tom"),
+        _("Low-Mid Tom"),
+        _("High-Mid Tom"),
+        _("High Tom"),
+        _("Low Bongo"),
+        _("High Bongo"),
+        _("Mute High Conga"),
+        _("Open High Conga"),
+        _("High Timbale"),
+        _("Low Timbale"),
+        _("High Agogo"),
+        _("Low Agogo"),
+        _("Casaba"),
+        _("Maracas"),
+        _("Short Whistle"),
+        _("Long Whistle"),
+        _("Short Guiro"),
+        _("Long Guiro"),
+        _("Claves"),
+        _("High Wood Block"),
+        _("Low Wood Block"),
+        _("Mute Cuica"),
+        _("Open Cuica"),
+        _("Mute Triangle"),
+        _("Open Triangle"),
+        _("Side Stick"),
+        _("Hand Clap"),
+        _("Tambourine"),
+        _("Cowbell"),
+        _("Vibraslap")
+    };
+
+    wxString drumDensityChoices[] = {
+        _("0.040"),
+        _("0.050"),
+        _("0.063"),
+        _("0.083"),
+        _("0.091"),
+        _("0.100"),
+        _("0.111"),
+        _("0.125"),
+        _("0.166"),
+        _("0.200"),
+        _("0.250"),
+        _("0.333"),
+        _("0.400"),
+        _("0.500"),
+        _("0.666"),
+        _("0.750"),
+        _("0.800"),
+        _("1.000")
+    };
+
     wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxVERTICAL);
     itemDialog1->SetSizer(itemBoxSizer2);
 
@@ -422,79 +492,11 @@ void AlgoRhythmia::CreateControls()
     _drumControl[0]->_offButton->SetValue(false);
     itemBoxSizer14->Add(_drumControl[0]->_offButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    wxString itemChoice17Strings[] = {
-        _("Bass Drum 1"),
-        _("Acoustic Kick"),
-        _("Acoustic Snare"),
-        _("Electric Snare"),
-        _("Closed Hi-Hat"),
-        _("Pedal Hi-Hat"),
-        _("Open Hi-Hat"),
-        _("Crash Cymbal"),
-        _("Crash Cymbal 2"),
-        _("Ride Cymbal"),
-        _("Ride Cymbal 2"),
-        _("Splash Cymbal"),
-        _("Chinese Cymbal"),
-        _("Ride Bell"),
-        _("Low Floor Tom"),
-        _("High Floor Tom"),
-        _("Low Tom"),
-        _("Low-Mid Tom"),
-        _("High-Mid Tom"),
-        _("High Tom"),
-        _("Low Bongo"),
-        _("High Bongo"),
-        _("Mute High Conga"),
-        _("Open High Conga"),
-        _("High Timbale"),
-        _("Low Timbale"),
-        _("High Agogo"),
-        _("Low Agogo"),
-        _("Casaba"),
-        _("Maracas"),
-        _("Short Whistle"),
-        _("Long Whistle"),
-        _("Short Guiro"),
-        _("Long Guiro"),
-        _("Claves"),
-        _("High Wood Block"),
-        _("Low Wood Block"),
-        _("Mute Cuica"),
-        _("Open Cuica"),
-        _("Mute Triangle"),
-        _("Open Triangle"),
-        _("Side Stick"),
-        _("Hand Clap"),
-        _("Tambourine"),
-        _("Cowbell"),
-        _("Vibraslap")
-    };
-    _drumControl[0]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO1, wxDefaultPosition, wxSize( 132, 20 ), 46, itemChoice17Strings, 0 );
+    _drumControl[0]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO1, wxDefaultPosition, wxSize( 132, 20 ), 46, midiNoteChoices, 0 );
     _drumControl[0]->_drumSelection->SetStringSelection(_("Bass Drum 1"));
     itemFlexGridSizer4->Add(_drumControl[0]->_drumSelection, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    wxString itemChoice18Strings[] = {
-        _("0.040"),
-        _("0.050"),
-        _("0.063"),
-        _("0.083"),
-        _("0.091"),
-        _("0.100"),
-        _("0.111"),
-        _("0.125"),
-        _("0.166"),
-        _("0.200"),
-        _("0.250"),
-        _("0.333"),
-        _("0.400"),
-        _("0.500"),
-        _("0.666"),
-        _("0.750"),
-        _("0.800"),
-        _("1.000")
-    };
-    _drumControl[0]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY1, wxDefaultPosition, wxSize(68, 20), 17, itemChoice18Strings, 0 );
+    _drumControl[0]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY1, wxDefaultPosition, wxSize(68, 20), 17, drumDensityChoices, 0 );
     _drumControl[0]->_avgDensity->SetStringSelection(_("0.250"));
     itemFlexGridSizer4->Add(_drumControl[0]->_avgDensity, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
@@ -537,79 +539,11 @@ void AlgoRhythmia::CreateControls()
     _drumControl[1]->_offButton->SetValue(false);
     itemBoxSizer25->Add(_drumControl[1]->_offButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    wxString itemChoice28Strings[] = {
-        _("Bass Drum 1"),
-        _("Acoustic Kick"),
-        _("Acoustic Snare"),
-        _("Electric Snare"),
-        _("Closed Hi-Hat"),
-        _("Pedal Hi-Hat"),
-        _("Open Hi-Hat"),
-        _("Crash Cymbal"),
-        _("Crash Cymbal 2"),
-        _("Ride Cymbal"),
-        _("Ride Cymbal 2"),
-        _("Splash Cymbal"),
-        _("Chinese Cymbal"),
-        _("Ride Bell"),
-        _("Low Floor Tom"),
-        _("High Floor Tom"),
-        _("Low Tom"),
-        _("Low-Mid Tom"),
-        _("High-Mid Tom"),
-        _("High Tom"),
-        _("Low Bongo"),
-        _("High Bongo"),
-        _("Mute High Conga"),
-        _("Open High Conga"),
-        _("High Timbale"),
-        _("Low Timbale"),
-        _("High Agogo"),
-        _("Low Agogo"),
-        _("Casaba"),
-        _("Maracas"),
-        _("Short Whistle"),
-        _("Long Whistle"),
-        _("Short Guiro"),
-        _("Long Guiro"),
-        _("Claves"),
-        _("High Wood Block"),
-        _("Low Wood Block"),
-        _("Mute Cuica"),
-        _("Open Cuica"),
-        _("Mute Triangle"),
-        _("Open Triangle"),
-        _("Side Stick"),
-        _("Hand Clap"),
-        _("Tambourine"),
-        _("Cowbell"),
-        _("Vibraslap")
-    };
-    _drumControl[1]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO2, wxDefaultPosition, wxSize( 132, 20 ), 46, itemChoice28Strings, 0 );
+    _drumControl[1]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO2, wxDefaultPosition, wxSize( 132, 20 ), 46, midiNoteChoices, 0 );
     _drumControl[1]->_drumSelection->SetStringSelection(_("Acoustic Snare"));
     itemFlexGridSizer4->Add(_drumControl[1]->_drumSelection, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    wxString itemChoice29Strings[] = {
-        _("0.040"),
-        _("0.050"),
-        _("0.063"),
-        _("0.083"),
-        _("0.091"),
-        _("0.100"),
-        _("0.111"),
-        _("0.125"),
-        _("0.166"),
-        _("0.200"),
-        _("0.250"),
-        _("0.333"),
-        _("0.400"),
-        _("0.500"),
-        _("0.666"),
-        _("0.750"),
-        _("0.800"),
-        _("1.000")
-    };
-    _drumControl[1]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY2, wxDefaultPosition, wxSize(68, 20), 17, itemChoice29Strings, 0 );
+    _drumControl[1]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY2, wxDefaultPosition, wxSize(68, 20), 17, drumDensityChoices, 0 );
     _drumControl[1]->_avgDensity->SetStringSelection(_("0.333"));
     itemFlexGridSizer4->Add(_drumControl[1]->_avgDensity, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
@@ -652,79 +586,11 @@ void AlgoRhythmia::CreateControls()
     _drumControl[2]->_offButton->SetValue(false);
     itemBoxSizer36->Add(_drumControl[2]->_offButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    wxString itemChoice39Strings[] = {
-        _("Bass Drum 1"),
-        _("Acoustic Kick"),
-        _("Acoustic Snare"),
-        _("Electric Snare"),
-        _("Closed Hi-Hat"),
-        _("Pedal Hi-Hat"),
-        _("Open Hi-Hat"),
-        _("Crash Cymbal"),
-        _("Crash Cymbal 2"),
-        _("Ride Cymbal"),
-        _("Ride Cymbal 2"),
-        _("Splash Cymbal"),
-        _("Chinese Cymbal"),
-        _("Ride Bell"),
-        _("Low Floor Tom"),
-        _("High Floor Tom"),
-        _("Low Tom"),
-        _("Low-Mid Tom"),
-        _("High-Mid Tom"),
-        _("High Tom"),
-        _("Low Bongo"),
-        _("High Bongo"),
-        _("Mute High Conga"),
-        _("Open High Conga"),
-        _("High Timbale"),
-        _("Low Timbale"),
-        _("High Agogo"),
-        _("Low Agogo"),
-        _("Casaba"),
-        _("Maracas"),
-        _("Short Whistle"),
-        _("Long Whistle"),
-        _("Short Guiro"),
-        _("Long Guiro"),
-        _("Claves"),
-        _("High Wood Block"),
-        _("Low Wood Block"),
-        _("Mute Cuica"),
-        _("Open Cuica"),
-        _("Mute Triangle"),
-        _("Open Triangle"),
-        _("Side Stick"),
-        _("Hand Clap"),
-        _("Tambourine"),
-        _("Cowbell"),
-        _("Vibraslap")
-    };
-    _drumControl[2]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO3, wxDefaultPosition, wxSize( 132, 20 ), 46, itemChoice39Strings, 0 );
+    _drumControl[2]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO3, wxDefaultPosition, wxSize( 132, 20 ), 46, midiNoteChoices, 0 );
     _drumControl[2]->_drumSelection->SetStringSelection(_("Closed Hi-Hat"));
     itemFlexGridSizer4->Add(_drumControl[2]->_drumSelection, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    wxString itemChoice40Strings[] = {
-        _("0.040"),
-        _("0.050"),
-        _("0.063"),
-        _("0.083"),
-        _("0.091"),
-        _("0.100"),
-        _("0.111"),
-        _("0.125"),
-        _("0.166"),
-        _("0.200"),
-        _("0.250"),
-        _("0.333"),
-        _("0.400"),
-        _("0.500"),
-        _("0.666"),
-        _("0.750"),
-        _("0.800"),
-        _("1.000")
-    };
-    _drumControl[2]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY3, wxDefaultPosition, wxSize(68, 20), 17, itemChoice40Strings, 0 );
+    _drumControl[2]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY3, wxDefaultPosition, wxSize(68, 20), 17, drumDensityChoices, 0 );
     _drumControl[2]->_avgDensity->SetStringSelection(_("0.750"));
     itemFlexGridSizer4->Add(_drumControl[2]->_avgDensity, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
@@ -767,79 +633,11 @@ void AlgoRhythmia::CreateControls()
     _drumControl[3]->_offButton->SetValue(false);
     itemBoxSizer47->Add(_drumControl[3]->_offButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    wxString itemChoice50Strings[] = {
-        _("Bass Drum 1"),
-        _("Acoustic Kick"),
-        _("Acoustic Snare"),
-        _("Electric Snare"),
-        _("Closed Hi-Hat"),
-        _("Pedal Hi-Hat"),
-        _("Open Hi-Hat"),
-        _("Crash Cymbal"),
-        _("Crash Cymbal 2"),
-        _("Ride Cymbal"),
-        _("Ride Cymbal 2"),
-        _("Splash Cymbal"),
-        _("Chinese Cymbal"),
-        _("Ride Bell"),
-        _("Low Floor Tom"),
-        _("High Floor Tom"),
-        _("Low Tom"),
-        _("Low-Mid Tom"),
-        _("High-Mid Tom"),
-        _("High Tom"),
-        _("Low Bongo"),
-        _("High Bongo"),
-        _("Mute High Conga"),
-        _("Open High Conga"),
-        _("High Timbale"),
-        _("Low Timbale"),
-        _("High Agogo"),
-        _("Low Agogo"),
-        _("Casaba"),
-        _("Maracas"),
-        _("Short Whistle"),
-        _("Long Whistle"),
-        _("Short Guiro"),
-        _("Long Guiro"),
-        _("Claves"),
-        _("High Wood Block"),
-        _("Low Wood Block"),
-        _("Mute Cuica"),
-        _("Open Cuica"),
-        _("Mute Triangle"),
-        _("Open Triangle"),
-        _("Side Stick"),
-        _("Hand Clap"),
-        _("Tambourine"),
-        _("Cowbell"),
-        _("Vibraslap")
-    };
-    _drumControl[3]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO4, wxDefaultPosition, wxSize( 132, 20 ), 46, itemChoice50Strings, 0 );
+    _drumControl[3]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO4, wxDefaultPosition, wxSize( 132, 20 ), 46, midiNoteChoices, 0 );
     _drumControl[3]->_drumSelection->SetStringSelection(_("Open Hi-Hat"));
     itemFlexGridSizer4->Add(_drumControl[3]->_drumSelection, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    wxString itemChoice51Strings[] = {
-        _("0.040"),
-        _("0.050"),
-        _("0.063"),
-        _("0.083"),
-        _("0.091"),
-        _("0.100"),
-        _("0.111"),
-        _("0.125"),
-        _("0.166"),
-        _("0.200"),
-        _("0.250"),
-        _("0.333"),
-        _("0.400"),
-        _("0.500"),
-        _("0.666"),
-        _("0.750"),
-        _("0.800"),
-        _("1.000")
-    };
-    _drumControl[3]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY4, wxDefaultPosition, wxSize(68, 20), 17, itemChoice51Strings, 0 );
+    _drumControl[3]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY4, wxDefaultPosition, wxSize(68, 20), 17, drumDensityChoices, 0 );
     _drumControl[3]->_avgDensity->SetStringSelection(_("0.125"));
     itemFlexGridSizer4->Add(_drumControl[3]->_avgDensity, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
@@ -882,79 +680,11 @@ void AlgoRhythmia::CreateControls()
     _drumControl[4]->_offButton->SetValue(false);
     itemBoxSizer58->Add(_drumControl[4]->_offButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    wxString itemChoice61Strings[] = {
-        _("Bass Drum 1"),
-        _("Acoustic Kick"),
-        _("Acoustic Snare"),
-        _("Electric Snare"),
-        _("Closed Hi-Hat"),
-        _("Pedal Hi-Hat"),
-        _("Open Hi-Hat"),
-        _("Crash Cymbal"),
-        _("Crash Cymbal 2"),
-        _("Ride Cymbal"),
-        _("Ride Cymbal 2"),
-        _("Splash Cymbal"),
-        _("Chinese Cymbal"),
-        _("Ride Bell"),
-        _("Low Floor Tom"),
-        _("High Floor Tom"),
-        _("Low Tom"),
-        _("Low-Mid Tom"),
-        _("High-Mid Tom"),
-        _("High Tom"),
-        _("Low Bongo"),
-        _("High Bongo"),
-        _("Mute High Conga"),
-        _("Open High Conga"),
-        _("High Timbale"),
-        _("Low Timbale"),
-        _("High Agogo"),
-        _("Low Agogo"),
-        _("Casaba"),
-        _("Maracas"),
-        _("Short Whistle"),
-        _("Long Whistle"),
-        _("Short Guiro"),
-        _("Long Guiro"),
-        _("Claves"),
-        _("High Wood Block"),
-        _("Low Wood Block"),
-        _("Mute Cuica"),
-        _("Open Cuica"),
-        _("Mute Triangle"),
-        _("Open Triangle"),
-        _("Side Stick"),
-        _("Hand Clap"),
-        _("Tambourine"),
-        _("Cowbell"),
-        _("Vibraslap")
-    };
-    _drumControl[4]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO5, wxDefaultPosition, wxSize( 132, 20 ), 46, itemChoice61Strings, 0 );
+    _drumControl[4]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO5, wxDefaultPosition, wxSize( 132, 20 ), 46, midiNoteChoices, 0 );
     _drumControl[4]->_drumSelection->SetStringSelection(_("Crash Cymbal"));
     itemFlexGridSizer4->Add(_drumControl[4]->_drumSelection, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    wxString itemChoice62Strings[] = {
-        _("0.040"),
-        _("0.050"),
-        _("0.063"),
-        _("0.083"),
-        _("0.091"),
-        _("0.100"),
-        _("0.111"),
-        _("0.125"),
-        _("0.166"),
-        _("0.200"),
-        _("0.250"),
-        _("0.333"),
-        _("0.400"),
-        _("0.500"),
-        _("0.666"),
-        _("0.750"),
-        _("0.800"),
-        _("1.000")
-    };
-    _drumControl[4]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY5, wxDefaultPosition, wxSize(68, 20), 17, itemChoice62Strings, 0 );
+    _drumControl[4]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY5, wxDefaultPosition, wxSize(68, 20), 17, drumDensityChoices, 0 );
     _drumControl[4]->_avgDensity->SetStringSelection(_("0.050"));
     itemFlexGridSizer4->Add(_drumControl[4]->_avgDensity, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
@@ -997,79 +727,11 @@ void AlgoRhythmia::CreateControls()
     _drumControl[5]->_offButton->SetValue(false);
     itemBoxSizer69->Add(_drumControl[5]->_offButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    wxString itemChoice72Strings[] = {
-        _("Bass Drum 1"),
-        _("Acoustic Kick"),
-        _("Acoustic Snare"),
-        _("Electric Snare"),
-        _("Closed Hi-Hat"),
-        _("Pedal Hi-Hat"),
-        _("Open Hi-Hat"),
-        _("Crash Cymbal"),
-        _("Crash Cymbal 2"),
-        _("Ride Cymbal"),
-        _("Ride Cymbal 2"),
-        _("Splash Cymbal"),
-        _("Chinese Cymbal"),
-        _("Ride Bell"),
-        _("Low Floor Tom"),
-        _("High Floor Tom"),
-        _("Low Tom"),
-        _("Low-Mid Tom"),
-        _("High-Mid Tom"),
-        _("High Tom"),
-        _("Low Bongo"),
-        _("High Bongo"),
-        _("Mute High Conga"),
-        _("Open High Conga"),
-        _("High Timbale"),
-        _("Low Timbale"),
-        _("High Agogo"),
-        _("Low Agogo"),
-        _("Casaba"),
-        _("Maracas"),
-        _("Short Whistle"),
-        _("Long Whistle"),
-        _("Short Guiro"),
-        _("Long Guiro"),
-        _("Claves"),
-        _("High Wood Block"),
-        _("Low Wood Block"),
-        _("Mute Cuica"),
-        _("Open Cuica"),
-        _("Mute Triangle"),
-        _("Open Triangle"),
-        _("Side Stick"),
-        _("Hand Clap"),
-        _("Tambourine"),
-        _("Cowbell"),
-        _("Vibraslap")
-    };
-    _drumControl[5]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO6, wxDefaultPosition, wxSize( 132, 20 ), 46, itemChoice72Strings, 0 );
+    _drumControl[5]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO6, wxDefaultPosition, wxSize( 132, 20 ), 46, midiNoteChoices, 0 );
     _drumControl[5]->_drumSelection->SetStringSelection(_("Low Tom"));
     itemFlexGridSizer4->Add(_drumControl[5]->_drumSelection, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    wxString itemChoice73Strings[] = {
-        _("0.040"),
-        _("0.050"),
-        _("0.063"),
-        _("0.083"),
-        _("0.091"),
-        _("0.100"),
-        _("0.111"),
-        _("0.125"),
-        _("0.166"),
-        _("0.200"),
-        _("0.250"),
-        _("0.333"),
-        _("0.400"),
-        _("0.500"),
-        _("0.666"),
-        _("0.750"),
-        _("0.800"),
-        _("1.000")
-    };
-    _drumControl[5]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY6, wxDefaultPosition, wxSize(68, 20), 17, itemChoice73Strings, 0 );
+    _drumControl[5]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY6, wxDefaultPosition, wxSize(68, 20), 17, drumDensityChoices, 0 );
     _drumControl[5]->_avgDensity->SetStringSelection(_("0.063"));
     itemFlexGridSizer4->Add(_drumControl[5]->_avgDensity, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
@@ -1112,79 +774,11 @@ void AlgoRhythmia::CreateControls()
     _drumControl[6]->_offButton->SetValue(false);
     itemBoxSizer80->Add(_drumControl[6]->_offButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    wxString itemChoice83Strings[] = {
-        _("Bass Drum 1"),
-        _("Acoustic Kick"),
-        _("Acoustic Snare"),
-        _("Electric Snare"),
-        _("Closed Hi-Hat"),
-        _("Pedal Hi-Hat"),
-        _("Open Hi-Hat"),
-        _("Crash Cymbal"),
-        _("Crash Cymbal 2"),
-        _("Ride Cymbal"),
-        _("Ride Cymbal 2"),
-        _("Splash Cymbal"),
-        _("Chinese Cymbal"),
-        _("Ride Bell"),
-        _("Low Floor Tom"),
-        _("High Floor Tom"),
-        _("Low Tom"),
-        _("Low-Mid Tom"),
-        _("High-Mid Tom"),
-        _("High Tom"),
-        _("Low Bongo"),
-        _("High Bongo"),
-        _("Mute High Conga"),
-        _("Open High Conga"),
-        _("High Timbale"),
-        _("Low Timbale"),
-        _("High Agogo"),
-        _("Low Agogo"),
-        _("Casaba"),
-        _("Maracas"),
-        _("Short Whistle"),
-        _("Long Whistle"),
-        _("Short Guiro"),
-        _("Long Guiro"),
-        _("Claves"),
-        _("High Wood Block"),
-        _("Low Wood Block"),
-        _("Mute Cuica"),
-        _("Open Cuica"),
-        _("Mute Triangle"),
-        _("Open Triangle"),
-        _("Side Stick"),
-        _("Hand Clap"),
-        _("Tambourine"),
-        _("Cowbell"),
-        _("Vibraslap")
-    };
-    _drumControl[6]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO7, wxDefaultPosition, wxSize( 132, 20 ), 46, itemChoice83Strings, 0 );
+    _drumControl[6]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO7, wxDefaultPosition, wxSize( 132, 20 ), 46, midiNoteChoices, 0 );
     _drumControl[6]->_drumSelection->SetStringSelection(_("Low-Mid Tom"));
     itemFlexGridSizer4->Add(_drumControl[6]->_drumSelection, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    wxString itemChoice84Strings[] = {
-        _("0.040"),
-        _("0.050"),
-        _("0.063"),
-        _("0.083"),
-        _("0.091"),
-        _("0.100"),
-        _("0.111"),
-        _("0.125"),
-        _("0.166"),
-        _("0.200"),
-        _("0.250"),
-        _("0.333"),
-        _("0.400"),
-        _("0.500"),
-        _("0.666"),
-        _("0.750"),
-        _("0.800"),
-        _("1.000")
-    };
-    _drumControl[6]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY7, wxDefaultPosition, wxSize(68, 20), 17, itemChoice84Strings, 0 );
+    _drumControl[6]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY7, wxDefaultPosition, wxSize(68, 20), 17, midiNoteChoices, 0 );
     _drumControl[6]->_avgDensity->SetStringSelection(_("0.063"));
     itemFlexGridSizer4->Add(_drumControl[6]->_avgDensity, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
@@ -1227,79 +821,11 @@ void AlgoRhythmia::CreateControls()
     _drumControl[7]->_offButton->SetValue(false);
     itemBoxSizer91->Add(_drumControl[7]->_offButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    wxString itemChoice94Strings[] = {
-        _("Bass Drum 1"),
-        _("Acoustic Kick"),
-        _("Acoustic Snare"),
-        _("Electric Snare"),
-        _("Closed Hi-Hat"),
-        _("Pedal Hi-Hat"),
-        _("Open Hi-Hat"),
-        _("Crash Cymbal"),
-        _("Crash Cymbal 2"),
-        _("Ride Cymbal"),
-        _("Ride Cymbal 2"),
-        _("Splash Cymbal"),
-        _("Chinese Cymbal"),
-        _("Ride Bell"),
-        _("Low Floor Tom"),
-        _("High Floor Tom"),
-        _("Low Tom"),
-        _("Low-Mid Tom"),
-        _("High-Mid Tom"),
-        _("High Tom"),
-        _("Low Bongo"),
-        _("High Bongo"),
-        _("Mute High Conga"),
-        _("Open High Conga"),
-        _("High Timbale"),
-        _("Low Timbale"),
-        _("High Agogo"),
-        _("Low Agogo"),
-        _("Casaba"),
-        _("Maracas"),
-        _("Short Whistle"),
-        _("Long Whistle"),
-        _("Short Guiro"),
-        _("Long Guiro"),
-        _("Claves"),
-        _("High Wood Block"),
-        _("Low Wood Block"),
-        _("Mute Cuica"),
-        _("Open Cuica"),
-        _("Mute Triangle"),
-        _("Open Triangle"),
-        _("Side Stick"),
-        _("Hand Clap"),
-        _("Tambourine"),
-        _("Cowbell"),
-        _("Vibraslap")
-    };
-    _drumControl[7]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO8, wxDefaultPosition, wxSize( 132, 20 ), 46, itemChoice94Strings, 0 );
+    _drumControl[7]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO8, wxDefaultPosition, wxSize( 132, 20 ), 46, midiNoteChoices, 0 );
     _drumControl[7]->_drumSelection->SetStringSelection(_("High-Mid Tom"));
     itemFlexGridSizer4->Add(_drumControl[7]->_drumSelection, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    wxString itemChoice95Strings[] = {
-        _("0.040"),
-        _("0.050"),
-        _("0.063"),
-        _("0.083"),
-        _("0.091"),
-        _("0.100"),
-        _("0.111"),
-        _("0.125"),
-        _("0.166"),
-        _("0.200"),
-        _("0.250"),
-        _("0.333"),
-        _("0.400"),
-        _("0.500"),
-        _("0.666"),
-        _("0.750"),
-        _("0.800"),
-        _("1.000")
-    };
-    _drumControl[7]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY8, wxDefaultPosition, wxSize(68, 20), 17, itemChoice95Strings, 0 );
+    _drumControl[7]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY8, wxDefaultPosition, wxSize(68, 20), 17, drumDensityChoices, 0 );
     _drumControl[7]->_avgDensity->SetStringSelection(_("0.063"));
     itemFlexGridSizer4->Add(_drumControl[7]->_avgDensity, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
