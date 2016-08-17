@@ -7,20 +7,20 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{10BE0872-DCBB-4680-AD19-F270B41D33B7}
 AppName=AlgoRhythmia
-AppVerName=AlgoRhythmia 4
+AppVerName=AlgoRhythmia 4.1
 AppPublisher=Zeta Centauri
 AppPublisherURL=http://zetacentauri.com
 AppSupportURL=http://zetacentauri.com
 AppUpdatesURL=http://zetacentauri.com
 DefaultDirName={pf}\Zeta Centauri\AlgoRhythmia
 DefaultGroupName=Zeta Centauri\AlgoRhythmia
-LicenseFile=G:\src\AlgoRhythmia\Release\License.txt
-OutputDir=G:\src\AlgoRhythmia\Release
-OutputBaseFilename=AlgoRhythmia4Setup
+LicenseFile=C:\Users\Xangis\code\AlgoRhythmia\Release\License.txt
+OutputDir=C:\Users\Xangis\code\AlgoRhythmia\installer
+OutputBaseFilename=AlgoRhythmia4.1Setup
 Compression=lzma
 SolidCompression=yes
-SetupIconFile=G:\src\AlgoRhythmia\Release\Algo4.ico
-UninstallDisplayIcon={app}\Algo4.ico
+SetupIconFile=C:\Users\Xangis\code\AlgoRhythmia\Release\algo.ico
+UninstallDisplayIcon={app}\algo.ico
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -30,17 +30,17 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "G:\src\AlgoRhythmia\Release\AlgoRhythmia.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "G:\src\AlgoRhythmia\Release\AlgoRhythmia Manual.pdf"; DestDir: "{app}"; Flags: ignoreversion
-Source: "G:\src\AlgoRhythmia\Release\Algo4.ico"; DestDir: "{app}"; Flags: ignoreversion
-Source: "G:\src\AlgoRhythmia\Release\License.txt"; DestDir: "{app}"; Flags: ignoreversion
-Source: "G:\src\AlgoRhythmia\Release\libsndfile-1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "G:\src\AlgoRhythmia\Release\Samples\*"; DestDir: "{app}\Samples"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "G:\src\AlgoRhythmia\Release\DirectX\DXSETUP.exe"; DestDir: "{app}"; Flags: ignoreversion deleteafterinstall
-Source: "G:\src\AlgoRhythmia\Release\DirectX\DSETUP.dll"; DestDir: "{app}"; Flags: ignoreversion deleteafterinstall
-Source: "G:\src\AlgoRhythmia\Release\DirectX\dsetup32.dll"; DestDir: "{app}"; Flags: ignoreversion deleteafterinstall
-Source: "G:\src\AlgoRhythmia\Release\DirectX\dxupdate.cab"; DestDir: "{app}"; Flags: ignoreversion deleteafterinstall
-Source: "G:\src\AlgoRhythmia\Release\DirectX\Aug2009_XAudio_x86.cab"; DestDir: "{app}"; Flags: ignoreversion deleteafterinstall
+Source: "C:\Users\Xangis\code\AlgoRhythmia\Release\AlgoRhythmia.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Xangis\code\AlgoRhythmia\Release\AlgoRhythmia Manual.pdf"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Xangis\code\AlgoRhythmia\Release\algo.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Xangis\code\AlgoRhythmia\Release\License.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Xangis\code\AlgoRhythmia\Release\libsndfile-1.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Xangis\code\AlgoRhythmia\Release\Samples\*"; DestDir: "{app}\Samples"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\Xangis\code\AlgoRhythmia\Release\DirectX\DXSETUP.exe"; DestDir: "{app}"; Flags: ignoreversion deleteafterinstall
+Source: "C:\Users\Xangis\code\AlgoRhythmia\Release\DirectX\DSETUP.dll"; DestDir: "{app}"; Flags: ignoreversion deleteafterinstall
+Source: "C:\Users\Xangis\code\AlgoRhythmia\Release\DirectX\dsetup32.dll"; DestDir: "{app}"; Flags: ignoreversion deleteafterinstall
+Source: "C:\Users\Xangis\code\AlgoRhythmia\Release\DirectX\dxupdate.cab"; DestDir: "{app}"; Flags: ignoreversion deleteafterinstall
+Source: "C:\Users\Xangis\code\AlgoRhythmia\Release\DirectX\Aug2009_XAudio_x86.cab"; DestDir: "{app}"; Flags: ignoreversion deleteafterinstall
 
 [Icons]
 Name: "{group}\AlgoRhythmia"; Filename: "{app}\AlgoRhythmia.exe"; WorkingDir: "{app}"
