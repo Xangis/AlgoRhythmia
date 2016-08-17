@@ -435,10 +435,11 @@ private:
 	// Global Variables:
 	HINSTANCE _hInstance;	
 	HMIDIOUT _outHandle;
-	IXAudio2* pXAudio2;
-	IXAudio2MasteringVoice* pMasteringVoice;
-	IXAudio2SourceVoice* pSourceVoice[DRUM_MAX];
-	IXAudio2SubmixVoice* pPath[DRUM_MAX];
+	WaveFile* _wave[DRUM_MAX];
+	IXAudio2* _xaudio2;
+	IXAudio2MasteringVoice* _masteringVoice;
+	IXAudio2SourceVoice* _sourceVoice[DRUM_MAX];
+	IXAudio2SubmixVoice* _path[DRUM_MAX];
 #endif
     AboutDlg* _aboutDlg;
     DrumDialog* _measureEditDlg;

@@ -1,46 +1,46 @@
-//#ifndef _EFFECTSDLG_H_
-//#define _EFFECTSDLG_H_
-//
-//#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-//#pragma interface "EffectsDlg.h"
-//#endif
-//
-//#define ID_EFFECTSDIALOG 27000
-//#define SYMBOL_EFFECTSDLG_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX
-//#define SYMBOL_EFFECTSDLG_TITLE _("Edit Effects")
-//#define SYMBOL_EFFECTSDLG_IDNAME ID_EFFECTSDIALOG
-//#define SYMBOL_EFFECTSDLG_SIZE wxSize(400, 300)
-//#define SYMBOL_EFFECTSDLG_POSITION wxDefaultPosition
-//#define ID_EFFECTS 27001
-//#define ID_ENABLED 27002
-//#define ID_PARAMNAME1 27003
-//#define ID_PARAMNAME2 27004
-//#define ID_PARAMNAME3 27005
-//#define ID_PARAMNAME4 27006
-//#define ID_PARAMNAME5 27007
-//#define ID_PARAMNAME6 27018
-//#define ID_PARAMSLIDER1 27008
-//#define ID_PARAMSLIDER2 27009
-//#define ID_PARAMSLIDER3 27010
-//#define ID_PARAMSLIDER4 27011
-//#define ID_PARAMSLIDER5 27012
-//#define ID_PARAMSLIDER6 27019
-//#define ID_VALUE1 27013
-//#define ID_VALUE2 27014
-//#define ID_VALUE3 27015
-//#define ID_VALUE4 27016
-//#define ID_VALUE5 27017
-//#define ID_VALUE6 27020
-//#define ID_WAVEFORM 27021
-//#define ID_PHASE 27022
-//
-//#ifndef wxCLOSE_BOX
-//#define wxCLOSE_BOX 0x1000
-//#endif
-//
-//#define EFFECT_MAX 8
-//
-//#include "wx/wx.h"
+#ifndef _EFFECTSDLG_H_
+#define _EFFECTSDLG_H_
+
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
+#pragma interface "EffectsDlg.h"
+#endif
+
+#define ID_EFFECTSDIALOG 27000
+#define SYMBOL_EFFECTSDLG_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX
+#define SYMBOL_EFFECTSDLG_TITLE _("Edit Effects")
+#define SYMBOL_EFFECTSDLG_IDNAME ID_EFFECTSDIALOG
+#define SYMBOL_EFFECTSDLG_SIZE wxSize(400, 300)
+#define SYMBOL_EFFECTSDLG_POSITION wxDefaultPosition
+#define ID_EFFECTS 27001
+#define ID_ENABLED 27002
+#define ID_PARAMNAME1 27003
+#define ID_PARAMNAME2 27004
+#define ID_PARAMNAME3 27005
+#define ID_PARAMNAME4 27006
+#define ID_PARAMNAME5 27007
+#define ID_PARAMNAME6 27018
+#define ID_PARAMSLIDER1 27008
+#define ID_PARAMSLIDER2 27009
+#define ID_PARAMSLIDER3 27010
+#define ID_PARAMSLIDER4 27011
+#define ID_PARAMSLIDER5 27012
+#define ID_PARAMSLIDER6 27019
+#define ID_VALUE1 27013
+#define ID_VALUE2 27014
+#define ID_VALUE3 27015
+#define ID_VALUE4 27016
+#define ID_VALUE5 27017
+#define ID_VALUE6 27020
+#define ID_WAVEFORM 27021
+#define ID_PHASE 27022
+
+#ifndef wxCLOSE_BOX
+#define wxCLOSE_BOX 0x1000
+#endif
+
+#define EFFECT_MAX 8
+
+#include "wx/wx.h"
 //#include "SoundFxManager.h"
 //
 //class EffectsDlg : public wxDialog
@@ -109,4 +109,4 @@
 //};
 //
 //
-//#endif
+#endif

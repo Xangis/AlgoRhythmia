@@ -1,7 +1,7 @@
 #ifndef _DRUMCONTROL_H_
 #define _DRUMCONTROL_H_
 
-#include "SoundFxManager.h"
+//#include "SoundFxManager.h"
 #include "EffectsDlg.h"
 
 #include "wx/wx.h"

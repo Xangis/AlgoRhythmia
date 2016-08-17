@@ -52,6 +52,11 @@ bool DrumDialog::Create( wxWindow* parent, wxWindowID id, const wxString& captio
     SetExtraStyle(GetExtraStyle()|wxWS_EX_BLOCK_EVENTS);
     wxDialog::Create( parent, id, caption, pos, size, style );
     CreateControls();
+	wxIcon icon;
+	if( icon.LoadFile(_T("algo.ico"), wxBITMAP_TYPE_ICO ))
+	{
+		SetIcon(icon);
+	}
     GetSizer()->Fit(this);
     GetSizer()->SetSizeHints(this);
     Centre();
@@ -72,16 +77,16 @@ void DrumDialog::CreateControls()
 	wxBoxSizer* itemBoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
 	wxBoxSizer* itemBoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
 
-    m_drumGrid[0] = new wxGrid( itemDialog1, ID_DRUMGRID_1, wxDefaultPosition, wxSize(450, 166), wxSUNKEN_BORDER|wxHSCROLL|wxVSCROLL );
-    m_drumGrid[1] = new wxGrid( itemDialog1, ID_DRUMGRID_2, wxDefaultPosition, wxSize(450, 166), wxSUNKEN_BORDER|wxHSCROLL|wxVSCROLL );
-    m_drumGrid[2] = new wxGrid( itemDialog1, ID_DRUMGRID_3, wxDefaultPosition, wxSize(450, 166), wxSUNKEN_BORDER|wxHSCROLL|wxVSCROLL );
-    m_drumGrid[3] = new wxGrid( itemDialog1, ID_DRUMGRID_4, wxDefaultPosition, wxSize(450, 166), wxSUNKEN_BORDER|wxHSCROLL|wxVSCROLL );
+    m_drumGrid[0] = new wxGrid( itemDialog1, ID_DRUMGRID_1, wxDefaultPosition, wxSize(498, 194), wxSUNKEN_BORDER/*|wxHSCROLL|wxVSCROLL*/ );
+    m_drumGrid[1] = new wxGrid( itemDialog1, ID_DRUMGRID_2, wxDefaultPosition, wxSize(498, 194), wxSUNKEN_BORDER/*|wxHSCROLL|wxVSCROLL*/ );
+    m_drumGrid[2] = new wxGrid( itemDialog1, ID_DRUMGRID_3, wxDefaultPosition, wxSize(498, 194), wxSUNKEN_BORDER/*|wxHSCROLL|wxVSCROLL*/ );
+    m_drumGrid[3] = new wxGrid( itemDialog1, ID_DRUMGRID_4, wxDefaultPosition, wxSize(498, 194), wxSUNKEN_BORDER/*|wxHSCROLL|wxVSCROLL*/ );
 	int count = 0;
 	for( count = 0; count < 4; count++ )
 	{
-		m_drumGrid[count]->SetDefaultColSize(18);
-		m_drumGrid[count]->SetDefaultRowSize(16);
-		m_drumGrid[count]->SetColLabelSize(18);
+		m_drumGrid[count]->SetDefaultColSize(21);
+		m_drumGrid[count]->SetDefaultRowSize(19);
+		m_drumGrid[count]->SetColLabelSize(21);
 		m_drumGrid[count]->SetRowLabelSize(30);
 		m_drumGrid[count]->CreateGrid(DRUM_MAX, MAX_MEASURE_LENGTH, wxGrid::wxGridSelectCells);
 		m_drumGrid[count]->EnableEditing(false);

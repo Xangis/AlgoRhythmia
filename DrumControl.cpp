@@ -13,6 +13,7 @@ DrumControl::DrumControl()
 	_sampleName = NULL;
 	_btnBrowse = NULL;
 	_btnFx = NULL;
+	//_fxDialog = NULL;
     //_knobVol = NULL;
     _volSlider = NULL;
     _label = NULL;

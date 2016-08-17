@@ -29,7 +29,13 @@
 *.a
 *.lib
 
-# Executables
+# Executables and Visual Studio stuff
 *.exe
 *.out
 *.app
+*.res
+*.sdf
+*.opensdf
+*.filters
+*.suo
+*.manifest
