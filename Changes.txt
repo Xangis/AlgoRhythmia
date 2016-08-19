@@ -1,3 +1,15 @@
+Changes still needed:
+
+Add General MIDI level 2 drum sounds to MIDI drum list.
+
+Changes from AlgoRhythmia Version 4 to 4.1 (August 2016):
+
+1) Replaced entire sample set of 76 files with one ENTIRELY from freewavesamples.com,
+with 102 samples, AND with names identical to those from FWS instead of those weird
+DOS-style filenames we had.
+
+2) Updated various libraries to more recent versions (wxWidgets, for example).
+
 Changes from AlgoRhythmia Version 3 to 4:
 
 1) Replaced the DirectMusic sound generation engine with XAudio2. DirectMusic
