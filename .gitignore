@@ -39,3 +39,4 @@
 *.filters
 *.suo
 *.manifest
+*.cache

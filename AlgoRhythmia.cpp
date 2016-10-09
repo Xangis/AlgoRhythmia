@@ -161,9 +161,11 @@ END_EVENT_TABLE()
 #include "wx/wx.h"
 
 // Global Constants for Drum Kits
-int midival[46] = { 36, 35, 38, 40, 42, 44, 46, 49, 57, 51, 59, 55, 52, 53, 41, 43,
+int midival[60] = { 36, 35, 38, 40, 42, 44, 46, 49, 57, 51, 59, 55, 52, 53, 41, 43,
 		            45, 47, 48, 50, 61, 60, 62, 63, 65, 66, 67, 68, 69, 70, 71, 72,
-				    73, 74, 75, 76, 77, 78, 79, 80, 81, 37, 39, 54, 56, 58 };
+				    73, 74, 75, 76, 77, 78, 79, 80, 81, 37, 39, 54, 56, 58,
+	                // General MIDI Level 2 starts here.
+	                27, 28, 29, 30, 31, 32, 33, 34, 82, 83, 84, 85, 86, 87 };
 
 #define Swap4Bytes(data)	(data = ((((data) >> 24) & 0x000000FF) | (((data) >>  8) & 0x0000FF00) |	\
 									 (((data) <<  8) & 0x00FF0000) | (((data) << 24) & 0xFF000000)))
@@ -263,24 +265,19 @@ bool AlgoRhythmia::Create( wxWindow* parent, wxWindowID id, const wxString& capt
 		_drumControl[count]->_drumNote = _drumControl[count]->_drumSelection->GetSelection();
 	}
 
-	wxString filenames[DRUM_MAX];
-	filenames[0] = _("./samples/kick.wav");
-	filenames[1] = _("./samples/snare.wav");
-	filenames[2] = _("./samples/chhat.wav");
-	filenames[3] = _("./samples/ohhat.wav");
-	filenames[4] = _("./samples/crash.wav");
-	filenames[5] = _("./samples/ltom.wav");
-	filenames[6] = _("./samples/mtom.wav");
-	filenames[7] = _("./samples/htom.wav");
-
 	// Create audiopaths and initialize effects for that audiopath.
+	// _filenames is populated in CreateControls().
 	for( count = 0; count < DRUM_MAX; count++ )
 	{
 		if( _wave[count] != NULL ) delete _wave[count];
-		_wave[count] = WaveFile::Load(filenames[count].wchar_str(), false);
+		_wave[count] = WaveFile::Load(_filenames[count].wchar_str(), false);
 
 		if( FAILED(hr = _xaudio2->CreateSourceVoice( &_sourceVoice[count], _wave[count]->GetWaveFormatEx(),
-              0, XAUDIO2_DEFAULT_FREQ_RATIO, NULL, NULL, NULL ) ) ) return hr;
+              0, XAUDIO2_DEFAULT_FREQ_RATIO, NULL, NULL, NULL ) ) )
+		{
+			wxMessageBox(wxString::Format(_("Could not load sample %s, CreateSourceVoice returned %d"), _wave[count], hr));
+		    return hr;
+		}
 
 		// TODO: FIX THIS.  THE EFFECTS MANAGER IS BROKEN BECAUSE IT REQUIRES DIRECTMUSIC.
 		//_drumControl[count]->_fxManager->Initialize( _path[count], true );
@@ -359,6 +356,20 @@ void AlgoRhythmia::CreateControls()
 {
     AlgoRhythmia* itemDialog1 = this;
 
+	_filenames[0] = _("./samples/Kick-Drum-1.wav");
+	_filenames[1] = _("./samples/Snare-Drum-1.wav");
+	_filenames[2] = _("./samples/Closed-Hi-Hat-1.wav");
+	_filenames[3] = _("./samples/Open-Hi-Hat-1.wav");
+	_filenames[4] = _("./samples/Crash-Cymbal-1.wav");
+	_filenames[5] = _("./samples/Low-Tom-1.wav");
+	_filenames[6] = _("./samples/Mid-Tom-1.wav");
+	_filenames[7] = _("./samples/Hi-Tom-1.wav");
+
+	wxSize buttonSize = wxSize( 66, 30 );
+	wxSize densitySize = wxSize( 68, 30 );
+	wxSize instrumentSize = wxSize( 154, 30 );
+	wxSize filenameSize = wxSize( 132, 30 );
+
 	int count;
 	for( count = 0; count < DRUM_MAX; count++ )
 	{
@@ -366,7 +377,7 @@ void AlgoRhythmia::CreateControls()
 	}
 
     wxString midiNoteChoices[] = {
-        _("Bass Drum 1"),
+        _("Bass Drum 1"), // 0
         _("Acoustic Kick"),
         _("Acoustic Snare"),
         _("Electric Snare"),
@@ -375,8 +386,8 @@ void AlgoRhythmia::CreateControls()
         _("Open Hi-Hat"),
         _("Crash Cymbal"),
         _("Crash Cymbal 2"),
-        _("Ride Cymbal"),
-        _("Ride Cymbal 2"),
+        _("Ride Cymbal"), 
+        _("Ride Cymbal 2"), // 10
         _("Splash Cymbal"),
         _("Chinese Cymbal"),
         _("Ride Bell"),
@@ -385,8 +396,8 @@ void AlgoRhythmia::CreateControls()
         _("Low Tom"),
         _("Low-Mid Tom"),
         _("High-Mid Tom"),
-        _("High Tom"),
-        _("Low Bongo"),
+        _("High Tom"), 
+        _("Low Bongo"), // 20
         _("High Bongo"),
         _("Mute High Conga"),
         _("Open High Conga"),
@@ -396,7 +407,7 @@ void AlgoRhythmia::CreateControls()
         _("Low Agogo"),
         _("Casaba"),
         _("Maracas"),
-        _("Short Whistle"),
+        _("Short Whistle"), // 30
         _("Long Whistle"),
         _("Short Guiro"),
         _("Long Guiro"),
@@ -406,12 +417,27 @@ void AlgoRhythmia::CreateControls()
         _("Mute Cuica"),
         _("Open Cuica"),
         _("Mute Triangle"),
-        _("Open Triangle"),
+        _("Open Triangle"), // 40
         _("Side Stick"),
         _("Hand Clap"),
         _("Tambourine"),
         _("Cowbell"),
-        _("Vibraslap")
+        _("Vibraslap"),
+		// General MIDI Level 2 Starts Here
+		_("High Q"),
+		_("Slap"),
+		_("Scratch Push"),
+		_("Scratch Pull"),
+		_("Sticks"), // 50
+		_("Square Click"),
+		_("Metronome Click"),
+		_("Metronome Bell"),
+		_("Shaker"),
+		_("Jingle Bell"),
+		_("Belltree"),
+		_("Castanets"),
+		_("Mute Surdo"),
+		_("Open Surdo") // 59
     };
 
     wxString drumDensityChoices[] = {
@@ -492,22 +518,22 @@ void AlgoRhythmia::CreateControls()
     _drumControl[0]->_offButton->SetValue(false);
     itemBoxSizer14->Add(_drumControl[0]->_offButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[0]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO1, wxDefaultPosition, wxSize( 132, 20 ), 46, midiNoteChoices, 0 );
+    _drumControl[0]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO1, wxDefaultPosition, instrumentSize, 46, midiNoteChoices, 0 );
     _drumControl[0]->_drumSelection->SetStringSelection(_("Bass Drum 1"));
     itemFlexGridSizer4->Add(_drumControl[0]->_drumSelection, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[0]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY1, wxDefaultPosition, wxSize(68, 20), 17, drumDensityChoices, 0 );
+    _drumControl[0]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY1, wxDefaultPosition, densitySize, 17, drumDensityChoices, 0 );
     _drumControl[0]->_avgDensity->SetStringSelection(_("0.250"));
     itemFlexGridSizer4->Add(_drumControl[0]->_avgDensity, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[0]->_btnSurvive = new wxButton( itemDialog1, ID_SURVIVE1, _("Survive"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[0]->_btnSurvive, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[0]->_btnSurvive = new wxButton( itemDialog1, ID_SURVIVE1, _("Survive"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[0]->_btnSurvive, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[0]->_btnDie = new wxButton( itemDialog1, ID_DIE1, _("Die"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[0]->_btnDie, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[0]->_btnDie = new wxButton( itemDialog1, ID_DIE1, _("Die"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[0]->_btnDie, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[0]->_btnInvert = new wxButton( itemDialog1, ID_INVERT1, _("Invert"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[0]->_btnInvert, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[0]->_btnInvert = new wxButton( itemDialog1, ID_INVERT1, _("Invert"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[0]->_btnInvert, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[0]->_volSlider = new wxSlider( itemDialog1, ID_VOLUME1, 100, 0, 200, wxDefaultPosition, wxSize(100, 22), wxNO_BORDER );
     itemFlexGridSizer4->Add(_drumControl[0]->_volSlider, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 1 );
@@ -519,10 +545,10 @@ void AlgoRhythmia::CreateControls()
     _drumControl[0]->_chkOn->SetValue(true);
     itemFlexGridSizer4->Add(_drumControl[0]->_chkOn, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[0]->_sampleName = new wxTextCtrl( itemDialog1, ID_SAMPLE1, _("kick.wav"), wxDefaultPosition, wxDefaultSize, 0 );
+    _drumControl[0]->_sampleName = new wxTextCtrl( itemDialog1, ID_SAMPLE1, wxFileName(_filenames[0]).GetName(), wxDefaultPosition, filenameSize, 0 );
     itemFlexGridSizer4->Add(_drumControl[0]->_sampleName, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[0]->_btnBrowse = new wxButton( itemDialog1, ID_BROWSE1, _("Browse"), wxDefaultPosition, wxSize(60, -1), 0 );
+    _drumControl[0]->_btnBrowse = new wxButton( itemDialog1, ID_BROWSE1, _("Browse"), wxDefaultPosition, buttonSize, 0 );
     itemFlexGridSizer4->Add(_drumControl[0]->_btnBrowse, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[1]->_label = new wxStaticText( itemDialog1, wxID_STATIC, _T("2:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -539,22 +565,22 @@ void AlgoRhythmia::CreateControls()
     _drumControl[1]->_offButton->SetValue(false);
     itemBoxSizer25->Add(_drumControl[1]->_offButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[1]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO2, wxDefaultPosition, wxSize( 132, 20 ), 46, midiNoteChoices, 0 );
+    _drumControl[1]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO2, wxDefaultPosition, instrumentSize, 46, midiNoteChoices, 0 );
     _drumControl[1]->_drumSelection->SetStringSelection(_("Acoustic Snare"));
     itemFlexGridSizer4->Add(_drumControl[1]->_drumSelection, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[1]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY2, wxDefaultPosition, wxSize(68, 20), 17, drumDensityChoices, 0 );
+    _drumControl[1]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY2, wxDefaultPosition, densitySize, 17, drumDensityChoices, 0 );
     _drumControl[1]->_avgDensity->SetStringSelection(_("0.333"));
     itemFlexGridSizer4->Add(_drumControl[1]->_avgDensity, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[1]->_btnSurvive = new wxButton( itemDialog1, ID_SURVIVE2, _("Survive"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[1]->_btnSurvive, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[1]->_btnSurvive = new wxButton( itemDialog1, ID_SURVIVE2, _("Survive"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[1]->_btnSurvive, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[1]->_btnDie = new wxButton( itemDialog1, ID_DIE2, _("Die"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[1]->_btnDie, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[1]->_btnDie = new wxButton( itemDialog1, ID_DIE2, _("Die"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[1]->_btnDie, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[1]->_btnInvert = new wxButton( itemDialog1, ID_INVERT2, _("Invert"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[1]->_btnInvert, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[1]->_btnInvert = new wxButton( itemDialog1, ID_INVERT2, _("Invert"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[1]->_btnInvert, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[1]->_volSlider = new wxSlider( itemDialog1, ID_VOLUME2, 100, 0, 200, wxDefaultPosition, wxSize(100, 22), wxNO_BORDER );
     itemFlexGridSizer4->Add(_drumControl[1]->_volSlider, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 1 );
@@ -566,10 +592,10 @@ void AlgoRhythmia::CreateControls()
     _drumControl[1]->_chkOn->SetValue(true);
     itemFlexGridSizer4->Add(_drumControl[1]->_chkOn, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[1]->_sampleName = new wxTextCtrl( itemDialog1, ID_SAMPLE2, _("snare.wav"), wxDefaultPosition, wxDefaultSize, 0 );
+    _drumControl[1]->_sampleName = new wxTextCtrl( itemDialog1, ID_SAMPLE2, wxFileName(_filenames[1]).GetName(), wxDefaultPosition, filenameSize, 0 );
     itemFlexGridSizer4->Add(_drumControl[1]->_sampleName, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[1]->_btnBrowse = new wxButton( itemDialog1, ID_BROWSE2, _("Browse"), wxDefaultPosition, wxSize(60, -1), 0 );
+    _drumControl[1]->_btnBrowse = new wxButton( itemDialog1, ID_BROWSE2, _("Browse"), wxDefaultPosition, buttonSize, 0 );
     itemFlexGridSizer4->Add(_drumControl[1]->_btnBrowse, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[2]->_label = new wxStaticText( itemDialog1, wxID_STATIC, _T("3:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -586,22 +612,22 @@ void AlgoRhythmia::CreateControls()
     _drumControl[2]->_offButton->SetValue(false);
     itemBoxSizer36->Add(_drumControl[2]->_offButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[2]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO3, wxDefaultPosition, wxSize( 132, 20 ), 46, midiNoteChoices, 0 );
+    _drumControl[2]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO3, wxDefaultPosition, instrumentSize, 46, midiNoteChoices, 0 );
     _drumControl[2]->_drumSelection->SetStringSelection(_("Closed Hi-Hat"));
     itemFlexGridSizer4->Add(_drumControl[2]->_drumSelection, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[2]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY3, wxDefaultPosition, wxSize(68, 20), 17, drumDensityChoices, 0 );
+    _drumControl[2]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY3, wxDefaultPosition, densitySize, 17, drumDensityChoices, 0 );
     _drumControl[2]->_avgDensity->SetStringSelection(_("0.750"));
     itemFlexGridSizer4->Add(_drumControl[2]->_avgDensity, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[2]->_btnSurvive = new wxButton( itemDialog1, ID_SURVIVE3, _("Survive"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[2]->_btnSurvive, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[2]->_btnSurvive = new wxButton( itemDialog1, ID_SURVIVE3, _("Survive"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[2]->_btnSurvive, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[2]->_btnDie = new wxButton( itemDialog1, ID_DIE3, _("Die"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[2]->_btnDie, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[2]->_btnDie = new wxButton( itemDialog1, ID_DIE3, _("Die"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[2]->_btnDie, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[2]->_btnInvert = new wxButton( itemDialog1, ID_INVERT3, _("Invert"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[2]->_btnInvert, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[2]->_btnInvert = new wxButton( itemDialog1, ID_INVERT3, _("Invert"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[2]->_btnInvert, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[2]->_volSlider = new wxSlider( itemDialog1, ID_VOLUME3, 100, 0, 200, wxDefaultPosition, wxSize(100, 22), wxNO_BORDER );
     itemFlexGridSizer4->Add(_drumControl[2]->_volSlider, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 1 );
@@ -613,10 +639,10 @@ void AlgoRhythmia::CreateControls()
     _drumControl[2]->_chkOn->SetValue(true);
     itemFlexGridSizer4->Add(_drumControl[2]->_chkOn, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[2]->_sampleName = new wxTextCtrl( itemDialog1, ID_SAMPLE3, _("chhat.wav"), wxDefaultPosition, wxDefaultSize, 0 );
+    _drumControl[2]->_sampleName = new wxTextCtrl( itemDialog1, ID_SAMPLE3, wxFileName(_filenames[2]).GetName(), wxDefaultPosition, filenameSize, 0 );
     itemFlexGridSizer4->Add(_drumControl[2]->_sampleName, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[2]->_btnBrowse = new wxButton( itemDialog1, ID_BROWSE3, _("Browse"), wxDefaultPosition, wxSize(60, -1), 0 );
+    _drumControl[2]->_btnBrowse = new wxButton( itemDialog1, ID_BROWSE3, _("Browse"), wxDefaultPosition, buttonSize, 0 );
     itemFlexGridSizer4->Add(_drumControl[2]->_btnBrowse, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[3]->_label = new wxStaticText( itemDialog1, wxID_STATIC, _T("4:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -633,21 +659,21 @@ void AlgoRhythmia::CreateControls()
     _drumControl[3]->_offButton->SetValue(false);
     itemBoxSizer47->Add(_drumControl[3]->_offButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[3]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO4, wxDefaultPosition, wxSize( 132, 20 ), 46, midiNoteChoices, 0 );
+    _drumControl[3]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO4, wxDefaultPosition, instrumentSize, 46, midiNoteChoices, 0 );
     _drumControl[3]->_drumSelection->SetStringSelection(_("Open Hi-Hat"));
     itemFlexGridSizer4->Add(_drumControl[3]->_drumSelection, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[3]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY4, wxDefaultPosition, wxSize(68, 20), 17, drumDensityChoices, 0 );
+    _drumControl[3]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY4, wxDefaultPosition, densitySize, 17, drumDensityChoices, 0 );
     _drumControl[3]->_avgDensity->SetStringSelection(_("0.125"));
     itemFlexGridSizer4->Add(_drumControl[3]->_avgDensity, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[3]->_btnSurvive = new wxButton( itemDialog1, ID_SURVIVE4, _("Survive"), wxDefaultPosition, wxSize(56, -1), 0 );
+    _drumControl[3]->_btnSurvive = new wxButton( itemDialog1, ID_SURVIVE4, _("Survive"), wxDefaultPosition, buttonSize, 0 );
     itemFlexGridSizer4->Add(_drumControl[3]->_btnSurvive, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[3]->_btnDie = new wxButton( itemDialog1, ID_DIE4, _("Die"), wxDefaultPosition, wxSize(56, -1), 0 );
+    _drumControl[3]->_btnDie = new wxButton( itemDialog1, ID_DIE4, _("Die"), wxDefaultPosition, buttonSize, 0 );
     itemFlexGridSizer4->Add(_drumControl[3]->_btnDie, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[3]->_btnInvert = new wxButton( itemDialog1, ID_INVERT4, _("Invert"), wxDefaultPosition, wxSize(56, -1), 0 );
+    _drumControl[3]->_btnInvert = new wxButton( itemDialog1, ID_INVERT4, _("Invert"), wxDefaultPosition, buttonSize, 0 );
     itemFlexGridSizer4->Add(_drumControl[3]->_btnInvert, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[3]->_volSlider = new wxSlider( itemDialog1, ID_VOLUME4, 100, 0, 200, wxDefaultPosition, wxSize(100, 22), wxNO_BORDER );
@@ -660,10 +686,10 @@ void AlgoRhythmia::CreateControls()
     _drumControl[3]->_chkOn->SetValue(true);
     itemFlexGridSizer4->Add(_drumControl[3]->_chkOn, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[3]->_sampleName = new wxTextCtrl( itemDialog1, ID_SAMPLE4, _("ohhat.wav"), wxDefaultPosition, wxDefaultSize, 0 );
+    _drumControl[3]->_sampleName = new wxTextCtrl( itemDialog1, ID_SAMPLE4, wxFileName(_filenames[3]).GetName(), wxDefaultPosition, filenameSize, 0 );
     itemFlexGridSizer4->Add(_drumControl[3]->_sampleName, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[3]->_btnBrowse = new wxButton( itemDialog1, ID_BROWSE4, _("Browse"), wxDefaultPosition, wxSize(60, -1), 0 );
+    _drumControl[3]->_btnBrowse = new wxButton( itemDialog1, ID_BROWSE4, _("Browse"), wxDefaultPosition, buttonSize, 0 );
     itemFlexGridSizer4->Add(_drumControl[3]->_btnBrowse, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[4]->_label = new wxStaticText( itemDialog1, wxID_STATIC, _T("5:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -680,22 +706,22 @@ void AlgoRhythmia::CreateControls()
     _drumControl[4]->_offButton->SetValue(false);
     itemBoxSizer58->Add(_drumControl[4]->_offButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[4]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO5, wxDefaultPosition, wxSize( 132, 20 ), 46, midiNoteChoices, 0 );
+    _drumControl[4]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO5, wxDefaultPosition, instrumentSize, 46, midiNoteChoices, 0 );
     _drumControl[4]->_drumSelection->SetStringSelection(_("Crash Cymbal"));
     itemFlexGridSizer4->Add(_drumControl[4]->_drumSelection, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[4]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY5, wxDefaultPosition, wxSize(68, 20), 17, drumDensityChoices, 0 );
+    _drumControl[4]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY5, wxDefaultPosition, densitySize, 17, drumDensityChoices, 0 );
     _drumControl[4]->_avgDensity->SetStringSelection(_("0.050"));
     itemFlexGridSizer4->Add(_drumControl[4]->_avgDensity, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[4]->_btnSurvive = new wxButton( itemDialog1, ID_SURVIVE5, _("Survive"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[4]->_btnSurvive, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[4]->_btnSurvive = new wxButton( itemDialog1, ID_SURVIVE5, _("Survive"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[4]->_btnSurvive, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[4]->_btnDie = new wxButton( itemDialog1, ID_DIE5, _("Die"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[4]->_btnDie, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[4]->_btnDie = new wxButton( itemDialog1, ID_DIE5, _("Die"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[4]->_btnDie, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[4]->_btnInvert = new wxButton( itemDialog1, ID_INVERT5, _("Invert"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[4]->_btnInvert, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[4]->_btnInvert = new wxButton( itemDialog1, ID_INVERT5, _("Invert"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[4]->_btnInvert, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[4]->_volSlider = new wxSlider( itemDialog1, ID_VOLUME5, 100, 0, 200, wxDefaultPosition, wxSize(100, 22), wxNO_BORDER );
     itemFlexGridSizer4->Add(_drumControl[4]->_volSlider, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 1 );
@@ -707,10 +733,10 @@ void AlgoRhythmia::CreateControls()
     _drumControl[4]->_chkOn->SetValue(true);
     itemFlexGridSizer4->Add(_drumControl[4]->_chkOn, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[4]->_sampleName = new wxTextCtrl( itemDialog1, ID_SAMPLE5, _("crash.wav"), wxDefaultPosition, wxDefaultSize, 0 );
+    _drumControl[4]->_sampleName = new wxTextCtrl( itemDialog1, ID_SAMPLE5, wxFileName(_filenames[4]).GetName(), wxDefaultPosition, filenameSize, 0 );
     itemFlexGridSizer4->Add(_drumControl[4]->_sampleName, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[4]->_btnBrowse = new wxButton( itemDialog1, ID_BROWSE5, _("Browse"), wxDefaultPosition, wxSize(60, -1), 0 );
+    _drumControl[4]->_btnBrowse = new wxButton( itemDialog1, ID_BROWSE5, _("Browse"), wxDefaultPosition, buttonSize, 0 );
     itemFlexGridSizer4->Add(_drumControl[4]->_btnBrowse, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[5]->_label = new wxStaticText( itemDialog1, wxID_STATIC, _T("6:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -727,22 +753,22 @@ void AlgoRhythmia::CreateControls()
     _drumControl[5]->_offButton->SetValue(false);
     itemBoxSizer69->Add(_drumControl[5]->_offButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[5]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO6, wxDefaultPosition, wxSize( 132, 20 ), 46, midiNoteChoices, 0 );
+    _drumControl[5]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO6, wxDefaultPosition, instrumentSize, 46, midiNoteChoices, 0 );
     _drumControl[5]->_drumSelection->SetStringSelection(_("Low Tom"));
     itemFlexGridSizer4->Add(_drumControl[5]->_drumSelection, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[5]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY6, wxDefaultPosition, wxSize(68, 20), 17, drumDensityChoices, 0 );
+    _drumControl[5]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY6, wxDefaultPosition, densitySize, 17, drumDensityChoices, 0 );
     _drumControl[5]->_avgDensity->SetStringSelection(_("0.063"));
     itemFlexGridSizer4->Add(_drumControl[5]->_avgDensity, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[5]->_btnSurvive = new wxButton( itemDialog1, ID_SURVIVE6, _("Survive"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[5]->_btnSurvive, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[5]->_btnSurvive = new wxButton( itemDialog1, ID_SURVIVE6, _("Survive"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[5]->_btnSurvive, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[5]->_btnDie = new wxButton( itemDialog1, ID_DIE6, _("Die"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[5]->_btnDie, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[5]->_btnDie = new wxButton( itemDialog1, ID_DIE6, _("Die"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[5]->_btnDie, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[5]->_btnInvert = new wxButton( itemDialog1, ID_INVERT6, _("Invert"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[5]->_btnInvert, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[5]->_btnInvert = new wxButton( itemDialog1, ID_INVERT6, _("Invert"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[5]->_btnInvert, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[5]->_volSlider = new wxSlider( itemDialog1, ID_VOLUME6, 100, 0, 200, wxDefaultPosition, wxSize(100, 22), wxNO_BORDER );
     itemFlexGridSizer4->Add(_drumControl[5]->_volSlider, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 1 );
@@ -754,10 +780,10 @@ void AlgoRhythmia::CreateControls()
     _drumControl[5]->_chkOn->SetValue(true);
     itemFlexGridSizer4->Add(_drumControl[5]->_chkOn, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[5]->_sampleName = new wxTextCtrl( itemDialog1, ID_SAMPLE6, _("ltom.wav"), wxDefaultPosition, wxDefaultSize, 0 );
+    _drumControl[5]->_sampleName = new wxTextCtrl( itemDialog1, ID_SAMPLE6, wxFileName(_filenames[5]).GetName(), wxDefaultPosition, filenameSize, 0 );
     itemFlexGridSizer4->Add(_drumControl[5]->_sampleName, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[5]->_btnBrowse = new wxButton( itemDialog1, ID_BROWSE6, _("Browse"), wxDefaultPosition, wxSize(60, -1), 0 );
+    _drumControl[5]->_btnBrowse = new wxButton( itemDialog1, ID_BROWSE6, _("Browse"), wxDefaultPosition, buttonSize, 0 );
     itemFlexGridSizer4->Add(_drumControl[5]->_btnBrowse, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[6]->_label = new wxStaticText( itemDialog1, wxID_STATIC, _T("7:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -774,22 +800,22 @@ void AlgoRhythmia::CreateControls()
     _drumControl[6]->_offButton->SetValue(false);
     itemBoxSizer80->Add(_drumControl[6]->_offButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[6]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO7, wxDefaultPosition, wxSize( 132, 20 ), 46, midiNoteChoices, 0 );
+    _drumControl[6]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO7, wxDefaultPosition, instrumentSize, 46, midiNoteChoices, 0 );
     _drumControl[6]->_drumSelection->SetStringSelection(_("Low-Mid Tom"));
     itemFlexGridSizer4->Add(_drumControl[6]->_drumSelection, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[6]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY7, wxDefaultPosition, wxSize(68, 20), 17, midiNoteChoices, 0 );
+    _drumControl[6]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY7, wxDefaultPosition, densitySize, 17, drumDensityChoices, 0 );
     _drumControl[6]->_avgDensity->SetStringSelection(_("0.063"));
     itemFlexGridSizer4->Add(_drumControl[6]->_avgDensity, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[6]->_btnSurvive = new wxButton( itemDialog1, ID_SURVIVE7, _("Survive"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[6]->_btnSurvive, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[6]->_btnSurvive = new wxButton( itemDialog1, ID_SURVIVE7, _("Survive"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[6]->_btnSurvive, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[6]->_btnDie = new wxButton( itemDialog1, ID_DIE7, _("Die"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[6]->_btnDie, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[6]->_btnDie = new wxButton( itemDialog1, ID_DIE7, _("Die"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[6]->_btnDie, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[6]->_btnInvert = new wxButton( itemDialog1, ID_INVERT7, _("Invert"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[6]->_btnInvert, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[6]->_btnInvert = new wxButton( itemDialog1, ID_INVERT7, _("Invert"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[6]->_btnInvert, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[6]->_volSlider = new wxSlider( itemDialog1, ID_VOLUME7, 100, 0, 200, wxDefaultPosition, wxSize(100, 22), wxNO_BORDER );
     itemFlexGridSizer4->Add(_drumControl[6]->_volSlider, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 1 );
@@ -801,10 +827,10 @@ void AlgoRhythmia::CreateControls()
     _drumControl[6]->_chkOn->SetValue(true);
     itemFlexGridSizer4->Add(_drumControl[6]->_chkOn, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[6]->_sampleName = new wxTextCtrl( itemDialog1, ID_SAMPLE7, _("mtom.wav"), wxDefaultPosition, wxDefaultSize, 0 );
+    _drumControl[6]->_sampleName = new wxTextCtrl( itemDialog1, ID_SAMPLE7, wxFileName(_filenames[6]).GetName(), wxDefaultPosition, filenameSize, 0 );
     itemFlexGridSizer4->Add(_drumControl[6]->_sampleName, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[6]->_btnBrowse = new wxButton( itemDialog1, ID_BROWSE7, _("Browse"), wxDefaultPosition, wxSize(60, -1), 0 );
+    _drumControl[6]->_btnBrowse = new wxButton( itemDialog1, ID_BROWSE7, _("Browse"), wxDefaultPosition, buttonSize, 0 );
     itemFlexGridSizer4->Add(_drumControl[6]->_btnBrowse, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[7]->_label = new wxStaticText( itemDialog1, wxID_STATIC, _T("8:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -821,22 +847,22 @@ void AlgoRhythmia::CreateControls()
     _drumControl[7]->_offButton->SetValue(false);
     itemBoxSizer91->Add(_drumControl[7]->_offButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[7]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO8, wxDefaultPosition, wxSize( 132, 20 ), 46, midiNoteChoices, 0 );
+    _drumControl[7]->_drumSelection = new wxChoice( itemDialog1, ID_DRUMCOMBO8, wxDefaultPosition, instrumentSize, 46, midiNoteChoices, 0 );
     _drumControl[7]->_drumSelection->SetStringSelection(_("High-Mid Tom"));
     itemFlexGridSizer4->Add(_drumControl[7]->_drumSelection, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[7]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY8, wxDefaultPosition, wxSize(68, 20), 17, drumDensityChoices, 0 );
+    _drumControl[7]->_avgDensity = new wxChoice( itemDialog1, ID_DENSITY8, wxDefaultPosition, densitySize, 17, drumDensityChoices, 0 );
     _drumControl[7]->_avgDensity->SetStringSelection(_("0.063"));
     itemFlexGridSizer4->Add(_drumControl[7]->_avgDensity, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[7]->_btnSurvive = new wxButton( itemDialog1, ID_SURVIVE8, _("Survive"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[7]->_btnSurvive, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[7]->_btnSurvive = new wxButton( itemDialog1, ID_SURVIVE8, _("Survive"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[7]->_btnSurvive, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[7]->_btnDie = new wxButton( itemDialog1, ID_DIE8, _("Die"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[7]->_btnDie, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[7]->_btnDie = new wxButton( itemDialog1, ID_DIE8, _("Die"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[7]->_btnDie, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[7]->_btnInvert = new wxButton( itemDialog1, ID_INVERT8, _("Invert"), wxDefaultPosition, wxSize(56, -1), 0 );
-    itemFlexGridSizer4->Add(_drumControl[7]->_btnInvert, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
+    _drumControl[7]->_btnInvert = new wxButton( itemDialog1, ID_INVERT8, _("Invert"), wxDefaultPosition, buttonSize, 0 );
+    itemFlexGridSizer4->Add(_drumControl[7]->_btnInvert, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[7]->_volSlider = new wxSlider( itemDialog1, ID_VOLUME8, 100, 0, 200, wxDefaultPosition, wxSize(100, 22), wxNO_BORDER );
     itemFlexGridSizer4->Add(_drumControl[7]->_volSlider, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 1 );
@@ -848,10 +874,10 @@ void AlgoRhythmia::CreateControls()
     _drumControl[7]->_chkOn->SetValue(true);
     itemFlexGridSizer4->Add(_drumControl[7]->_chkOn, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[7]->_sampleName = new wxTextCtrl( itemDialog1, ID_SAMPLE8, _("htom.wav"), wxDefaultPosition, wxDefaultSize, 0 );
+    _drumControl[7]->_sampleName = new wxTextCtrl( itemDialog1, ID_SAMPLE8, wxFileName(_filenames[7]).GetName(), wxDefaultPosition, filenameSize, 0 );
     itemFlexGridSizer4->Add(_drumControl[7]->_sampleName, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
-    _drumControl[7]->_btnBrowse = new wxButton( itemDialog1, ID_BROWSE8, _("Browse"), wxDefaultPosition, wxSize(60, -1), 0 );
+    _drumControl[7]->_btnBrowse = new wxButton( itemDialog1, ID_BROWSE8, _("Browse"), wxDefaultPosition, buttonSize, 0 );
     itemFlexGridSizer4->Add(_drumControl[7]->_btnBrowse, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     wxBoxSizer* itemBoxSizer102 = new wxBoxSizer(wxHORIZONTAL);
@@ -1076,6 +1102,7 @@ AlgoRhythmia::~AlgoRhythmia()
 		if( _sourceVoice[count] )
 		{
 			_sourceVoice[count]->DestroyVoice();
+			_sourceVoice[count] = NULL;
 		}
 	}
     SAFE_RELEASE( _xaudio2 );
@@ -1620,7 +1647,7 @@ void* AlgoRhythmia::Entry( )
 				if( _alwayskickone && _step == 0 )
 				{
 #ifdef WIN32
-					if( _midiOn )
+					if( _midiOn && _outHandle )
 					{
 						midiOutShortMsg(_outHandle, (0x007F2390 + _midichannel));
 					}
@@ -1672,7 +1699,7 @@ void* AlgoRhythmia::Entry( )
 						}
 						hiWord = MAKEWORD( (0x90 + _midichannel), midival[_drumControl[counter]->_drumNote] );
 						fullWord = MAKELONG( hiWord, loWord );
-						if( _midiOn )
+						if( _midiOn && _outHandle )
 						{
 							midiOutShortMsg(_outHandle, fullWord );
 						}
@@ -1724,12 +1751,28 @@ void AlgoRhythmia::SampleBrowse( int drumNumber )
 	if( _sourceVoice[drumNumber] )
 	{
 		_sourceVoice[drumNumber]->DestroyVoice();
+		_sourceVoice[drumNumber] = NULL;
 	}
 #endif
 
-	_wave[drumNumber]->Load(fdialog.GetPath().wchar_str());
+	_filenames[drumNumber] = fdialog.GetPath();
 
-	_drumControl[drumNumber]->_sampleName->SetValue( fdialog.GetPath() );
+	_wave[drumNumber]->Load(_filenames[drumNumber].wchar_str());
+	if( _wave[drumNumber] == NULL )
+	{
+		return;
+		//wxMessageBox::Show(wxString::Format(_("Failed to load sample %s"), _filenames[drumNumber]), _("Sample Load Failed."));
+	}
+
+	_drumControl[drumNumber]->_sampleName->SetValue( wxFileName(_filenames[drumNumber]).GetName() );
+
+	// Load the new sample.
+	HRESULT hr;
+	if( FAILED(hr = _xaudio2->CreateSourceVoice( &_sourceVoice[drumNumber], _wave[drumNumber]->GetWaveFormatEx(),
+         0, XAUDIO2_DEFAULT_FREQ_RATIO, NULL, NULL, NULL ) ) )
+	{
+		return;
+	}
 
 	return;
 }
@@ -2157,7 +2200,10 @@ void AlgoRhythmia::OnBasepatternSelected( wxCommandEvent& event )
 void AlgoRhythmia::OnMidideviceSelected( wxCommandEvent& event )
 {
 #ifdef WIN32
-	midiOutClose(_outHandle);
+	if( _outHandle )
+	{
+		midiOutClose(_outHandle);
+	}
 	/* Open the MIDI Device */
     int selection = event.GetSelection();
 	HRESULT result = midiOutOpen(&_outHandle, selection, 0, 0, CALLBACK_WINDOW);
@@ -2229,11 +2275,17 @@ void AlgoRhythmia::OnStopClick( wxCommandEvent& event )
 #ifdef WIN32
 	for( int i = 0; i < DRUM_MAX; i++ )
 	{
-		_sourceVoice[i]->Stop();
-		_sourceVoice[i]->FlushSourceBuffers();
+		if( _sourceVoice[i] != NULL )
+		{
+			_sourceVoice[i]->Stop();
+			_sourceVoice[i]->FlushSourceBuffers();
+		}
 	}
 	// Make sure all notes are off.
-	midiOutShortMsg(_outHandle, 0x00007BB0);
+	if( _outHandle != NULL )
+	{
+		midiOutShortMsg(_outHandle, 0x00007BB0);
+	}
 #endif
 	_step = 0;
 	_mutex.Unlock();
@@ -2408,7 +2460,7 @@ void AlgoRhythmia::OnLoadPatternClick( wxCommandEvent& event )
     wxMessageBox( "Pattern load is disabled in the demo version." );
     return;
 #endif
-	wxFileDialog fdialog( NULL, _T("Choose a file to Load"), _T("."), _T("Pattern"), _T("XML Files (*.xml) |*.xml||"), wxFD_OPEN );
+	wxFileDialog fdialog( NULL, _T("Choose a file to Load"), _T("."), _T("Pattern"), _T("AlgoRhythmia Files (*.algo) |*.algo||"), wxFD_OPEN );
 
 	wxString fileName;
 	
@@ -2457,29 +2509,49 @@ void AlgoRhythmia::LoadPattern( wxString& filename )
 	value = atoi(_configData->GetValue( _("basepattern") ).mb_str());
 	_basePattern->SetSelection ( value );
 	int count;
+	HRESULT hr;
 	for( count = 0; count < DRUM_MAX; count++ )
 	{
-		_drumControl[count]->_drumOn = atoi(_configData->GetValue( wxString::Format(_("drumcontrol%d/drumon"), count ) ).mb_str());
+		_drumControl[count]->_drumOn = atoi(_configData->GetValue( wxString::Format(_("drumcontrol%ddrumon"), count ) ).mb_str());
 		_drumControl[count]->_onButton->SetValue( _drumControl[count]->_drumOn );
 		_drumControl[count]->_offButton->SetValue( !_drumControl[count]->_drumOn );
-		_drumControl[count]->_sampleOn = atoi(_configData->GetValue( wxString::Format(_("drumcontrol%d/sampleon"), count ) ).mb_str());
+		_drumControl[count]->_sampleOn = atoi(_configData->GetValue( wxString::Format(_("drumcontrol%dsampleon"), count ) ).mb_str());
 		_drumControl[count]->_chkOn->SetValue( _drumControl[count]->_sampleOn );
-		_drumControl[count]->_drumNote = atoi(_configData->GetValue( wxString::Format(_("drumcontrol%d/drumnote"), count ) ).mb_str());
-		value = atoi(_configData->GetValue( wxString::Format(_("drumcontrol%d/drumselection"), count ) ).mb_str());
+		_drumControl[count]->_drumNote = atoi(_configData->GetValue( wxString::Format(_("drumcontrol%ddrumnote"), count ) ).mb_str());
+		value = atoi(_configData->GetValue( wxString::Format(_("drumcontrol%ddrumselection"), count ) ).mb_str());
 		_drumControl[count]->_drumSelection->SetSelection( value );
+		// Set up sample.
 		wxString name;
-		name = _configData->GetValue( wxString::Format(_("drumcontrol%d/samplename"), count ) );
-		_drumControl[count]->_sampleName->SetValue( name );
-		name = _configData->GetValue( wxString::Format(_("drumcontrol%d/avgdensity"), count ) );
+		name = _configData->GetValue( wxString::Format(_("drumcontrol%dsamplename"), count ) );
+		_filenames[count] = name;
+		_drumControl[count]->_sampleName->SetValue( wxFileName(_filenames[count]).GetName() );
+		if( _sourceVoice[count] )
+		{
+			_sourceVoice[count]->DestroyVoice();
+			_sourceVoice[count] = NULL;
+		}
+		_wave[count]->Load(_filenames[count].wchar_str());
+		if( FAILED(hr = _xaudio2->CreateSourceVoice( &_sourceVoice[count], _wave[count]->GetWaveFormatEx(),
+            0, XAUDIO2_DEFAULT_FREQ_RATIO, NULL, NULL, NULL ) ) )
+		{
+			wxMessageBox(wxString::Format(_("Could not load sample %s, CreateSourceVoice returned %d"), _wave[count], hr));
+			return;
+		}
+		// End set up sample.
+		name = _configData->GetValue( wxString::Format(_("drumcontrol%davgdensity"), count ) );
 		_drumControl[count]->_avgDensity->SetStringSelection( name );
-		value = atoi(_configData->GetValue( wxString::Format(_("drumcontrol%d/densityselection"), count ) ).mb_str());
+		value = atoi(_configData->GetValue( wxString::Format(_("drumcontrol%ddensityselection"), count ) ).mb_str());
 		_drumControl[count]->_avgDensity->SetSelection( value );
 		int note;
 		for ( note = 0; note < MAX_PATTERN_SIZE; note++ )
 		{
-           bool state = atoi(_configData->GetValue( wxString::Format(_("drumcontrol%d/notedata/%d"), count, note )).mb_str());
+           bool state = atoi(_configData->GetValue( wxString::Format(_("drumcontrol%dnotedata%d"), count, note )).mb_str());
 		   _drumControl[count]->_noteData[note] = state;
 		}
+
+
+	// Load the new sample.
+
 		// Store effects settings.
 		//_drumControl[count]->_fxManager->ReadConfigurationSettings( count, _configData );
 		//int fxnum;
@@ -2505,7 +2577,7 @@ void AlgoRhythmia::OnSavePatternClick( wxCommandEvent& event )
     wxMessageBox( _("Pattern save is disabled in the demo version.") );
     return;
 #endif
-	wxFileDialog fdialog( NULL, _T("Choose a file to Save"), _T("."), _T("Pattern"), _T("XML Files (*.xml) |*.xml||"), wxFD_SAVE|wxFD_CHANGE_DIR );
+	wxFileDialog fdialog( NULL, _T("Choose a file to Save"), _T("."), _T("Pattern"), _T("AlgoRhythmia Files (*.algo) |*.algo||"), wxFD_SAVE|wxFD_CHANGE_DIR );
 
 	wxString fileName;
 
@@ -2538,17 +2610,17 @@ void AlgoRhythmia::SavePattern( wxString& filename )
 	int count;
 	for( count = 0; count < DRUM_MAX; count++ )
 	{
-		_configData->SetValue( wxString::Format(_("drumcontrol%d/drumon"), count ), wxString::Format( _("%d"), _drumControl[count]->_drumOn ));
-		_configData->SetValue( wxString::Format(_("drumcontrol%d/sampleon"), count ), wxString::Format( _("%d"), _drumControl[count]->_sampleOn )); 
-		_configData->SetValue( wxString::Format(_("drumcontrol%d/drumnote"), count ), wxString::Format( _("%d"), _drumControl[count]->_drumNote ));
-		_configData->SetValue( wxString::Format(_("drumcontrol%d/drumselection"), count ), wxString::Format( _("%d"), _drumControl[count]->_drumSelection->GetSelection() ));
-		_configData->SetValue( wxString::Format(_("drumcontrol%d/samplename"), count ), _drumControl[count]->_sampleName->GetValue() );
-		_configData->SetValue( wxString::Format(_("drumcontrol%d/avgdensity"), count ), _drumControl[count]->_avgDensity->GetStringSelection() );
-		_configData->SetValue( wxString::Format(_("drumcontrol%d/densityselection"), count ), wxString::Format( _("%d"), _drumControl[count]->_avgDensity->GetSelection() ));
+		_configData->SetValue( wxString::Format(_("drumcontrol%ddrumon"), count ), wxString::Format( _("%d"), _drumControl[count]->_drumOn ));
+		_configData->SetValue( wxString::Format(_("drumcontrol%dsampleon"), count ), wxString::Format( _("%d"), _drumControl[count]->_sampleOn )); 
+		_configData->SetValue( wxString::Format(_("drumcontrol%ddrumnote"), count ), wxString::Format( _("%d"), _drumControl[count]->_drumNote ));
+		_configData->SetValue( wxString::Format(_("drumcontrol%ddrumselection"), count ), wxString::Format( _("%d"), _drumControl[count]->_drumSelection->GetSelection() ));
+		_configData->SetValue( wxString::Format(_("drumcontrol%dsamplename"), count ), _filenames[count] );
+		_configData->SetValue( wxString::Format(_("drumcontrol%davgdensity"), count ), _drumControl[count]->_avgDensity->GetStringSelection() );
+		_configData->SetValue( wxString::Format(_("drumcontrol%ddensityselection"), count ), wxString::Format( _("%d"), _drumControl[count]->_avgDensity->GetSelection() ));
 		int note;
 		for ( note = 0; note < MAX_PATTERN_SIZE; note++ )
 		{
-			_configData->SetValue( wxString::Format(_("drumcontrol%d/notedata/%d"), count, note ),
+			_configData->SetValue( wxString::Format(_("drumcontrol%dnotedata%d"), count, note ),
 				wxString::Format( _("%d"), _drumControl[count]->_noteData[note] ) );
 		}
 		// Store effects settings.

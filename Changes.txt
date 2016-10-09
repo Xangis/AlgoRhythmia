@@ -1,14 +1,16 @@
 Changes still needed:
 
-Add General MIDI level 2 drum sounds to MIDI drum list.
+None pending.
 
 Changes from AlgoRhythmia Version 4 to 4.1 (August 2016):
 
 1) Replaced entire sample set of 76 files with one ENTIRELY from freewavesamples.com,
-with 102 samples, AND with names identical to those from FWS instead of those weird
-DOS-style filenames we had.
-
-2) Updated various libraries to more recent versions (wxWidgets, for example).
+with 100 samples, AND with names identical to those from FWS instead of those weird
+DOS-style filenames we had. Also adjusted default starting drum sounds.
+2) Updated libsndfile and wxWidgets libraries.
+3) Added General MIDI Level 2 drum notes to MIDI note list.
+4) Bug fixes related to sample loading and voice allocation.
+5) Bug fixes in pattern save and load.
 
 Changes from AlgoRhythmia Version 3 to 4:
 

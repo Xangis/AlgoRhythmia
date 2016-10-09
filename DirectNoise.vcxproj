@@ -31,7 +31,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Demo Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v100</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -74,8 +74,8 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules />
     <CodeAnalysisRuleAssemblies />
-    <LibraryPath>C:\Users\Xangis\code\AudioFile;C:\Users\Xangis\code\wxAudioControls\Debug;F:\lib\wxWidgets-3.0.2\lib\vc_lib;F:\lib\libsndfile-1.0.25\lib;$(LibraryPath);$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
-    <IncludePath>C:\Users\Xangis\code\AudioFile;F:\lib\libsndfile-1.0.25\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;F:\lib\wxWidgets-3.0.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Xangis\code\AudioFile;C:\Users\Xangis\code\wxAudioControls\Debug;F:\lib\wxWidgets-3.0.2\lib\vc_lib;F:\lib\libsndfile-1.0.27\lib;$(LibraryPath);$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
+    <IncludePath>C:\Users\Xangis\code\AudioFile;F:\lib\libsndfile-1.0.27\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;F:\lib\wxWidgets-3.0.2\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>Release\</OutDir>
@@ -88,12 +88,14 @@
     <LibraryPath>C:\Users\Xangis\code\AudioFile;C:\Users\Xangis\code\wxAudioControls\Release;F:\lib\wxWidgets-3.0.2\lib\vc_lib;F:\lib\libsndfile-1.0.25\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Demo Release|Win32'">
-    <OutDir>$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
+    <OutDir>Demo\</OutDir>
+    <IntDir>Demo\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules />
     <CodeAnalysisRuleAssemblies />
+    <LibraryPath>C:\Users\Xangis\code\AudioFile;C:\Users\Xangis\code\wxAudioControls\Release;F:\lib\wxWidgets-3.0.2\lib\vc_lib;F:\lib\libsndfile-1.0.25\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Xangis\code\AudioFile;F:\lib\libsndfile-1.0.25\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;F:\lib\wxWidgets-3.0.2\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Demo Debug|Win32'">
     <OutDir>$(Configuration)\</OutDir>
@@ -159,8 +161,8 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>dsound.lib;winmm.lib;dxguid.lib;wxmsw28_core.lib;wxmsw28_adv.lib;wxbase28.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comctl32.lib;rpcrt4.lib;wxtiff.lib;wxpng.lib;wxjpeg.lib;wxzlib.lib;xerces-c_2.lib;esellerateLibrary.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)AlgoRhythmiaDemo.exe</OutputFile>
+      <AdditionalDependencies>winmm.lib;wxmsw30u_core.lib;wxmsw30u_adv.lib;wxbase30u_xml.lib;wxbase30u.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comctl32.lib;rpcrt4.lib;wxtiff.lib;wxpng.lib;wxjpeg.lib;wxzlib.lib;AudioFile.lib;libsndfile-1.lib;wxAudioControls.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)AlgoRhythmia.exe</OutputFile>
       <AdditionalLibraryDirectories>F:\Zeta Centauri\trunk\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>

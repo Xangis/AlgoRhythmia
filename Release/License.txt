@@ -6,7 +6,7 @@ liability, whether in an action of contract, tort or otherwise, arising from,
 out of or in connection with the software or the use or other dealings in
 the software.
 
-DrumPads is Copyright 2011-2016 Zeta Centauri.
+AlgoRhythmia is Copyright 2006-2016 Zeta Centauri.
 
-DrumPads may not be distributed without permission. All included sample wave 
-files are royalty-free.
+AlgoRhythmia may not be distributed without permission. All included sample 
+wave files are royalty-free.

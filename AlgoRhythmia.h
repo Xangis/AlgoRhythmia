@@ -27,7 +27,7 @@
 
 #define ID_ALGORHYTHMIA_DIALOG 11000
 #define SYMBOL_ALGORHYTHMIA_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX
-#define SYMBOL_ALGORHYTHMIA_TITLE _("AlgoRhythmia 4")
+#define SYMBOL_ALGORHYTHMIA_TITLE _("AlgoRhythmia 4.1")
 #define SYMBOL_ALGORHYTHMIA_IDNAME ID_ALGORHYTHMIA_DIALOG
 #define SYMBOL_ALGORHYTHMIA_SIZE wxSize(399, 299)
 #define SYMBOL_ALGORHYTHMIA_POSITION wxDefaultPosition
@@ -444,6 +444,7 @@ private:
     AboutDlg* _aboutDlg;
     DrumDialog* _measureEditDlg;
 	DrumControl* _drumControl[DRUM_MAX];
+	wxString _filenames[DRUM_MAX];
     wxCheckBox* _chkKickFirstBeat;
     wxCheckBox* _chkSimilarMeasures;
     wxCheckBox* _chkVaryVolume;
