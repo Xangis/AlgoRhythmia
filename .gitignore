@@ -40,3 +40,5 @@
 *.suo
 *.manifest
 *.cache
+
+.DS_Store

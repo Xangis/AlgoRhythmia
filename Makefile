@@ -5,7 +5,7 @@
 WX_CONFIG := wx-config
 
 # Main executable file
-PROGRAM = AlgoRhythmia
+PROGRAM = installer/AlgoRhythmia.app/Contents/MacOS/AlgoRhythmia
 
 # Directory containing library portions of code.
 INCLUDEDIR = ../../lib/libsndfile-1.0.27/include/
