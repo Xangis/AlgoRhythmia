@@ -472,40 +472,40 @@ void AlgoRhythmia::CreateControls()
     itemStaticBoxSizer3->Add(itemFlexGridSizer4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 2);
 
     wxStaticText* itemStaticText4 = new wxStaticText( itemDialog1, wxID_STATIC, _("Ch"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(itemStaticText4, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemFlexGridSizer4->Add(itemStaticText4, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText5 = new wxStaticText( itemDialog1, wxID_STATIC, _("Active"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(itemStaticText5, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemFlexGridSizer4->Add(itemStaticText5, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText6 = new wxStaticText( itemDialog1, wxID_STATIC, _("MIDI Instrument"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(itemStaticText6, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemFlexGridSizer4->Add(itemStaticText6, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText7 = new wxStaticText( itemDialog1, wxID_STATIC, _("Avg Density"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(itemStaticText7, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemFlexGridSizer4->Add(itemStaticText7, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	itemFlexGridSizer4->AddSpacer( 1 );
 
     wxStaticText* itemStaticText9 = new wxStaticText( itemDialog1, wxID_STATIC, _("Evolution"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(itemStaticText9, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemFlexGridSizer4->Add(itemStaticText9, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	itemFlexGridSizer4->AddSpacer( 1 );
 
     wxStaticText* itemStaticText14 = new wxStaticText( itemDialog1, wxID_STATIC, _("Vol"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(itemStaticText14, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemFlexGridSizer4->Add(itemStaticText14, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	// FX column.
 	//itemFlexGridSizer4->AddSpacer( 1 );
 
 	wxStaticText* itemStaticText11 = new wxStaticText( itemDialog1, wxID_STATIC, _("On"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(itemStaticText11, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemFlexGridSizer4->Add(itemStaticText11, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText12 = new wxStaticText( itemDialog1, wxID_STATIC, _("Sample"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(itemStaticText12, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemFlexGridSizer4->Add(itemStaticText12, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	itemFlexGridSizer4->AddSpacer( 1 );
 
     _drumControl[0]->_label = new wxStaticText( itemDialog1, wxID_STATIC, _T("1:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(_drumControl[0]->_label, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 2);
+    itemFlexGridSizer4->Add(_drumControl[0]->_label, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
 
     wxBoxSizer* itemBoxSizer14 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer4->Add(itemBoxSizer14, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 0);
@@ -552,7 +552,7 @@ void AlgoRhythmia::CreateControls()
     itemFlexGridSizer4->Add(_drumControl[0]->_btnBrowse, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[1]->_label = new wxStaticText( itemDialog1, wxID_STATIC, _T("2:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(_drumControl[1]->_label, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 2);
+    itemFlexGridSizer4->Add(_drumControl[1]->_label, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
 
     wxBoxSizer* itemBoxSizer25 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer4->Add(itemBoxSizer25, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 0);
@@ -599,7 +599,7 @@ void AlgoRhythmia::CreateControls()
     itemFlexGridSizer4->Add(_drumControl[1]->_btnBrowse, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[2]->_label = new wxStaticText( itemDialog1, wxID_STATIC, _T("3:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(_drumControl[2]->_label, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 2);
+    itemFlexGridSizer4->Add(_drumControl[2]->_label, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
 
     wxBoxSizer* itemBoxSizer36 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer4->Add(itemBoxSizer36, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 0);
@@ -646,7 +646,7 @@ void AlgoRhythmia::CreateControls()
     itemFlexGridSizer4->Add(_drumControl[2]->_btnBrowse, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[3]->_label = new wxStaticText( itemDialog1, wxID_STATIC, _T("4:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(_drumControl[3]->_label, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 2);
+    itemFlexGridSizer4->Add(_drumControl[3]->_label, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
 
     wxBoxSizer* itemBoxSizer47 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer4->Add(itemBoxSizer47, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 0);
@@ -693,7 +693,7 @@ void AlgoRhythmia::CreateControls()
     itemFlexGridSizer4->Add(_drumControl[3]->_btnBrowse, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[4]->_label = new wxStaticText( itemDialog1, wxID_STATIC, _T("5:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(_drumControl[4]->_label, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 2);
+    itemFlexGridSizer4->Add(_drumControl[4]->_label, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
 
     wxBoxSizer* itemBoxSizer58 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer4->Add(itemBoxSizer58, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 0);
@@ -740,7 +740,7 @@ void AlgoRhythmia::CreateControls()
     itemFlexGridSizer4->Add(_drumControl[4]->_btnBrowse, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[5]->_label = new wxStaticText( itemDialog1, wxID_STATIC, _T("6:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(_drumControl[5]->_label, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 2);
+    itemFlexGridSizer4->Add(_drumControl[5]->_label, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
 
     wxBoxSizer* itemBoxSizer69 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer4->Add(itemBoxSizer69, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 0);
@@ -787,7 +787,7 @@ void AlgoRhythmia::CreateControls()
     itemFlexGridSizer4->Add(_drumControl[5]->_btnBrowse, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[6]->_label = new wxStaticText( itemDialog1, wxID_STATIC, _T("7:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(_drumControl[6]->_label, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 2);
+    itemFlexGridSizer4->Add(_drumControl[6]->_label, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
 
     wxBoxSizer* itemBoxSizer80 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer4->Add(itemBoxSizer80, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 0);
@@ -834,7 +834,7 @@ void AlgoRhythmia::CreateControls()
     itemFlexGridSizer4->Add(_drumControl[6]->_btnBrowse, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
     _drumControl[7]->_label = new wxStaticText( itemDialog1, wxID_STATIC, _T("8:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(_drumControl[7]->_label, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 2);
+    itemFlexGridSizer4->Add(_drumControl[7]->_label, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 2);
 
     wxBoxSizer* itemBoxSizer91 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer4->Add(itemBoxSizer91, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 0);
@@ -909,19 +909,19 @@ void AlgoRhythmia::CreateControls()
     itemBoxSizer103->Add(itemBoxSizer108, 0, wxALIGN_LEFT|wxALL, 0);
 
     wxStaticText* itemStaticText109 = new wxStaticText( itemDialog1, wxID_STATIC, _("BPM:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer108->Add(itemStaticText109, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemBoxSizer108->Add(itemStaticText109, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     _txtBPM = new wxTextCtrl( itemDialog1, ID_BPM, _("130"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer108->Add(_txtBPM, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	wxStaticText* itemStaticText110 = new wxStaticText( itemDialog1, wxID_STATIC, _("Swing"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer108->Add(itemStaticText110, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemBoxSizer108->Add(itemStaticText110, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	_swingSlider = new wxSlider( itemDialog1, ID_SWING_SLIDER, 100, 100, 150, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	itemBoxSizer108->Add(_swingSlider, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
     wxStaticText* itemStaticText112 = new wxStaticText( itemDialog1, wxID_STATIC, _("Base Pattern"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer108->Add(itemStaticText112, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemBoxSizer108->Add(itemStaticText112, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxString _basePatternStrings[] = {
         _("Random"),
@@ -943,7 +943,7 @@ void AlgoRhythmia::CreateControls()
     itemBoxSizer103->Add(itemBoxSizer114, 0, wxALIGN_LEFT|wxALL, 0);
 
     wxStaticText* itemStaticText115 = new wxStaticText( itemDialog1, wxID_STATIC, _("MIDI Device"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer114->Add(itemStaticText115, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemBoxSizer114->Add(itemStaticText115, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxString _midiDeviceStrings[] = {
 		_("MIDI Mapper")
@@ -953,7 +953,7 @@ void AlgoRhythmia::CreateControls()
     itemBoxSizer114->Add(_midiDevice, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText117 = new wxStaticText( itemDialog1, wxID_STATIC, _("Channel"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer114->Add(itemStaticText117, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemBoxSizer114->Add(itemStaticText117, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxString itemChoice118Strings[] = {
         _("1"),
@@ -992,10 +992,10 @@ void AlgoRhythmia::CreateControls()
     itemBoxSizer119->Add(_txtMutateMeasures, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText122 = new wxStaticText( itemDialog1, wxID_STATIC, _("Measures"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer119->Add(itemStaticText122, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemBoxSizer119->Add(itemStaticText122, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText123 = new wxStaticText( itemDialog1, wxID_STATIC, _("Mutation Rate (0 to 1)"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer119->Add(itemStaticText123, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemBoxSizer119->Add(itemStaticText123, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     _txtMutateRate = new wxTextCtrl( itemDialog1, ID_MUTATERATE, _("0.06"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer119->Add(_txtMutateRate, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
@@ -1030,7 +1030,7 @@ void AlgoRhythmia::CreateControls()
     itemBoxSizer294->Add(_radioMeasures, 0, wxALIGN_TOP|wxALL, 2);
 
     wxStaticText* itemStaticText315 = new wxStaticText( itemDialog1, wxID_STATIC, _("Division"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer294->Add(itemStaticText315, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 3);
+    itemBoxSizer294->Add(itemStaticText315, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 3);
 
 	wxString divisionStrings[] = {
 		_("Quarter"),

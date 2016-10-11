@@ -52,7 +52,7 @@ void AboutDlg::CreateControls()
     itemBoxSizer2->Add(itemBoxSizer3, 0, 0, 7);
 
 	wxStaticText* itemStaticText4 = new wxStaticText( itemDialog1, wxID_STATIC, _("AlgoRhythmia 4.1 (c) 2005-2016 Zeta Centauri, Inc.\nhttp://www.zetacentauri.com\n\nDeveloped by Jason Champion"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer3->Add(itemStaticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 10);
+    itemBoxSizer3->Add(itemStaticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 10);
 }
 
 /*!
