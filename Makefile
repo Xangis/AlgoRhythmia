@@ -18,13 +18,13 @@ LIBDIR = ../../lib/libsndfile-1.0.27/lib/
 # Object files
 OBJECTS = AboutDlg.o DrumControl.o EffectsDlg.o PresetDrumPattern.o SoundFxManager.o ../AudioFile/wavefile.o ../wxAudioControls/wxSettingsFile.o AlgoRhythmiaApp.o drumgrid.o AlgoRhythmia.o
 
-CXX = $(shell $(WX_CONFIG) --cxx) -g -ggdb
-#CXX = $(shell $(WX_CONFIG) --cxx) -O3
+#CXX = $(shell $(WX_CONFIG) --cxx) -g -ggdb
+CXX = $(shell $(WX_CONFIG) --cxx) -O3
 
 .SUFFIXES:	.o .cpp
 
 .cpp.o :
-#	$(CXX) -c -D__MACOSX_CORE__ -I$(INCLUDEDIR) -I$(INCLUDEDIR2) -I$(INCLUDEDIR3) -I$(INCLUDEDIR4) -I$(INCLUDEDIR5) `$(WX_CONFIG) --cxxflags` -o $@ $<
+#	$(CXX) -c -g -ggdb -D__MACOSX_CORE__ -I$(INCLUDEDIR) -I$(INCLUDEDIR2) -I$(INCLUDEDIR3) -I$(INCLUDEDIR4) -I$(INCLUDEDIR5) `$(WX_CONFIG) --cxxflags` -o $@ $<
 	$(CXX) -c -D__MACOSX_CORE__ -I$(INCLUDEDIR) -I$(INCLUDEDIR2) -I$(INCLUDEDIR3) -I$(INCLUDEDIR4) -I$(INCLUDEDIR5) `$(WX_CONFIG) --cxxflags` -o $@ $<
 
 all:    $(PROGRAM)
@@ -33,4 +33,4 @@ $(PROGRAM):	$(OBJECTS)
 	$(CXX) -o $(PROGRAM) $(OBJECTS) -L$(LIBDIR) `$(WX_CONFIG) --libs` -lportaudio -lpthread -lsndfile
 
 clean: 
-	rm -f *.o $(PROGRAM)
+	rm -f *.o ../wxAudioControls/*.o $(PROGRAM)
