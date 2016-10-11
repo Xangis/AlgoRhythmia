@@ -24,7 +24,7 @@ DrumControl::DrumControl()
 	int count;
 	for( count = 0; count < MAX_PATTERN_SIZE; count++ )
 	{
-		_noteData[MAX_PATTERN_SIZE] = false;
+		_noteData[count] = false;
 	}
 	//_fxManager = new SoundFxManager;
 	//_fxDialog = 0;
