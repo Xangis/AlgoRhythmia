@@ -8,17 +8,21 @@ WX_CONFIG := wx-config
 PROGRAM = AlgoRhythmia
 
 # Directory containing library portions of code.
+INCLUDEDIR = ../../lib/libsndfile-1.0.27/include/
+INCLUDEDIR2 = ../AudioFile
 INCLUDEDIR3 = rtmidi-2.1.0
 
 # Object files
-OBJECTS = AboutDlg.o DrumControl.o EffectsDlg.o PresetDrumPattern.o SoundFxManager.o wavefile.o wxSettingsFile.o AlgoRhythmiaApp.o AlgoRhythmia.o drumgrid.o
+OBJECTS = AboutDlg.o DrumControl.o EffectsDlg.o PresetDrumPattern.o SoundFxManager.o ../AudioFile/wavefile.o ../wxAudioControls/wxSettingsFile.o AlgoRhythmiaApp.o drumgrid.o AlgoRhythmia.o
 
-CXX = $(shell $(WX_CONFIG) --cxx -ggdb)
+CXX = $(shell $(WX_CONFIG) --cxx) -g -ggdb
+#CXX = $(shell $(WX_CONFIG) --cxx) -O3
 
 .SUFFIXES:	.o .cpp
 
 .cpp.o :
-	$(CXX) -c -D__LINUX_ALSASEQ__ -I$(INCLUDEDIR3) `$(WX_CONFIG) --cxxflags` -o $@ $<
+#	$(CXX) -c -D__MACOSX_CORE__ -I$(INCLUDEDIR) -I$(INCLUDEDIR2) -I$(INCLUDEDIR3) `$(WX_CONFIG) --cxxflags` -o $@ $<
+	$(CXX) -c -D__MACOSX_CORE__ -I$(INCLUDEDIR) -I$(INCLUDEDIR2) -I$(INCLUDEDIR3) `$(WX_CONFIG) --cxxflags` -o $@ $<
 
 all:    $(PROGRAM)
 
