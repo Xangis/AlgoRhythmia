@@ -10,7 +10,10 @@ PROGRAM = AlgoRhythmia
 # Directory containing library portions of code.
 INCLUDEDIR = ../../lib/libsndfile-1.0.27/include/
 INCLUDEDIR2 = ../AudioFile
-INCLUDEDIR3 = rtmidi-2.1.0
+INCLUDEDIR3 = ../../lib/rtmidi-2.1.0
+INCLUDEDIR4 = ../../lib/SDL_2-2.0.3/include
+INCLUDEDIR5 = ../../lib/SDL2_mixer-2.0.1
+LIBDIR = ../../lib/libsndfile-1.0.27/lib/
 
 # Object files
 OBJECTS = AboutDlg.o DrumControl.o EffectsDlg.o PresetDrumPattern.o SoundFxManager.o ../AudioFile/wavefile.o ../wxAudioControls/wxSettingsFile.o AlgoRhythmiaApp.o drumgrid.o AlgoRhythmia.o
@@ -21,13 +24,13 @@ CXX = $(shell $(WX_CONFIG) --cxx) -g -ggdb
 .SUFFIXES:	.o .cpp
 
 .cpp.o :
-#	$(CXX) -c -D__MACOSX_CORE__ -I$(INCLUDEDIR) -I$(INCLUDEDIR2) -I$(INCLUDEDIR3) `$(WX_CONFIG) --cxxflags` -o $@ $<
-	$(CXX) -c -D__MACOSX_CORE__ -I$(INCLUDEDIR) -I$(INCLUDEDIR2) -I$(INCLUDEDIR3) `$(WX_CONFIG) --cxxflags` -o $@ $<
+#	$(CXX) -c -D__MACOSX_CORE__ -I$(INCLUDEDIR) -I$(INCLUDEDIR2) -I$(INCLUDEDIR3) -I$(INCLUDEDIR4) -I$(INCLUDEDIR5) `$(WX_CONFIG) --cxxflags` -o $@ $<
+	$(CXX) -c -D__MACOSX_CORE__ -I$(INCLUDEDIR) -I$(INCLUDEDIR2) -I$(INCLUDEDIR3) -I$(INCLUDEDIR4) -I$(INCLUDEDIR5) `$(WX_CONFIG) --cxxflags` -o $@ $<
 
 all:    $(PROGRAM)
 
 $(PROGRAM):	$(OBJECTS)
-	$(CXX) -o $(PROGRAM) $(OBJECTS) `$(WX_CONFIG) --libs` -lportaudio -lasound -lpthread -lsndfile
+	$(CXX) -o $(PROGRAM) $(OBJECTS) -L$(LIBDIR) `$(WX_CONFIG) --libs` -lportaudio -lpthread -lsndfile
 
 clean: 
 	rm -f *.o $(PROGRAM)

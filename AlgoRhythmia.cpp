@@ -184,7 +184,9 @@ bool AlgoRhythmia::Create( wxWindow* parent, wxWindowID id, const wxString& capt
 		_wave[count] = NULL;
 		_sourceVoice[count] = NULL;
 	}
+#ifdef WIN32
 	_masteringVoice = NULL;
+#endif
 	_measureEditDlg = NULL;
     _aboutDlg = NULL;
 	_chcDivision = NULL;
@@ -272,6 +274,7 @@ bool AlgoRhythmia::Create( wxWindow* parent, wxWindowID id, const wxString& capt
 		if( _wave[count] != NULL ) delete _wave[count];
 		_wave[count] = WaveFile::Load(_filenames[count].wchar_str(), false);
 
+#ifdef WIN32
 		if( FAILED(hr = _xaudio2->CreateSourceVoice( &_sourceVoice[count], _wave[count]->GetWaveFormatEx(),
               0, XAUDIO2_DEFAULT_FREQ_RATIO, NULL, NULL, NULL ) ) )
 		{
@@ -298,6 +301,7 @@ bool AlgoRhythmia::Create( wxWindow* parent, wxWindowID id, const wxString& capt
 		//_drumControl[count]->_fxManager->ActivateFX();
 		// This should not be necessary since we called Initialize with true for load parameters.
 		// _drumControl[count]->_fxManager->LoadCurrentFXParameters();
+#endif
 	}
 
 #ifdef WIN32
@@ -1767,12 +1771,14 @@ void AlgoRhythmia::SampleBrowse( int drumNumber )
 	_drumControl[drumNumber]->_sampleName->SetValue( wxFileName(_filenames[drumNumber]).GetName() );
 
 	// Load the new sample.
+#ifdef WIN32
 	HRESULT hr;
 	if( FAILED(hr = _xaudio2->CreateSourceVoice( &_sourceVoice[drumNumber], _wave[drumNumber]->GetWaveFormatEx(),
          0, XAUDIO2_DEFAULT_FREQ_RATIO, NULL, NULL, NULL ) ) )
 	{
 		return;
 	}
+#endif
 
 	return;
 }
@@ -2509,7 +2515,9 @@ void AlgoRhythmia::LoadPattern( wxString& filename )
 	value = atoi(_configData->GetValue( _("basepattern") ).mb_str());
 	_basePattern->SetSelection ( value );
 	int count;
+#ifdef WIN32
 	HRESULT hr;
+#endif
 	for( count = 0; count < DRUM_MAX; count++ )
 	{
 		_drumControl[count]->_drumOn = atoi(_configData->GetValue( wxString::Format(_("drumcontrol%ddrumon"), count ) ).mb_str());
@@ -2527,16 +2535,22 @@ void AlgoRhythmia::LoadPattern( wxString& filename )
 		_drumControl[count]->_sampleName->SetValue( wxFileName(_filenames[count]).GetName() );
 		if( _sourceVoice[count] )
 		{
+#ifdef WIN32
 			_sourceVoice[count]->DestroyVoice();
+#else
+                        delete _sourceVoice[count];
+#endif
 			_sourceVoice[count] = NULL;
 		}
 		_wave[count]->Load(_filenames[count].wchar_str());
+#ifdef WIN32
 		if( FAILED(hr = _xaudio2->CreateSourceVoice( &_sourceVoice[count], _wave[count]->GetWaveFormatEx(),
             0, XAUDIO2_DEFAULT_FREQ_RATIO, NULL, NULL, NULL ) ) )
 		{
 			wxMessageBox(wxString::Format(_("Could not load sample %s, CreateSourceVoice returned %d"), _wave[count], hr));
 			return;
 		}
+#endif
 		// End set up sample.
 		name = _configData->GetValue( wxString::Format(_("drumcontrol%davgdensity"), count ) );
 		_drumControl[count]->_avgDensity->SetStringSelection( name );
@@ -2708,7 +2722,11 @@ void AlgoRhythmia::UpdateVolume( int channel )
     }
     int value = _drumControl[channel]->_volSlider->GetValue();
 	float newValue = (float)value / 100.0;
+#ifdef WIN32
     _sourceVoice[channel]->SetVolume( newValue, 0 );
+#else
+#pragma message ("TODO: Fix volume setting on non-Windows builds")
+#endif
     // Convert range 0 to 200 range 0 to 127.
     _drumControl[channel]->_midiVolume = (value * 127 / 200);
 }
@@ -2840,7 +2858,11 @@ int AlgoRhythmia::PrepareMIDIBuffer( char* buffer, int length )
 						// Adjust sample volume too: 10% range.
 						int value = _drumControl[drum]->_volSlider->GetValue();
 						float newValue = (float)(value + rand() % 20) / 100.0;
+#ifdef WIN32
 						_sourceVoice[drum]->SetVolume( newValue, 0 );
+#else
+#pragma message ("TODO: Fix volume setting on non-Windows builds")
+#endif
                     }
                     if( bytesWritten < length )
                     {

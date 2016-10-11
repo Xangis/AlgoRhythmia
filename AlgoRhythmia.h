@@ -19,10 +19,21 @@
 #include "AboutDlg.h"
 #include "wxSettingsFile.h"
 #include "DrumControl.h"
+
 #ifdef WIN32
 #define INITGUID
 #include <XAudio2.h>
 #endif
+
+#ifdef linux
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_mixer.h"
+#endif
+#ifdef __APPLE__
+#include "SDL.h"
+#include "SDL_mixer.h"
+#endif
+
 #include "wavefile.h"
 
 #define ID_ALGORHYTHMIA_DIALOG 11000
@@ -425,6 +436,7 @@ private:
 	double _mutateRate;	// Mutation rate.
 	double _swingRatio;	// Swing ratio.
 	WaveFile* pLoader;
+	WaveFile* _wave[DRUM_MAX];
 #ifdef WIN32
 	LARGE_INTEGER _currtime;
 	LARGE_INTEGER _lasttime;
@@ -435,11 +447,13 @@ private:
 	// Global Variables:
 	HINSTANCE _hInstance;	
 	HMIDIOUT _outHandle;
-	WaveFile* _wave[DRUM_MAX];
 	IXAudio2* _xaudio2;
 	IXAudio2MasteringVoice* _masteringVoice;
 	IXAudio2SourceVoice* _sourceVoice[DRUM_MAX];
 	IXAudio2SubmixVoice* _path[DRUM_MAX];
+#else
+    // SDL implementation to substitute for XAudio2.
+    Mix_Chunk* _sourceVoice[DRUM_MAX];
 #endif
     AboutDlg* _aboutDlg;
     DrumDialog* _measureEditDlg;
