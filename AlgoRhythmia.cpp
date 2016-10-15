@@ -1482,11 +1482,6 @@ void AlgoRhythmia::SaveMIDI( void )
 // Thread to play the beat - makes dialog independent of sound.
 void* AlgoRhythmia::Entry( )
 {
-#ifdef WIN32
-	DWORD fullWord;
-	WORD hiWord;
-	WORD loWord;
-#endif
 	// LARGE_INTEGER difference, sum;
 	int counter = 0;
 	static int mutateMeasure = 0;
@@ -2214,12 +2209,13 @@ void AlgoRhythmia::OnStopClick( wxCommandEvent& event )
 			_sourceVoice[i]->FlushSourceBuffers();
 		}
 	}
+#endif
 	// Make sure all notes are off.
 	if(  _midiOutDevice != NULL )
 	{
             AllNotesOff();
 	}
-#endif
+
 	_step = 0;
 	_mutex.Unlock();
     event.Skip();
