@@ -452,11 +452,7 @@ private:
 	LARGE_INTEGER _currtime;
 	LARGE_INTEGER _lasttime;
 	LARGE_INTEGER _tickspersec;
-	HWND _hWnd;
-	MSG _msg;
-	HACCEL _hAccelTable;
 	// Global Variables:
-	HINSTANCE _hInstance;	
 	IXAudio2* _xaudio2;
 	IXAudio2MasteringVoice* _masteringVoice;
 	IXAudio2SourceVoice* _sourceVoice[DRUM_MAX];
