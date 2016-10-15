@@ -52,11 +52,18 @@ bool DrumDialog::Create( wxWindow* parent, wxWindowID id, const wxString& captio
     SetExtraStyle(GetExtraStyle()|wxWS_EX_BLOCK_EVENTS);
     wxDialog::Create( parent, id, caption, pos, size, style );
     CreateControls();
-	wxIcon icon;
-	if( icon.LoadFile(_T("algo.ico"), wxBITMAP_TYPE_ICO ))
-	{
-		SetIcon(icon);
-	}
+    wxIcon _icon;
+
+#ifndef __APPLE__
+    wxString filepath = _("algo.ico");
+#else
+    wxString filepath = wxString::Format(_("%s//%s"), wxStandardPaths::Get().GetResourcesDir(), _("algo.ico"));
+#endif
+    if( _icon.LoadFile(filepath, wxBITMAP_TYPE_ICO ))
+    {
+        SetIcon(_icon);
+    }
+
     GetSizer()->Fit(this);
     GetSizer()->SetSizeHints(this);
     Centre();

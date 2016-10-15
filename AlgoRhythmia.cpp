@@ -1006,10 +1006,15 @@ void AlgoRhythmia::CreateControls()
     _btnExit = new wxButton( itemDialog1, ID_EXIT, _("Exit"), wxDefaultPosition, wxSize( 96, -1 ), 0 );
     itemBoxSizer133->Add(_btnExit, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 2);
 
-	if( _icon.LoadFile(_T("algo.ico"), wxBITMAP_TYPE_ICO ))
-	{
-		SetIcon(_icon);
-	}
+#ifndef __APPLE__
+    wxString filepath = _("algo.ico");
+#else
+    wxString filepath = wxString::Format(_("%s//%s"), wxStandardPaths::Get().GetResourcesDir(), _("algo.ico"));
+#endif
+    if( _icon.LoadFile(filepath, wxBITMAP_TYPE_ICO ))
+    {
+        SetIcon(_icon);
+    }
 }
 
 AlgoRhythmia::AlgoRhythmia( )
