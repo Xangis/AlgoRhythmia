@@ -3000,7 +3000,9 @@ void AlgoRhythmia::ShowFxDialog( int channel )
 // User has clicked the purchase button, start eSellerate transaction.
 void AlgoRhythmia::OnPurchase( wxCommandEvent& event )
 {
+#ifdef WIN32
 	system("start http://sites.fastspring.com/zetacentauri/product/algorhythmia");
+#endif
 	// Avoid linking in unnecessary libraries, even though this button is only shown in the demo version.
 //#ifdef _DEMOVERSION
 //	eSellerate_ResultData result = NULL;
