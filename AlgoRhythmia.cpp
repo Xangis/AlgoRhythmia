@@ -11,7 +11,6 @@
 #include "AlgoRhythmia.h"
 #include "drumgrid.h"
 #include "wx/aboutdlg.h"
-
 #include <wx/apptrait.h>
 
 // Values for style box, to keep from having to change switch statement every
@@ -182,7 +181,9 @@ bool AlgoRhythmia::Create( wxWindow* parent, wxWindowID id, const wxString& capt
 	{
 		_drumControl[count] = NULL;
 		_wave[count] = NULL;
+#ifdef WIN32
 		_sourceVoice[count] = NULL;
+#endif
 	}
 #ifdef WIN32
 	_masteringVoice = NULL;
@@ -240,91 +241,10 @@ bool AlgoRhythmia::Create( wxWindow* parent, wxWindowID id, const wxString& capt
 
 	_configData = new wxSettingsFile;
 
-#ifdef WIN32
-	// XAudio2 and Mastering Voice
-#ifndef _XBOX
-	CoInitializeEx(NULL, COINIT_MULTITHREADED);
-#endif
-	HRESULT hr;
-#ifdef DEBUG
-	if ( FAILED(hr = XAudio2Create( &_xaudio2, XAUDIO2_DEBUG_ENGINE, XAUDIO2_DEFAULT_PROCESSOR ) ) )
-#else
-	if ( FAILED(hr = XAudio2Create( &_xaudio2, 0, XAUDIO2_DEFAULT_PROCESSOR ) ) )
-#endif
-		return hr;
-	//
-	// TODO: Enumerate audio devices instead of just using the default.
-	//
-	// Mastering Voice
-	if ( FAILED(hr = _xaudio2->CreateMasteringVoice( &_masteringVoice, XAUDIO2_DEFAULT_CHANNELS,
-                            XAUDIO2_DEFAULT_SAMPLERATE, 0, 0, NULL ) ) )
-    return hr;
-	// End XAudio Setup
-#endif
-
-	for( count = 0; count < DRUM_MAX; count++ )
-	{
-		_drumControl[count]->_drumNote = _drumControl[count]->_drumSelection->GetSelection();
-	}
-
-	// Create audiopaths and initialize effects for that audiopath.
-	// _filenames is populated in CreateControls().
-	for( count = 0; count < DRUM_MAX; count++ )
-	{
-		if( _wave[count] != NULL ) delete _wave[count];
-		_wave[count] = WaveFile::Load(_filenames[count].wchar_str(), false);
+    InitializeAudio();
+    InitializeMidi();
 
 #ifdef WIN32
-		if( FAILED(hr = _xaudio2->CreateSourceVoice( &_sourceVoice[count], _wave[count]->GetWaveFormatEx(),
-              0, XAUDIO2_DEFAULT_FREQ_RATIO, NULL, NULL, NULL ) ) )
-		{
-			wxMessageBox(wxString::Format(_("Could not load sample %s, CreateSourceVoice returned %d"), _wave[count], hr));
-		    return hr;
-		}
-
-		// TODO: FIX THIS.  THE EFFECTS MANAGER IS BROKEN BECAUSE IT REQUIRES DIRECTMUSIC.
-		//_drumControl[count]->_fxManager->Initialize( _path[count], true );
-		// We have to create the effects dialogs in order to load settings properly [the dialogs hold on/off settings for effects].
-		//if( _drumControl[count]->_fxDialog == NULL )
-		//{
-		//	_drumControl[count]->_fxDialog = new EffectsDlg(this, _drumControl[count]->_fxManager, ID_EFFECTSDIALOG, wxString::Format( "Edit Channel %d Effects", count ) );
-		//}
-		// This should not be necessary because it's one of the things that Initialize() covers.
-		//_drumControl[count]->_fxManager->DisableAllFX();
-        // We're not going to activate any effects here because they will all be disabled by
-        // default and they can be enabled one by one on the effects dialog on a per-drum basis.
-		//int effectNum;
-		//for( effectNum = 0; effectNum < eNUM_SFX; effectNum++ )
-		//{
-		//	_drumControl[count]->_fxManager->SetFXEnable( effectNum );
-		//}
-		//_drumControl[count]->_fxManager->ActivateFX();
-		// This should not be necessary since we called Initialize with true for load parameters.
-		// _drumControl[count]->_fxManager->LoadCurrentFXParameters();
-#endif
-	}
-
-#ifdef WIN32
-	// Populate MIDI Device List
-	int numDevices = midiOutGetNumDevs();
-	MIDIOUTCAPS midiCaps;
-	for( count = 0; count < numDevices; count++ )
-	{
-		hr = midiOutGetDevCaps( count, &midiCaps, sizeof( midiCaps ) );
-		if( hr == MMSYSERR_BADDEVICEID || hr == MMSYSERR_INVALPARAM || hr == MMSYSERR_NODRIVER || hr == MMSYSERR_NOMEM )
-		{
-			continue;
-		}
-		// Add the device to a list box on the GUI.
-		_midiDevice->Append( midiCaps.szPname );
-	}
-	_midiDevice->SetSelection(0);
-	/* Open the MIDI Mapper */
-	unsigned long result = midiOutOpen(&_outHandle, (UINT)-1, 0, 0, CALLBACK_WINDOW);
-	if (result)
-	{
-        wxMessageBox( _("There was an error opening MIDI Mapper!"), _("MIDI Error"), wxOK );
-	}
 	// Set up timer
 	QueryPerformanceFrequency( &_tickspersec );
 	QueryPerformanceCounter( &_currtime );
@@ -1115,6 +1035,14 @@ AlgoRhythmia::~AlgoRhythmia()
 	_mutex.Unlock();
 #endif
 
+    for( int i = 0; i < DRUM_MAX; i++ )
+    {
+        Mix_FreeChunk(_wave[i]);
+    }
+
+    Mix_CloseAudio();
+    SDL_Quit();
+
 	// Give everything a chance to finish up.
 	Sleep(20);
 }
@@ -1761,7 +1689,11 @@ void AlgoRhythmia::SampleBrowse( int drumNumber )
 
 	_filenames[drumNumber] = fdialog.GetPath();
 
+#ifdef WIN32
 	_wave[drumNumber]->Load(_filenames[drumNumber].wchar_str());
+#else
+        _wave[drumNumber] = Mix_LoadWAV(_filenames[drumNumber].mb_str().data());
+#endif
 	if( _wave[drumNumber] == NULL )
 	{
 		return;
@@ -2533,16 +2465,21 @@ void AlgoRhythmia::LoadPattern( wxString& filename )
 		name = _configData->GetValue( wxString::Format(_("drumcontrol%dsamplename"), count ) );
 		_filenames[count] = name;
 		_drumControl[count]->_sampleName->SetValue( wxFileName(_filenames[count]).GetName() );
+#ifdef WIN32
 		if( _sourceVoice[count] )
 		{
-#ifdef WIN32
 			_sourceVoice[count]->DestroyVoice();
-#else
                         delete _sourceVoice[count];
-#endif
 			_sourceVoice[count] = NULL;
 		}
+#endif
+
+#ifdef WIN32
 		_wave[count]->Load(_filenames[count].wchar_str());
+#else
+        _wave[count] = Mix_LoadWAV(_filenames[count].mb_str().data());
+#endif
+
 #ifdef WIN32
 		if( FAILED(hr = _xaudio2->CreateSourceVoice( &_sourceVoice[count], _wave[count]->GetWaveFormatEx(),
             0, XAUDIO2_DEFAULT_FREQ_RATIO, NULL, NULL, NULL ) ) )
@@ -3017,4 +2954,343 @@ void AlgoRhythmia::OnPurchase( wxCommandEvent& event )
 //	eSellerate_DeleteResultData( result );
 //#endif
     event.Skip();
+}
+
+bool AlgoRhythmia::InitializeAudio()
+{
+#ifdef WIN32
+	// XAudio2 and Mastering Voice
+#ifndef _XBOX
+    CoInitializeEx(NULL, COINIT_MULTITHREADED);
+#endif
+    HRESULT hr;
+#ifdef DEBUG
+    if ( FAILED(hr = XAudio2Create( &_xaudio2, XAUDIO2_DEBUG_ENGINE, XAUDIO2_DEFAULT_PROCESSOR ) ) )
+#else
+    if ( FAILED(hr = XAudio2Create( &_xaudio2, 0, XAUDIO2_DEFAULT_PROCESSOR ) ) )
+#endif
+    return hr;
+	//
+	// TODO: Enumerate audio devices instead of just using the default.
+	//
+	// Mastering Voice
+	if ( FAILED(hr = _xaudio2->CreateMasteringVoice( &_masteringVoice, XAUDIO2_DEFAULT_CHANNELS,
+                            XAUDIO2_DEFAULT_SAMPLERATE, 0, 0, NULL ) ) )
+    return hr;
+	// End XAudio Setup
+#endif
+
+	for( int count = 0; count < DRUM_MAX; count++ )
+	{
+		_drumControl[count]->_drumNote = _drumControl[count]->_drumSelection->GetSelection();
+	}
+
+	// Create audiopaths and initialize effects for that audiopath.
+	// _filenames is populated in CreateControls().
+	for( int count = 0; count < DRUM_MAX; count++ )
+	{
+		if( _wave[count] != NULL ) delete _wave[count];
+#ifdef WIN32
+            _wave[count] = WaveFile::Load(_filenames[count].wchar_str(), false);
+#else
+            _wave[count] = Mix_LoadWAV(_filenames[count].mb_str().data());
+#endif
+
+#ifdef WIN32
+		if( FAILED(hr = _xaudio2->CreateSourceVoice( &_sourceVoice[count], _wave[count]->GetWaveFormatEx(),
+              0, XAUDIO2_DEFAULT_FREQ_RATIO, NULL, NULL, NULL ) ) )
+		{
+			wxMessageBox(wxString::Format(_("Could not load sample %s, CreateSourceVoice returned %d"), _wave[count], hr));
+		    return hr;
+		}
+
+		// TODO: FIX THIS.  THE EFFECTS MANAGER IS BROKEN BECAUSE IT REQUIRES DIRECTMUSIC.
+		//_drumControl[count]->_fxManager->Initialize( _path[count], true );
+		// We have to create the effects dialogs in order to load settings properly [the dialogs hold on/off settings for effects].
+		//if( _drumControl[count]->_fxDialog == NULL )
+		//{
+		//	_drumControl[count]->_fxDialog = new EffectsDlg(this, _drumControl[count]->_fxManager, ID_EFFECTSDIALOG, wxString::Fo
+rmat( "Edit Channel %d Effects", count ) );
+		//}
+		// This should not be necessary because it's one of the things that Initialize() covers.
+		//_drumControl[count]->_fxManager->DisableAllFX();
+        // We're not going to activate any effects here because they will all be disabled by
+        // default and they can be enabled one by one on the effects dialog on a per-drum basis.
+		//int effectNum;
+		//for( effectNum = 0; effectNum < eNUM_SFX; effectNum++ )
+		//{
+		//	_drumControl[count]->_fxManager->SetFXEnable( effectNum );
+		//}
+		//_drumControl[count]->_fxManager->ActivateFX();
+		// This should not be necessary since we called Initialize with true for load parameters.
+		// _drumControl[count]->_fxManager->LoadCurrentFXParameters();
+#endif
+	}
+
+#ifndef WIN32
+    _sampleRate = 44100;
+    _sampleBlockSize = 1024;
+    // Initialize the SDL library with the Video subsystem
+    SDL_Init(SDL_INIT_AUDIO);
+    atexit(SDL_Quit);
+
+    // Set up the audio stream
+    int result = Mix_OpenAudio(_sampleRate, AUDIO_S16SYS, 2, _sampleBlockSize);
+    if( result < 0 )
+    {
+        fprintf(stderr, "Unable to open audio: %s\n", SDL_GetError());
+        exit(-1);
+    }
+
+    result = Mix_AllocateChannels(8);
+    if( result < 0 )
+    {
+        fprintf(stderr, "Unable to allocate mixing channels: %s\n", SDL_GetError());
+        exit(-1);
+    }
+#endif
+
+    return true;
+}
+
+bool AlgoRhythmia::InitializeMidi()
+{
+    _inputChannel = 1;
+    _outputChannel = 1;
+    _midiInDevice = new RtMidiIn();
+    _midiOutDevice = new RtMidiOut();
+    EnableMidiOutput(false);
+    _midiInputDeviceNumber = 0;  // MIDI Mapper
+    _midiOutputDeviceNumber = 0;  // Default Output
+
+    // Open default MIDI devices.
+    int numInDevices = _midiInDevice->getPortCount();
+    if( numInDevices > 0 )
+    {
+        // MIDI input is not enabled for this app.
+        //SelectMidiInputDevice(_midiInputDeviceNumber);
+    }
+    int numOutDevices = _midiOutDevice->getPortCount();
+    if( numOutDevices > 0 )
+    {
+            SelectMidiOutputDevice(_midiOutputDeviceNumber);
+    }
+
+    if( numOutDevices < 1 || numInDevices < 1 )
+    {
+        wxString in = _("");
+        wxString out = _("");
+        if( numInDevices < 1 )
+        {
+            // MIDI input is not enabled for this app.
+            //in = _("No MIDI input devices detected.  MIDI input is disabled.");
+        }
+        if( numOutDevices < 1 )
+        {
+            out = _("No MIDI output devices detected.  MIDI output is disabled.");
+        }
+        wxMessageBox(wxString::Format(_("%s\n\n%s"), in, out ));
+    }
+
+    return true;
+}
+
+/**
+* Enables or disables MIDI output.
+*/
+void AlgoRhythmia::EnableMidiOutput(bool enabled)
+{
+        _midiOutputEnabled = enabled;
+}
+
+/**
+* Changes the MIDI input channel.
+*/
+void AlgoRhythmia::SelectMidiInputChannel( int number )
+{
+    // Set MIDI Channel
+	if( number > 16 )
+	{
+		number = 1;
+	}
+	AllNotesOff(); // We may or may not need to turn off all notes that were triggered by MIDI.
+	_inputChannel = number;
+}
+
+/**
+* Changes the MIDI output channel, turning off all notes on the previous channel.
+*/
+void AlgoRhythmia::SelectMidiOutputChannel( int number )
+{
+    // Set MIDI Channel
+	if( number > 16 )
+	{
+		number = 1;
+	}
+	AllNotesOff();
+	_outputChannel = number;
+}
+
+/**
+* Processes MIDI input device selection changes.
+*/
+void AlgoRhythmia::SelectMidiInputDevice(int number)
+{
+#ifndef VST
+	_midiInputDeviceNumber = number;
+    try
+    {
+        _midiInDevice->closePort();
+        _midiInDevice->openPort(number);
+        _midiInDevice->setCallback(MidiMessageHandler, this);
+    }
+    //catch( RtMidiError &error )
+    catch( RtMidiError &error )
+    {
+        //wxMessageBox(wxString::FromAscii(error.what()));
+        wxMessageBox(wxString::FromAscii(error.what()));
+    }
+#endif
+}
+
+/**
+* Processes MIDI output device selection changes.
+*/
+void AlgoRhythmia::SelectMidiOutputDevice(int number)
+{
+#ifndef VST
+	_midiOutputDeviceNumber = number;
+    try
+    {
+        _midiOutDevice->closePort();
+        _midiOutDevice->openPort(number);
+    }
+    catch( RtMidiError &error )
+    {
+        wxMessageBox(wxString::FromAscii(error.what()));
+    }
+#endif
+}
+
+void AlgoRhythmia::AllNotesOff( bool receivedFromMidi )
+{
+        // TODO: Track and stop all notes.
+        //for( int i = 0; i < MAX_NOTES; i++ )
+        //{
+        //      if( _playing[i] )
+        //      {
+        //              StopNote(i);
+        //      }
+        //      _playing[i] = false;
+        //}
+        if( _midiOutputEnabled && !receivedFromMidi )
+        {
+                // 00 (not used), 0x00, 123, 0xBX (message + channel)
+                SendMidiMessage( 0, 0, 123, (175 + _outputChannel) );
+        }
+        // Turn off any red dots.
+        //Refresh();
+}
+
+void AlgoRhythmia::SendMidiMessage(unsigned char byte1, unsigned char byte2, unsigned char byte3, unsigned char byte4, bool shortmsg)
+{
+    std::vector<unsigned char> msg;
+    msg.push_back(byte4);
+    msg.push_back(byte3);
+    if(!shortmsg)
+    {
+      msg.push_back(byte2);
+      if( byte1 != 0 )
+      {
+        msg.push_back(byte1);
+      }
+#ifndef VST
+      _midiOutDevice->sendMessage(&msg);
+#endif
+    }
+}
+
+/**
+* Handles incoming MIDI message data.
+*/
+void AlgoRhythmia::ProcessMidiMessage(unsigned char byte1, unsigned char byte2, unsigned char byte3, unsigned char byte4)
+{
+        // This app does not process MIDI messages, so this is a NOOP.
+        /*
+	// MIDI timimg clock pulse.  Doesn't mean anything to us.
+	if( byte4 == 0xF8 )
+	{
+		return;
+	}
+
+	// Active sensing message.  Doesn't mean anything to us.
+	if( byte4 == 0xFE )
+	{
+		return;
+	}
+
+	// Volume message. Doesn't mean anything to us, except for volume 0, which is note off.
+	if( byte4 == (0x90 + _inputChannel - 1) )
+	{
+		if( byte2 > 0 )
+		{
+			PlayNote(byte3, true);
+		}
+		else
+		{
+			StopNote(byte3, true);
+		}
+		return;
+	}
+	// Note off (some keyboards send this instead of note on 0 velocity.
+	if( byte4 == (0x80 + _inputChannel - 1)  )
+	{
+		StopNote( byte3, true );
+		return;
+	}
+	else if( byte4 == (0xB0 + _inputChannel - 1)  )
+	{
+		// All notes off.
+		if( byte3 == 0x7B && byte2 == 0x00 )
+		{
+			AllNotesOff(true);
+            		return;
+		}
+	}
+        */
+}
+
+/**
+* Callback for MIDI message data.
+*/
+void MidiMessageHandler( double deltatime, std::vector< unsigned char > *message, void *userData )
+{
+    AlgoRhythmia* algo = (AlgoRhythmia*)userData;
+
+    unsigned char a = 0;
+    unsigned char b = 0;
+    unsigned char c = 0;
+    unsigned char d = 0;
+    if( message->size() > 0 )
+    {
+        d = (*message)[0];
+    }
+    if( message->size() > 1 )
+    {
+        c = (*message)[1];
+    }
+    if( message->size() > 2 )
+    {
+        b = (*message)[2];
+    }
+    if( message->size() > 3 )
+    {
+        a = (*message)[3];
+    }
+    if( message->size() > 4 )
+    {
+        printf( "MIDI message size too large, cannot process." );
+        return;
+    }
+    algo->ProcessMidiMessage(a, b, c, d);
 }

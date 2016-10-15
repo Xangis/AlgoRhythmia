@@ -19,6 +19,7 @@
 #include "AboutDlg.h"
 #include "wxSettingsFile.h"
 #include "DrumControl.h"
+#include "../wxAudioControls/MidiSettingsInterface.h"
 
 #ifdef WIN32
 #define INITGUID
@@ -183,16 +184,27 @@
 
 class DrumDialog;
 
-class AlgoRhythmia : public wxDialog, public wxThread
+class AlgoRhythmia : public wxDialog, public wxThread, public MidiSettingsInterface
 {
     DECLARE_DYNAMIC_CLASS( AlgoRhythmia )
     DECLARE_EVENT_TABLE()
 public:
     AlgoRhythmia( );
-	~AlgoRhythmia();
+    ~AlgoRhythmia();
     AlgoRhythmia( wxWindow* parent, wxWindowID id = SYMBOL_ALGORHYTHMIA_IDNAME, const wxString& caption = SYMBOL_ALGORHYTHMIA_TITLE, const wxPoint& pos = SYMBOL_ALGORHYTHMIA_POSITION, const wxSize& size = SYMBOL_ALGORHYTHMIA_SIZE, long style = SYMBOL_ALGORHYTHMIA_STYLE );
     bool Create( wxWindow* parent, wxWindowID id = SYMBOL_ALGORHYTHMIA_IDNAME, const wxString& caption = SYMBOL_ALGORHYTHMIA_TITLE, const wxPoint& pos = SYMBOL_ALGORHYTHMIA_POSITION, const wxSize& size = SYMBOL_ALGORHYTHMIA_SIZE, long style = SYMBOL_ALGORHYTHMIA_STYLE );
     void CreateControls();
+    bool InitializeAudio();
+    bool InitializeMidi();
+    // MidiSettingsInterface methods.
+    void SelectMidiInputDevice(int number);
+    void SelectMidiOutputDevice(int number);
+    void SelectMidiInputChannel(int number);
+    void SelectMidiOutputChannel(int number);
+    void EnableMidiOutput(bool enabled);
+    void AllNotesOff( bool receivedFromMidi = false );
+    void SendMidiMessage( unsigned char byte1, unsigned char byte2, unsigned char byte3, unsigned char byte4, bool shortmsg = false );
+    void ProcessMidiMessage(unsigned char byte1, unsigned char byte2, unsigned char byte3, unsigned char byte4);
 	void MutateDrum(int drum);
 	void MutateAllDrums( void );
 	void RegenerateDrum(int drum);
@@ -435,9 +447,9 @@ private:
 	int _midichannel;	// Current MIDI channel, 0-based.
 	double _mutateRate;	// Mutation rate.
 	double _swingRatio;	// Swing ratio.
+#ifdef WIN32
 	WaveFile* pLoader;
 	WaveFile* _wave[DRUM_MAX];
-#ifdef WIN32
 	LARGE_INTEGER _currtime;
 	LARGE_INTEGER _lasttime;
 	LARGE_INTEGER _tickspersec;
@@ -453,7 +465,7 @@ private:
 	IXAudio2SubmixVoice* _path[DRUM_MAX];
 #else
     // SDL implementation to substitute for XAudio2.
-    Mix_Chunk* _sourceVoice[DRUM_MAX];
+    Mix_Chunk* _wave[DRUM_MAX];
 #endif
     AboutDlg* _aboutDlg;
     DrumDialog* _measureEditDlg;
@@ -488,8 +500,19 @@ private:
 	wxSlider* _swingSlider;
 	wxMutex _mutex;
 	wxIcon _icon;
+    // MIDI Settings
+    int _inputChannel;
+    int _outputChannel;
+    int _midiInputDeviceNumber;
+    int _midiOutputDeviceNumber;
+    bool _midiOutputEnabled;
+    // End MIDI Settings
     void SetDrumEnabled( bool enable, int drum );
     void SetSampleState( int drumNumber, bool enable );
+    int _sampleRate;
+    int _sampleBlockSize;
 };
+
+void MidiMessageHandler( double deltatime, std::vector< unsigned char > *message, void *userData );
 
 #endif

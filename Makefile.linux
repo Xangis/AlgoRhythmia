@@ -9,10 +9,10 @@ PROGRAM = AlgoRhythmia
 
 # Directory containing library portions of code.
 INCLUDEDIR = ../AudioFile/
-INCLUDEDIR3 = rtmidi-2.1.0
+INCLUDEDIR3 = ../../lib/rtmidi-2.1.0
 
 # Object files
-OBJECTS = AboutDlg.o DrumControl.o EffectsDlg.o PresetDrumPattern.o SoundFxManager.o ../AudioFile/wavefile.o ../wxAudioControls/wxSettingsFile.o AlgoRhythmiaApp.o AlgoRhythmia.o drumgrid.o
+OBJECTS = AboutDlg.o DrumControl.o EffectsDlg.o PresetDrumPattern.o SoundFxManager.o ../AudioFile/wavefile.o ../wxAudioControls/wxSettingsFile.o AlgoRhythmiaApp.o AlgoRhythmia.o drumgrid.o $(INCLUDEDIR3)/RtMidi.o
 
 CXX = $(shell $(WX_CONFIG) --cxx -ggdb)
 
@@ -24,7 +24,7 @@ CXX = $(shell $(WX_CONFIG) --cxx -ggdb)
 all:    $(PROGRAM)
 
 $(PROGRAM):	$(OBJECTS)
-	$(CXX) -o $(PROGRAM) $(OBJECTS) `$(WX_CONFIG) --libs` -lportaudio -lasound -lpthread -lsndfile
+	$(CXX) -o $(PROGRAM) $(OBJECTS) `$(WX_CONFIG) --libs` -lasound -lpthread -lsndfile -lSDL2 -lSDL2_mixer
 
 clean: 
 	rm -f *.o ../wxAudioControls/*.o ../AudioFile/*.o $(PROGRAM)
