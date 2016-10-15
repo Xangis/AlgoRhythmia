@@ -248,6 +248,8 @@ bool AlgoRhythmia::Create( wxWindow* parent, wxWindowID id, const wxString& capt
 	QueryPerformanceFrequency( &_tickspersec );
 	QueryPerformanceCounter( &_currtime );
 	_lasttime = _currtime;
+#else
+        clock_gettime(CLOCK_MONOTONIC, &_currtime);
 #endif
 
 	srand((unsigned)time(0));
@@ -1492,6 +1494,8 @@ void* AlgoRhythmia::Entry( )
 		{
 #ifdef WIN32
 			QueryPerformanceCounter( &_currtime );
+#else
+                        clock_gettime(CLOCK_MONOTONIC, &_currtime);
 #endif
 			// BPM / 60 = Beats per second.
 			// Ticks per second / beats per second = ticks per beat.
@@ -1509,7 +1513,10 @@ void* AlgoRhythmia::Entry( )
 			{
 				// Long note.
 #ifdef WIN32
-				nextNoteTime = ((_tickspersec.QuadPart * 60.0f ) / (float)_bpm) * _swingRatio;
+				nextNoteTime = ((_tickspersec.QuadPart * 60.0f ) / (double)_bpm) * _swingRatio;
+#else
+				// Working in nanoseconds on *NIX.
+				nextNoteTime = ( 60000000000.0f / (double)_bpm) * _swingRatio;
 #endif
 				// Shorten time if we have eighth or sixteenth notes;
 				if( _division == 16 )
@@ -1525,7 +1532,10 @@ void* AlgoRhythmia::Entry( )
 			{
 				// Short note.
 #ifdef WIN32
-				nextNoteTime = ((_tickspersec.QuadPart * 60.0f ) / (float)_bpm) * (2.0 - _swingRatio );
+				nextNoteTime = ((_tickspersec.QuadPart * 60.0f ) / (double)_bpm) * (2.0 - _swingRatio );
+#else
+				// Working in nanoseconds on *NIX.
+				nextNoteTime = ( 60000000000.0f / (double)_bpm) * (2.0 - _swingRatio );
 #endif
 				// Shorten time if we have eighth or sixteenth notes;
 				if( _division == 16 )
@@ -1539,9 +1549,11 @@ void* AlgoRhythmia::Entry( )
 			}
 
 #ifdef WIN32
-			if( (_currtime.QuadPart - _lasttime.QuadPart) > nextNoteTime )
+			if( (_currtime.QuadPart - _lasttime.QuadPart) > nextNoteTime ))
 #else
-            if( 1 )
+                        double oldNS = _lasttime.tv_sec * 1000000000.0 + _lasttime.tv_nsec;
+                        double newNS = _currtime.tv_sec * 1000000000.0 + _currtime.tv_nsec;
+			if( (newNS - oldNS) > nextNoteTime )
 #endif
 			{
 				// Increment the current step and wrap it at our max steps count.
@@ -1650,9 +1662,7 @@ void* AlgoRhythmia::Entry( )
 				}
 				// Set our time so we know when to play the next beat.
 				// By not adding the time it took us to actually play the beat we maintain timing consistency.
-#ifdef WIN32
 				_lasttime = _currtime;
-#endif
 				++_step;
 				_mutex.Unlock();
 			}
@@ -1700,6 +1710,7 @@ void AlgoRhythmia::SampleBrowse( int drumNumber )
 	if( _wave[drumNumber] == NULL )
 	{
 		return;
+                printf("Failed to load sample %s", _filenames[drumNumber].mb_str().data());
 		//wxMessageBox::Show(wxString::Format(_("Failed to load sample %s"), _filenames[drumNumber]), _("Sample Load Failed."));
 	}
 

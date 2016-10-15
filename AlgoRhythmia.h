@@ -24,6 +24,8 @@
 #ifdef WIN32
 #define INITGUID
 #include <XAudio2.h>
+#else
+#include <time.h>
 #endif
 
 #ifdef linux
@@ -459,6 +461,8 @@ private:
 	IXAudio2SubmixVoice* _path[DRUM_MAX];
 #else
     // SDL implementation to substitute for XAudio2.
+    struct timespec _currtime;
+    struct timespec _lasttime;
     Mix_Chunk* _wave[DRUM_MAX];
 #endif
     AboutDlg* _aboutDlg;
