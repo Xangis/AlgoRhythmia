@@ -444,7 +444,6 @@ private:
     bool _similarMeasures;// Generate with similar measures?
 	bool _hihatCancel;	// Is hihat cancellation enabled?
 	int _periodicmutatemeasures; // Number of measures to wait before mutating.
-	int _midichannel;	// Current MIDI channel, 0-based.
 	double _mutateRate;	// Mutation rate.
 	double _swingRatio;	// Swing ratio.
 #ifdef WIN32
@@ -458,7 +457,6 @@ private:
 	HACCEL _hAccelTable;
 	// Global Variables:
 	HINSTANCE _hInstance;	
-	HMIDIOUT _outHandle;
 	IXAudio2* _xaudio2;
 	IXAudio2MasteringVoice* _masteringVoice;
 	IXAudio2SourceVoice* _sourceVoice[DRUM_MAX];

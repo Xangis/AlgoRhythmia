@@ -213,7 +213,6 @@ bool AlgoRhythmia::Create( wxWindow* parent, wxWindowID id, const wxString& capt
     _btnLoadPattern = NULL;
     _btnExit = NULL;
 	_configData = NULL;
-	_midiChannel = NULL;
     _btnPurchase = NULL;
     _mutateRate = 0.06f;
 	_similarMeasures = true;
@@ -228,7 +227,7 @@ bool AlgoRhythmia::Create( wxWindow* parent, wxWindowID id, const wxString& capt
 	_measures = 1;
 	_bpm = 130;
 	// Zero-based MIDI Channel
-	_midichannel = 9;
+	_outputChannel = 9;
 	_periodicmutatemeasures = 8;
 	_step = 0; // Keep track of which sequencer step we are on.
 	_timesignature = 16; // Initial time signature is 4/4
@@ -1011,14 +1010,14 @@ AlgoRhythmia::AlgoRhythmia( )
 AlgoRhythmia::~AlgoRhythmia()
 {
 	// Make sure all notes are off and close the MIDI device
-#ifdef WIN32
 	_mutex.Lock();
-	if( _outHandle )
+	if( _midiOutDevice != NULL )
 	{
-		midiOutShortMsg(_outHandle, 0x00007BB0);	
-		midiOutClose(_outHandle);
+                AllNotesOff();
+                _midiOutDevice->closePort();
 	}
 
+#ifdef WIN32
 	// Uninitialize XAudio2
 	int count;
 	for( count = 0; count < DRUM_MAX; count++ )
@@ -1032,8 +1031,8 @@ AlgoRhythmia::~AlgoRhythmia()
     SAFE_RELEASE( _xaudio2 );
 	CoUninitialize();
 
-	_mutex.Unlock();
 #endif
+	_mutex.Unlock();
 
     for( int i = 0; i < DRUM_MAX; i++ )
     {
@@ -1578,18 +1577,22 @@ void* AlgoRhythmia::Entry( )
 				// This gets a little stupid because we have to know our checkbox names.
 				if( _alwayskickone && _step == 0 )
 				{
-#ifdef WIN32
-					if( _midiOn && _outHandle )
+					if( _midiOn &&  _midiOutDevice )
 					{
-						midiOutShortMsg(_outHandle, (0x007F2390 + _midichannel));
+						// 00 (not used), 7F (velocity), 2B (note number), 9X (note on)+channel
+						SendMidiMessage( 0, 127, 35, (144 + _outputChannel) );
+						SendMidiMessage( 0, 127, 35, (160 + _outputChannel) );
 					}
 					if( _drumControl[0]->_sampleOn )
 					{
+#ifdef WIN32
 						_sourceVoice[0]->Stop(XAUDIO2_PLAY_TAILS, XAUDIO2_COMMIT_NOW);
 						_sourceVoice[0]->SubmitSourceBuffer(_wave[0]->GetXAudio2Buffer());
 						_sourceVoice[0]->Start(0, XAUDIO2_COMMIT_NOW);
-					}
+#else
+						Mix_PlayChannel(-1, _wave[0], 0);
 #endif
+					}
 				}
 				bool hihatEnabled = true;
 				for( counter = 0; counter < DRUM_MAX; counter++ )
@@ -1613,28 +1616,29 @@ void* AlgoRhythmia::Entry( )
 								hihatEnabled = false;
 							}
 						}
-#ifdef WIN32
+                                                unsigned char volume;
 						if( !_varyvolume )
 						{
-							loWord = MAKEWORD( _drumControl[counter]->_midiVolume, 0x00 );
+							volume = _drumControl[counter]->_midiVolume;
 						}
 						else
 						{
 							if( _drumControl[counter]->_midiVolume > 15 )
 							{
-								loWord = MAKEWORD( ((rand() % 16) + (_drumControl[counter]->_midiVolume - 16)), 0x00 );
+								volume = ((rand() % 16) + (_drumControl[counter]->_midiVolume - 16));
 							}
 							else
 							{
-								loWord = MAKEWORD( (rand() % 16), 0x00 );
+								volume = (rand() % 16);
 							}
 						}
-						hiWord = MAKEWORD( (0x90 + _midichannel), midival[_drumControl[counter]->_drumNote] );
-						fullWord = MAKELONG( hiWord, loWord );
-						if( _midiOn && _outHandle )
+						if( _midiOn && _midiOutDevice )
 						{
-							midiOutShortMsg(_outHandle, fullWord );
+                                                	// 00 (not used), 7F (velocity), 2B (note number), 9X (note on)+channel
+                                                	SendMidiMessage( 0, volume, midival[_drumControl[counter]->_drumNote], (144 + _outputChannel) );
+                                                	SendMidiMessage( 0, volume, midival[_drumControl[counter]->_drumNote], (160 + _outputChannel) );
 						}
+#ifdef WIN32
 						if( _drumControl[counter]->_sampleOn && _sourceVoice[counter] != NULL )
 						{
 							_sourceVoice[counter]->Stop(XAUDIO2_PLAY_TAILS, XAUDIO2_COMMIT_NOW);
@@ -1643,6 +1647,10 @@ void* AlgoRhythmia::Entry( )
 							_sourceVoice[counter]->Start(0, XAUDIO2_COMMIT_NOW);
 						}
 #endif
+						if( _drumControl[counter]->_sampleOn && _wave[counter] != NULL )
+						{
+							Mix_PlayChannel(-1, _wave[counter], 0);
+						}
 					}
 				}
 				// Set our time so we know when to play the next beat.
@@ -2137,26 +2145,13 @@ void AlgoRhythmia::OnBasepatternSelected( wxCommandEvent& event )
 
 void AlgoRhythmia::OnMidideviceSelected( wxCommandEvent& event )
 {
-#ifdef WIN32
-	if( _outHandle )
-	{
-		midiOutClose(_outHandle);
-	}
-	/* Open the MIDI Device */
-    int selection = event.GetSelection();
-	HRESULT result = midiOutOpen(&_outHandle, selection, 0, 0, CALLBACK_WINDOW);
-	if (result)
-	{
-        wxMessageBox( _("There was an error opening the MIDI device!"), _("Device Error"), wxOK );
-	}
-#endif
-	// MessageBox( NULL, "Midi device selected", "Midi", MB_OK );
+    SelectMidiOutputDevice(event.GetSelection());
     event.Skip();
 }
 
 void AlgoRhythmia::OnMidichannelSelected( wxCommandEvent& event )
 {
-    _midichannel = event.GetSelection();
+    _outputChannel = event.GetSelection();
     event.Skip();
 }
 
@@ -2220,9 +2215,9 @@ void AlgoRhythmia::OnStopClick( wxCommandEvent& event )
 		}
 	}
 	// Make sure all notes are off.
-	if( _outHandle != NULL )
+	if(  _midiOutDevice != NULL )
 	{
-		midiOutShortMsg(_outHandle, 0x00007BB0);
+            AllNotesOff();
 	}
 #endif
 	_step = 0;
@@ -2440,8 +2435,8 @@ void AlgoRhythmia::LoadPattern( wxString& filename )
 	_chkVaryVolume->SetValue( _varyvolume );
     _periodicmutate = atoi(_configData->GetValue( _("periodicmutate") ).mb_str());
 	_chkMutate->SetValue( _periodicmutate );
-	_midichannel = atoi(_configData->GetValue( _("midichannel") ).mb_str());
-	_midiChannel->SetSelection( _midichannel );
+	_outputChannel = atoi(_configData->GetValue( _("midichannel") ).mb_str());
+	_midiChannel->SetSelection( _outputChannel );
 	_similarMeasures = atoi(_configData->GetValue( _("similarmeasures") ).mb_str());
 	_chkSimilarMeasures->SetValue( _similarMeasures );
 	value = atoi(_configData->GetValue( _("basepattern") ).mb_str());
@@ -2555,7 +2550,7 @@ void AlgoRhythmia::SavePattern( wxString& filename )
     _configData->SetValue( _("alwayskickone"), wxString::Format( _("%d"), _alwayskickone ));
 	_configData->SetValue( _("varyvolume"), wxString::Format( _("%d"), _varyvolume ));
 	_configData->SetValue( _("periodicmutate"), wxString::Format( _("%d"), _periodicmutate ));
-	_configData->SetValue( _("midichannel"), wxString::Format( _("%d"), _midichannel ));
+	_configData->SetValue( _("midichannel"), wxString::Format( _("%d"), _outputChannel ));
 	_configData->SetValue( _("similarmeasures"), wxString::Format( _("%d"), _similarMeasures ));
 	_configData->SetValue( _("basepattern"), wxString::Format( _("%d"), _basePattern->GetSelection() ));
 	int count;
@@ -2803,7 +2798,7 @@ int AlgoRhythmia::PrepareMIDIBuffer( char* buffer, int length )
                     }
                     if( bytesWritten < length )
                     {
-					    buffer[bytesWritten] = 0x90 + _midichannel;
+					    buffer[bytesWritten] = 0x90 + _outputChannel;
 					    ++bytesWritten;
                     }
                     if( bytesWritten < length )
