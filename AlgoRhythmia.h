@@ -21,11 +21,17 @@
 #include "DrumControl.h"
 #include "../wxAudioControls/MidiSettingsInterface.h"
 
+// High-performance timer.
 #ifdef WIN32
 #define INITGUID
 #include <XAudio2.h>
-#else
+#endif
+#ifdef linux
 #include <time.h>
+#endif
+#ifdef __APPLE__
+#include <mach/clock.h>
+#include <mach/mach.h>
 #endif
 
 #ifdef linux
@@ -459,10 +465,17 @@ private:
 	IXAudio2MasteringVoice* _masteringVoice;
 	IXAudio2SourceVoice* _sourceVoice[DRUM_MAX];
 	IXAudio2SubmixVoice* _path[DRUM_MAX];
-#else
+#endif
+#ifdef linux
     // SDL implementation to substitute for XAudio2.
     struct timespec _currtime;
     struct timespec _lasttime;
+    Mix_Chunk* _wave[DRUM_MAX];
+#endif
+#ifdef __APPLE__
+    clock_serv_t _clock;
+    mach_timespec_t _currtime;
+    mach_timespec_t _lasttime;
     Mix_Chunk* _wave[DRUM_MAX];
 #endif
     AboutDlg* _aboutDlg;

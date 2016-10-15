@@ -176,6 +176,9 @@ AlgoRhythmia::AlgoRhythmia( wxWindow* parent, wxWindowID id, const wxString& cap
 
 bool AlgoRhythmia::Create( wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style )
 {
+#ifdef __APPLE__
+    host_get_clock_service(mach_host_self(), SYSTEM_CLOCK, &_clock);
+#endif
 	int count;
 	for( count = 0; count < DRUM_MAX; count++ )
 	{
@@ -248,8 +251,12 @@ bool AlgoRhythmia::Create( wxWindow* parent, wxWindowID id, const wxString& capt
 	QueryPerformanceFrequency( &_tickspersec );
 	QueryPerformanceCounter( &_currtime );
 	_lasttime = _currtime;
-#else
+#endif
+#ifdef linux
         clock_gettime(CLOCK_MONOTONIC, &_currtime);
+#endif
+#ifdef __APPLE__
+	clock_get_time(_clock, &_currtime);
 #endif
 
 	srand((unsigned)time(0));
@@ -1043,6 +1050,9 @@ AlgoRhythmia::~AlgoRhythmia()
 
     Mix_CloseAudio();
     SDL_Quit();
+#ifdef __APPLE__
+    mach_port_deallocate(mach_task_self(), _clock);
+#endif
 
 	// Give everything a chance to finish up.
 	Sleep(20);
@@ -1494,8 +1504,12 @@ void* AlgoRhythmia::Entry( )
 		{
 #ifdef WIN32
 			QueryPerformanceCounter( &_currtime );
-#else
+#endif
+#ifdef linux
                         clock_gettime(CLOCK_MONOTONIC, &_currtime);
+#endif
+#ifdef __APPLE__
+			clock_get_time(_clock, &_currtime);
 #endif
 			// BPM / 60 = Beats per second.
 			// Ticks per second / beats per second = ticks per beat.
