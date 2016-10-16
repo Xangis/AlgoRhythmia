@@ -290,14 +290,19 @@ void AlgoRhythmia::CreateControls()
 {
     AlgoRhythmia* itemDialog1 = this;
 
-	_filenames[0] = _("./samples/Kick-Drum-1.wav");
-	_filenames[1] = _("./samples/Snare-Drum-1.wav");
-	_filenames[2] = _("./samples/Closed-Hi-Hat-1.wav");
-	_filenames[3] = _("./samples/Open-Hi-Hat-1.wav");
-	_filenames[4] = _("./samples/Crash-Cymbal-1.wav");
-	_filenames[5] = _("./samples/Low-Tom-1.wav");
-	_filenames[6] = _("./samples/Mid-Tom-1.wav");
-	_filenames[7] = _("./samples/Hi-Tom-1.wav");
+#ifdef __APPLE__
+        wxString folderName = wxString::Format(_("%s/samples/"), wxStandardPaths::Get().GetResourcesDir());
+#else
+        wxString folderName = _("./samples/");
+#endif
+	_filenames[0] = wxString::Format(_("%sKick-Drum-1.wav"), folderName);
+	_filenames[1] = wxString::Format(_("%sSnare-Drum-1.wav"), folderName);
+	_filenames[2] = wxString::Format(_("%sClosed-Hi-Hat-1.wav"), folderName);
+	_filenames[3] = wxString::Format(_("%sOpen-Hi-Hat-1.wav"), folderName);
+	_filenames[4] = wxString::Format(_("%sCrash-Cymbal-1.wav"), folderName);
+	_filenames[5] = wxString::Format(_("%sLow-Tom-1.wav"), folderName);
+	_filenames[6] = wxString::Format(_("%sMid-Tom-1.wav"), folderName);
+	_filenames[7] = wxString::Format(_("%sHi-Tom-1.wav"), folderName);
 
 	wxSize buttonSize = wxSize( 66, 30 );
 	wxSize densitySize = wxSize( 68, 30 );
@@ -1741,9 +1746,9 @@ void AlgoRhythmia::SampleBrowse( int drumNumber )
 #endif
 	if( _wave[drumNumber] == NULL )
 	{
+                //printf("Failed to load sample %s", _filenames[drumNumber].mb_str().data());
+		wxMessageBox(wxString::Format(_("Failed to load sample %s"), _filenames[drumNumber]), _("Sample Load Failed."));
 		return;
-                printf("Failed to load sample %s", _filenames[drumNumber].mb_str().data());
-		//wxMessageBox::Show(wxString::Format(_("Failed to load sample %s"), _filenames[drumNumber]), _("Sample Load Failed."));
 	}
 
 	_drumControl[drumNumber]->_sampleName->SetValue( wxFileName(_filenames[drumNumber]).GetName() );
@@ -2527,8 +2532,14 @@ void AlgoRhythmia::LoadPattern( wxString& filename )
 #ifdef WIN32
 		_wave[count]->Load(_filenames[count].wchar_str());
 #else
-        _wave[count] = Mix_LoadWAV(_filenames[count].mb_str().data());
+            _wave[count] = Mix_LoadWAV(_filenames[count].mb_str().data());
 #endif
+            if( _wave[count] == NULL )
+            {
+                //printf("Failed to load sample %s", _filenames[count].mb_str().data());
+                wxMessageBox(wxString::Format(_("Failed to load sample %s"), _filenames[count]), _("Sample Load Failed."));
+                continue;
+            }
 
 #ifdef WIN32
 		if( FAILED(hr = _xaudio2->CreateSourceVoice( &_sourceVoice[count], _wave[count]->GetWaveFormatEx(),
@@ -3028,6 +3039,26 @@ bool AlgoRhythmia::InitializeAudio()
                             XAUDIO2_DEFAULT_SAMPLERATE, 0, 0, NULL ) ) )
     return hr;
 	// End XAudio Setup
+#else
+    // Initialize the SDL library with the audio subsystem
+    _sampleRate = 44100;
+    _sampleBlockSize = 1024;
+    SDL_Init(SDL_INIT_AUDIO);
+    atexit(SDL_Quit);
+    // Set up the audio stream
+    int result = Mix_OpenAudio(_sampleRate, AUDIO_S16SYS, 2, _sampleBlockSize);
+    if( result < 0 )
+    {
+        wxMessageBox("Unable to open audio: %s\n", SDL_GetError());
+        exit(-1);
+    }
+
+    result = Mix_AllocateChannels(8);
+    if( result < 0 )
+    {
+        wxMessageBox("Unable to allocate mixing channels: %s\n", SDL_GetError());
+        exit(-1);
+    }
 #endif
 
 	for( int count = 0; count < DRUM_MAX; count++ )
@@ -3045,6 +3076,17 @@ bool AlgoRhythmia::InitializeAudio()
 #else
             _wave[count] = Mix_LoadWAV(_filenames[count].mb_str().data());
 #endif
+            if( _wave[count] == NULL )
+            {
+                //printf("Failed to load sample %s", _filenames[count].mb_str().data());
+#ifndef WIN32
+                wxMessageBox(wxString::Format(_("Failed to load sample %s: %s"), _filenames[count], Mix_GetError()), _("Sample Load Failed."));
+#else
+                wxMessageBox(wxString::Format(_("Failed to load sample %s"), _filenames[count]), _("Sample Load Failed."));
+#endif
+                continue;
+            }
+
 
 #ifdef WIN32
 		if( FAILED(hr = _xaudio2->CreateSourceVoice( &_sourceVoice[count], _wave[count]->GetWaveFormatEx(),
@@ -3075,29 +3117,6 @@ bool AlgoRhythmia::InitializeAudio()
 		// _drumControl[count]->_fxManager->LoadCurrentFXParameters();
 #endif
 	}
-
-#ifndef WIN32
-    _sampleRate = 44100;
-    _sampleBlockSize = 1024;
-    // Initialize the SDL library with the Video subsystem
-    SDL_Init(SDL_INIT_AUDIO);
-    atexit(SDL_Quit);
-
-    // Set up the audio stream
-    int result = Mix_OpenAudio(_sampleRate, AUDIO_S16SYS, 2, _sampleBlockSize);
-    if( result < 0 )
-    {
-        fprintf(stderr, "Unable to open audio: %s\n", SDL_GetError());
-        exit(-1);
-    }
-
-    result = Mix_AllocateChannels(8);
-    if( result < 0 )
-    {
-        fprintf(stderr, "Unable to allocate mixing channels: %s\n", SDL_GetError());
-        exit(-1);
-    }
-#endif
 
     return true;
 }
