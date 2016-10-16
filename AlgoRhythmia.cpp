@@ -312,6 +312,9 @@ void AlgoRhythmia::CreateControls()
 #else
     wxSize filenameSize = wxSize(132, 26);
 #endif
+#ifdef linux
+        densitySize = wxDefaultSize;
+#endif
 
 	int count;
 	for( count = 0; count < DRUM_MAX; count++ )
@@ -860,7 +863,7 @@ void AlgoRhythmia::CreateControls()
 	wxStaticText* itemStaticText110 = new wxStaticText( itemDialog1, wxID_STATIC, _("Swing"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer108->Add(itemStaticText110, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	_swingSlider = new wxSlider( itemDialog1, ID_SWING_SLIDER, 100, 100, 150, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	_swingSlider = new wxSlider( itemDialog1, ID_SWING_SLIDER, 100, 100, 150, wxDefaultPosition, wxSize(60, 24), wxSL_HORIZONTAL );
 	itemBoxSizer108->Add(_swingSlider, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
     wxStaticText* itemStaticText112 = new wxStaticText( itemDialog1, wxID_STATIC, _("Base Pattern"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -916,7 +919,7 @@ void AlgoRhythmia::CreateControls()
         _("15"),
         _("16")
     };
-    _midiChannel = new wxChoice( itemDialog1, ID_MIDICHANNEL, wxDefaultPosition, wxSize(48, -1), 16, itemChoice118Strings, 0 );
+    _midiChannel = new wxChoice( itemDialog1, ID_MIDICHANNEL, wxDefaultPosition, wxDefaultSize, 16, itemChoice118Strings, 0 );
     _midiChannel->SetStringSelection(_("10"));
     itemBoxSizer114->Add(_midiChannel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
