@@ -37,8 +37,7 @@
 #ifdef linux
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_mixer.h"
-#endif
-#ifdef __APPLE__
+#else
 #include "SDL.h"
 #include "SDL_mixer.h"
 #endif

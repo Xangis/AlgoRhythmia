@@ -253,7 +253,7 @@ bool AlgoRhythmia::Create( wxWindow* parent, wxWindowID id, const wxString& capt
 	_lasttime = _currtime;
 #endif
 #ifdef linux
-        clock_gettime(CLOCK_MONOTONIC, &_currtime);
+    clock_gettime(CLOCK_MONOTONIC, &_currtime);
 #endif
 #ifdef __APPLE__
 	clock_get_time(_clock, &_currtime);
@@ -1048,13 +1048,14 @@ AlgoRhythmia::~AlgoRhythmia()
 #endif
 	_mutex.Unlock();
 
-    for( int i = 0; i < DRUM_MAX; i++ )
+#ifndef WIN32
+	for( int i = 0; i < DRUM_MAX; i++ )
     {
         Mix_FreeChunk(_wave[i]);
     }
-
     Mix_CloseAudio();
     SDL_Quit();
+#endif
 #ifdef __APPLE__
     mach_port_deallocate(mach_task_self(), _clock);
 #endif
@@ -1568,7 +1569,7 @@ void* AlgoRhythmia::Entry( )
 			}
 
 #ifdef WIN32
-			if( (_currtime.QuadPart - _lasttime.QuadPart) > nextNoteTime ))
+			if( (_currtime.QuadPart - _lasttime.QuadPart) > nextNoteTime )
 #else
                         double oldNS = _lasttime.tv_sec * 1000000000.0 + _lasttime.tv_nsec;
                         double newNS = _currtime.tv_sec * 1000000000.0 + _currtime.tv_nsec;
@@ -1672,11 +1673,12 @@ void* AlgoRhythmia::Entry( )
 							_sourceVoice[counter]->SubmitSourceBuffer(buffer);
 							_sourceVoice[counter]->Start(0, XAUDIO2_COMMIT_NOW);
 						}
-#endif
+#else
 						if( _drumControl[counter]->_sampleOn && _wave[counter] != NULL )
 						{
 							Mix_PlayChannel(-1, _wave[counter], 0);
 						}
+#endif
 					}
 				}
 				// Set our time so we know when to play the next beat.
@@ -3030,8 +3032,7 @@ bool AlgoRhythmia::InitializeAudio()
 		// We have to create the effects dialogs in order to load settings properly [the dialogs hold on/off settings for effects].
 		//if( _drumControl[count]->_fxDialog == NULL )
 		//{
-		//	_drumControl[count]->_fxDialog = new EffectsDlg(this, _drumControl[count]->_fxManager, ID_EFFECTSDIALOG, wxString::Fo
-rmat( "Edit Channel %d Effects", count ) );
+		//	_drumControl[count]->_fxDialog = new EffectsDlg(this, _drumControl[count]->_fxManager, ID_EFFECTSDIALOG, wxString::Format( "Edit Channel %d Effects", count ) );
 		//}
 		// This should not be necessary because it's one of the things that Initialize() covers.
 		//_drumControl[count]->_fxManager->DisableAllFX();
