@@ -122,6 +122,7 @@ BEGIN_EVENT_TABLE( AlgoRhythmia, wxDialog )
     EVT_RADIOBOX( ID_MEASURES_RADIOBOX, AlgoRhythmia::OnMeasuresRadioboxSelected )
     EVT_RADIOBOX( ID_SIGNATURE_RADIOBOX, AlgoRhythmia::OnSignatureRadioboxSelected )
     EVT_BUTTON( ID_ABOUT, AlgoRhythmia::OnAboutClick )
+    EVT_BUTTON( ID_HELP, AlgoRhythmia::OnHelpClick )
     EVT_BUTTON( ID_CLEANSLATE, AlgoRhythmia::OnCleanslateClick )
     EVT_BUTTON( ID_SAVEMIDI, AlgoRhythmia::OnSavemidiClick )
     EVT_BUTTON( ID_EXIT, AlgoRhythmia::OnExitClick )
@@ -210,6 +211,7 @@ bool AlgoRhythmia::Create( wxWindow* parent, wxWindowID id, const wxString& capt
     _radioMeasures = NULL;
     _radioTimeSignature = NULL;
     _btnAbout = NULL;
+    _btnHelp = NULL;
     _btnRegenerate = NULL;
     _btnSaveMidi = NULL;
     _btnSavePattern = NULL;
@@ -300,7 +302,11 @@ void AlgoRhythmia::CreateControls()
 	wxSize buttonSize = wxSize( 66, 30 );
 	wxSize densitySize = wxSize( 68, 30 );
 	wxSize instrumentSize = wxSize( 154, 30 );
-	wxSize filenameSize = wxSize( 132, 30 );
+#ifndef __APPLE__
+    wxSize filenameSize = wxSize( 132, 30 );
+#else
+    wxSize filenameSize = wxSize(132, 26);
+#endif
 
 	int count;
 	for( count = 0; count < DRUM_MAX; count++ )
@@ -987,6 +993,11 @@ void AlgoRhythmia::CreateControls()
 
     wxBoxSizer* itemBoxSizer133 = new wxBoxSizer(wxVERTICAL);
     itemBoxSizer102->Add(itemBoxSizer133, 0, wxALIGN_TOP|wxALL, 0);
+
+#ifdef __APPLE__
+    _btnHelp = new wxButton( itemDialog1, ID_HELP, _("Help"), wxDefaultPosition, wxSize( 96, -1 ), 0 );
+    itemBoxSizer133->Add(_btnHelp, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 2);
+#endif
 
     _btnAbout = new wxButton( itemDialog1, ID_ABOUT, _("About"), wxDefaultPosition, wxSize( 96, -1 ), 0 );
     itemBoxSizer133->Add(_btnAbout, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 2);
@@ -2111,7 +2122,7 @@ void AlgoRhythmia::OnAboutClick( wxCommandEvent& event )
 	info.SetName(_("AlgoRhythmia"));
     info.SetLicense(_("AlgoRhythmia is copyrighted software and may not be distributed without a license."));
 #endif
-    info.SetVersion(_("4.1"));
+    info.SetVersion(_("4.2"));
     info.SetCopyright(_("(c) 2005-2016 Zeta Centauri"));
 	info.AddDeveloper(_("Jason Champion"));
 	info.SetIcon(_icon);
@@ -2120,6 +2131,15 @@ void AlgoRhythmia::OnAboutClick( wxCommandEvent& event )
 	info.SetDescription(_("AlgoRhythmia uses the wxWidgets and libsndfile libraries."));
 
     wxAboutBox(info);
+
+    event.Skip();
+}
+
+void AlgoRhythmia::OnHelpClick( wxCommandEvent& event )
+{
+    wxString fileName = wxString::Format(_("%s/AlgoRhythmia_Manual.pdf"), wxStandardPaths::Get().GetResourcesDir());
+
+    system(wxString::Format(_("open %s"), fileName).mb_str().data());
 
     event.Skip();
 }
@@ -2421,7 +2441,14 @@ void AlgoRhythmia::OnLoadPatternClick( wxCommandEvent& event )
     wxMessageBox( "Pattern load is disabled in the demo version." );
     return;
 #endif
-	wxFileDialog fdialog( NULL, _T("Choose a file to Load"), _T("."), _T("Pattern"), _T("AlgoRhythmia Files (*.algo) |*.algo||"), wxFD_OPEN );
+
+//#ifndef __APPLE__
+//        wxFileDialog fdialog( this, _("Load A Config"), path, _(""), _("SigmaTizm Patches (*.sigm) |*.sigm||"), wxFD_OPEN );
+//#else
+//        wxString folderName = wxString::Format(_("%s/Patches/"), wxStandardPaths::Get().GetResourcesDir());
+//        wxFileDialog fdialog( this, _("Load A Config"), folderName, _(""), _("SigmaTizm Patches (*.sigm) |*.sigm||"), wxFD_OPEN );
+//#endif
+	wxFileDialog fdialog( this, _T("Choose a file to Load"), _T(""), _T("Pattern"), _T("AlgoRhythmia Files (*.algo) |*.algo||"), wxFD_OPEN );
 
 	wxString fileName;
 	
