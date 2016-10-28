@@ -1,6 +1,12 @@
 Changes still needed:
 
-None pending.
+Windows version needs to be ported to SDL.
+
+Changes from AlgoRhtyhmia Version 4.1 to 4.2 (October 2016):
+
+1) Replaced WinMM MIDI engine with RtMidi engine for cross-platform compatibility.
+2) Ported XAudio2 to SDL for OSX version (Windows version still uses XAudio2).
+3) Help button for OSX to launch PDF manual.
 
 Changes from AlgoRhythmia Version 4.1 to 4.2 (October 2016):
 

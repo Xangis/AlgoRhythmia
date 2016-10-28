@@ -32,7 +32,6 @@
 # Executables and Visual Studio stuff
 *.exe
 *.out
-*.app
 *.res
 *.sdf
 *.opensdf

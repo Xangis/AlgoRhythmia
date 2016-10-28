@@ -122,6 +122,7 @@ BEGIN_EVENT_TABLE( AlgoRhythmia, wxDialog )
     EVT_RADIOBOX( ID_MEASURES_RADIOBOX, AlgoRhythmia::OnMeasuresRadioboxSelected )
     EVT_RADIOBOX( ID_SIGNATURE_RADIOBOX, AlgoRhythmia::OnSignatureRadioboxSelected )
     EVT_BUTTON( ID_ABOUT, AlgoRhythmia::OnAboutClick )
+    EVT_BUTTON( ID_HELP, AlgoRhythmia::OnHelpClick )
     EVT_BUTTON( ID_CLEANSLATE, AlgoRhythmia::OnCleanslateClick )
     EVT_BUTTON( ID_SAVEMIDI, AlgoRhythmia::OnSavemidiClick )
     EVT_BUTTON( ID_EXIT, AlgoRhythmia::OnExitClick )
@@ -210,6 +211,7 @@ bool AlgoRhythmia::Create( wxWindow* parent, wxWindowID id, const wxString& capt
     _radioMeasures = NULL;
     _radioTimeSignature = NULL;
     _btnAbout = NULL;
+    _btnHelp = NULL;
     _btnRegenerate = NULL;
     _btnSaveMidi = NULL;
     _btnSavePattern = NULL;
@@ -288,19 +290,31 @@ void AlgoRhythmia::CreateControls()
 {
     AlgoRhythmia* itemDialog1 = this;
 
-	_filenames[0] = _("./samples/Kick-Drum-1.wav");
-	_filenames[1] = _("./samples/Snare-Drum-1.wav");
-	_filenames[2] = _("./samples/Closed-Hi-Hat-1.wav");
-	_filenames[3] = _("./samples/Open-Hi-Hat-1.wav");
-	_filenames[4] = _("./samples/Crash-Cymbal-1.wav");
-	_filenames[5] = _("./samples/Low-Tom-1.wav");
-	_filenames[6] = _("./samples/Mid-Tom-1.wav");
-	_filenames[7] = _("./samples/Hi-Tom-1.wav");
+#ifdef __APPLE__
+        wxString folderName = wxString::Format(_("%s/samples/"), wxStandardPaths::Get().GetResourcesDir());
+#else
+        wxString folderName = _("./samples/");
+#endif
+	_filenames[0] = wxString::Format(_("%sKick-Drum-1.wav"), folderName);
+	_filenames[1] = wxString::Format(_("%sSnare-Drum-1.wav"), folderName);
+	_filenames[2] = wxString::Format(_("%sClosed-Hi-Hat-1.wav"), folderName);
+	_filenames[3] = wxString::Format(_("%sOpen-Hi-Hat-1.wav"), folderName);
+	_filenames[4] = wxString::Format(_("%sCrash-Cymbal-1.wav"), folderName);
+	_filenames[5] = wxString::Format(_("%sLow-Tom-1.wav"), folderName);
+	_filenames[6] = wxString::Format(_("%sMid-Tom-1.wav"), folderName);
+	_filenames[7] = wxString::Format(_("%sHi-Tom-1.wav"), folderName);
 
 	wxSize buttonSize = wxSize( 66, 30 );
 	wxSize densitySize = wxSize( 68, 30 );
 	wxSize instrumentSize = wxSize( 154, 30 );
-	wxSize filenameSize = wxSize( 132, 30 );
+#ifndef __APPLE__
+    wxSize filenameSize = wxSize( 132, 30 );
+#else
+    wxSize filenameSize = wxSize(132, 26);
+#endif
+#ifdef linux
+        densitySize = wxDefaultSize;
+#endif
 
 	int count;
 	for( count = 0; count < DRUM_MAX; count++ )
@@ -849,7 +863,7 @@ void AlgoRhythmia::CreateControls()
 	wxStaticText* itemStaticText110 = new wxStaticText( itemDialog1, wxID_STATIC, _("Swing"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer108->Add(itemStaticText110, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	_swingSlider = new wxSlider( itemDialog1, ID_SWING_SLIDER, 100, 100, 150, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	_swingSlider = new wxSlider( itemDialog1, ID_SWING_SLIDER, 100, 100, 150, wxDefaultPosition, wxSize(60, 24), wxSL_HORIZONTAL );
 	itemBoxSizer108->Add(_swingSlider, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
     wxStaticText* itemStaticText112 = new wxStaticText( itemDialog1, wxID_STATIC, _("Base Pattern"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -905,7 +919,7 @@ void AlgoRhythmia::CreateControls()
         _("15"),
         _("16")
     };
-    _midiChannel = new wxChoice( itemDialog1, ID_MIDICHANNEL, wxDefaultPosition, wxSize(48, -1), 16, itemChoice118Strings, 0 );
+    _midiChannel = new wxChoice( itemDialog1, ID_MIDICHANNEL, wxDefaultPosition, wxDefaultSize, 16, itemChoice118Strings, 0 );
     _midiChannel->SetStringSelection(_("10"));
     itemBoxSizer114->Add(_midiChannel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
@@ -987,6 +1001,11 @@ void AlgoRhythmia::CreateControls()
 
     wxBoxSizer* itemBoxSizer133 = new wxBoxSizer(wxVERTICAL);
     itemBoxSizer102->Add(itemBoxSizer133, 0, wxALIGN_TOP|wxALL, 0);
+
+#ifdef __APPLE__
+    _btnHelp = new wxButton( itemDialog1, ID_HELP, _("Help"), wxDefaultPosition, wxSize( 96, -1 ), 0 );
+    itemBoxSizer133->Add(_btnHelp, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 2);
+#endif
 
     _btnAbout = new wxButton( itemDialog1, ID_ABOUT, _("About"), wxDefaultPosition, wxSize( 96, -1 ), 0 );
     itemBoxSizer133->Add(_btnAbout, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 2);
@@ -1730,9 +1749,9 @@ void AlgoRhythmia::SampleBrowse( int drumNumber )
 #endif
 	if( _wave[drumNumber] == NULL )
 	{
+                //printf("Failed to load sample %s", _filenames[drumNumber].mb_str().data());
+		wxMessageBox(wxString::Format(_("Failed to load sample %s"), _filenames[drumNumber]), _("Sample Load Failed."));
 		return;
-                printf("Failed to load sample %s", _filenames[drumNumber].mb_str().data());
-		//wxMessageBox::Show(wxString::Format(_("Failed to load sample %s"), _filenames[drumNumber]), _("Sample Load Failed."));
 	}
 
 	_drumControl[drumNumber]->_sampleName->SetValue( wxFileName(_filenames[drumNumber]).GetName() );
@@ -2124,6 +2143,15 @@ void AlgoRhythmia::OnAboutClick( wxCommandEvent& event )
     event.Skip();
 }
 
+void AlgoRhythmia::OnHelpClick( wxCommandEvent& event )
+{
+    wxString fileName = wxString::Format(_("%s/AlgoRhythmia_Manual.pdf"), wxStandardPaths::Get().GetResourcesDir());
+
+    system(wxString::Format(_("open %s"), fileName).mb_str().data());
+
+    event.Skip();
+}
+
 void AlgoRhythmia::OnCleanslateClick( wxCommandEvent& event )
 {
 	RegenerateAllDrums();
@@ -2421,7 +2449,14 @@ void AlgoRhythmia::OnLoadPatternClick( wxCommandEvent& event )
     wxMessageBox( "Pattern load is disabled in the demo version." );
     return;
 #endif
-	wxFileDialog fdialog( NULL, _T("Choose a file to Load"), _T("."), _T("Pattern"), _T("AlgoRhythmia Files (*.algo) |*.algo||"), wxFD_OPEN );
+
+//#ifndef __APPLE__
+//        wxFileDialog fdialog( this, _("Load A Config"), path, _(""), _("SigmaTizm Patches (*.sigm) |*.sigm||"), wxFD_OPEN );
+//#else
+//        wxString folderName = wxString::Format(_("%s/Patches/"), wxStandardPaths::Get().GetResourcesDir());
+//        wxFileDialog fdialog( this, _("Load A Config"), folderName, _(""), _("SigmaTizm Patches (*.sigm) |*.sigm||"), wxFD_OPEN );
+//#endif
+	wxFileDialog fdialog( this, _T("Choose a file to Load"), _T(""), _T("Pattern"), _T("AlgoRhythmia Files (*.algo) |*.algo||"), wxFD_OPEN );
 
 	wxString fileName;
 	
@@ -2500,8 +2535,14 @@ void AlgoRhythmia::LoadPattern( wxString& filename )
 #ifdef WIN32
 		_wave[count]->Load(_filenames[count].wchar_str());
 #else
-        _wave[count] = Mix_LoadWAV(_filenames[count].mb_str().data());
+            _wave[count] = Mix_LoadWAV(_filenames[count].mb_str().data());
 #endif
+            if( _wave[count] == NULL )
+            {
+                //printf("Failed to load sample %s", _filenames[count].mb_str().data());
+                wxMessageBox(wxString::Format(_("Failed to load sample %s"), _filenames[count]), _("Sample Load Failed."));
+                continue;
+            }
 
 #ifdef WIN32
 		if( FAILED(hr = _xaudio2->CreateSourceVoice( &_sourceVoice[count], _wave[count]->GetWaveFormatEx(),
@@ -3022,6 +3063,26 @@ bool AlgoRhythmia::InitializeAudio()
                             XAUDIO2_DEFAULT_SAMPLERATE, 0, 0, NULL ) ) )
     return hr;
 	// End XAudio Setup
+#else
+    // Initialize the SDL library with the audio subsystem
+    _sampleRate = 44100;
+    _sampleBlockSize = 1024;
+    SDL_Init(SDL_INIT_AUDIO);
+    atexit(SDL_Quit);
+    // Set up the audio stream
+    int result = Mix_OpenAudio(_sampleRate, AUDIO_S16SYS, 2, _sampleBlockSize);
+    if( result < 0 )
+    {
+        wxMessageBox("Unable to open audio: %s\n", SDL_GetError());
+        exit(-1);
+    }
+
+    result = Mix_AllocateChannels(8);
+    if( result < 0 )
+    {
+        wxMessageBox("Unable to allocate mixing channels: %s\n", SDL_GetError());
+        exit(-1);
+    }
 #endif
 
 	for( int count = 0; count < DRUM_MAX; count++ )
@@ -3039,6 +3100,17 @@ bool AlgoRhythmia::InitializeAudio()
 #else
             _wave[count] = Mix_LoadWAV(_filenames[count].mb_str().data());
 #endif
+            if( _wave[count] == NULL )
+            {
+                //printf("Failed to load sample %s", _filenames[count].mb_str().data());
+#ifndef WIN32
+                wxMessageBox(wxString::Format(_("Failed to load sample %s: %s"), _filenames[count], Mix_GetError()), _("Sample Load Failed."));
+#else
+                wxMessageBox(wxString::Format(_("Failed to load sample %s"), _filenames[count]), _("Sample Load Failed."));
+#endif
+                continue;
+            }
+
 
 #ifdef WIN32
 		if( FAILED(hr = _xaudio2->CreateSourceVoice( &_sourceVoice[count], _wave[count]->GetWaveFormatEx(),
@@ -3069,29 +3141,6 @@ bool AlgoRhythmia::InitializeAudio()
 		// _drumControl[count]->_fxManager->LoadCurrentFXParameters();
 #endif
 	}
-
-#ifndef WIN32
-    _sampleRate = 44100;
-    _sampleBlockSize = 1024;
-    // Initialize the SDL library with the Video subsystem
-    SDL_Init(SDL_INIT_AUDIO);
-    atexit(SDL_Quit);
-
-    // Set up the audio stream
-    int result = Mix_OpenAudio(_sampleRate, AUDIO_S16SYS, 2, _sampleBlockSize);
-    if( result < 0 )
-    {
-        fprintf(stderr, "Unable to open audio: %s\n", SDL_GetError());
-        exit(-1);
-    }
-
-    result = Mix_AllocateChannels(8);
-    if( result < 0 )
-    {
-        fprintf(stderr, "Unable to allocate mixing channels: %s\n", SDL_GetError());
-        exit(-1);
-    }
-#endif
 
     return true;
 }
@@ -3248,7 +3297,10 @@ void AlgoRhythmia::SendMidiMessage(unsigned char byte1, unsigned char byte2, uns
         msg.push_back(byte1);
       }
 #ifndef VST
-      _midiOutDevice->sendMessage(&msg);
+      if( _midiOutDevice != NULL )
+      {
+          _midiOutDevice->sendMessage(&msg);
+      }
 #endif
     }
 }

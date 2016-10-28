@@ -46,7 +46,7 @@
 
 #define ID_ALGORHYTHMIA_DIALOG 11000
 #define SYMBOL_ALGORHYTHMIA_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX
-#define SYMBOL_ALGORHYTHMIA_TITLE _("AlgoRhythmia 4.1")
+#define SYMBOL_ALGORHYTHMIA_TITLE _("AlgoRhythmia 4.2")
 #define SYMBOL_ALGORHYTHMIA_IDNAME ID_ALGORHYTHMIA_DIALOG
 #define SYMBOL_ALGORHYTHMIA_SIZE wxSize(399, 299)
 #define SYMBOL_ALGORHYTHMIA_POSITION wxDefaultPosition
@@ -173,6 +173,7 @@
 #define ID_FX7 10218
 #define ID_FX8 10219
 #define ID_PURCHASE 10220
+#define ID_HELP 10221
 
 #define DRUM_KICK			0
 #define DRUM_SNARE			1
@@ -407,6 +408,7 @@ public:
     void OnSavemidiClick( wxCommandEvent& event );
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_EXIT
     void OnExitClick( wxCommandEvent& event );
+    void OnHelpClick( wxCommandEvent& event );
 	void OnLoadPatternClick( wxCommandEvent& event );
 	void OnSavePatternClick( wxCommandEvent& event );
 	void OnSwingSlider( wxScrollEvent& event );
@@ -501,6 +503,7 @@ private:
     wxRadioBox* _radioMeasures;
     wxRadioBox* _radioTimeSignature;
     wxButton* _btnAbout;
+    wxButton* _btnHelp;
     wxButton* _btnRegenerate;
     wxButton* _btnSaveMidi;
     wxButton* _btnSavePattern;
