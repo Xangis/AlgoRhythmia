@@ -1723,8 +1723,12 @@ void* AlgoRhythmia::Entry( )
 
 void AlgoRhythmia::SampleBrowse( int drumNumber )
 {
+#ifndef __APPLE__
 	// Make sure that we always default to ProgramDirectory\samples for browse.
 	wxString pathName = wxStandardPaths::Get().GetDataDir() + _T("\\samples");
+#else
+        wxString pathName = wxString::Format(_("%s/samples"), wxStandardPaths::Get().GetResourcesDir());
+#endif
 	wxFileDialog fdialog( NULL, _T("Choose a Sample"), pathName, _T(""), _T("Wave Files (*.wav) |*.wav||"), wxFD_OPEN );
 	if( fdialog.ShowModal() != wxID_OK )
 	{
