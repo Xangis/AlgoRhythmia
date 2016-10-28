@@ -2,6 +2,13 @@ Changes still needed:
 
 None pending.
 
+Changes from AlgoRhythmia Version 4.1 to 4.2 (October 2016):
+
+1) Improved MIDI file writing -- includes note off messages and always writes to channel 10.
+2) Switched to SDL for OSX and Linux. (should switch for Windows too, but need to verify).
+3) Switched to RtMidi for MIDI messages.
+4) Default MIDI output channel is now 10.
+
 Changes from AlgoRhythmia Version 4 to 4.1 (August 2016):
 
 1) Replaced entire sample set of 76 files with one ENTIRELY from freewavesamples.com,

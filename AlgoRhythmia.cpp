@@ -2111,7 +2111,7 @@ void AlgoRhythmia::OnAboutClick( wxCommandEvent& event )
 	info.SetName(_("AlgoRhythmia"));
     info.SetLicense(_("AlgoRhythmia is copyrighted software and may not be distributed without a license."));
 #endif
-    info.SetVersion(_("4.1"));
+    info.SetVersion(_("4.2"));
     info.SetCopyright(_("(c) 2005-2016 Zeta Centauri"));
 	info.AddDeveloper(_("Jason Champion"));
 	info.SetIcon(_icon);
@@ -2734,6 +2734,7 @@ int WriteVarLen(register unsigned long value, char* output)
 // Generates a stream of track data and returns the length.
 int AlgoRhythmia::PrepareMIDIBuffer( char* buffer, int length )
 {
+    int channel = 9; // Channel 10 for drums.
 	int step = 0;
     int measure = 0;
 	int drum = 0;
@@ -2826,7 +2827,7 @@ int AlgoRhythmia::PrepareMIDIBuffer( char* buffer, int length )
                     }
                     if( bytesWritten < length )
                     {
-					    buffer[bytesWritten] = 0x90 + _outputChannel;
+					    buffer[bytesWritten] = 0x90 + channel;
 					    ++bytesWritten;
                     }
                     if( bytesWritten < length )
@@ -2837,6 +2838,26 @@ int AlgoRhythmia::PrepareMIDIBuffer( char* buffer, int length )
                     if( bytesWritten < length )
                     {
 					    buffer[bytesWritten] = volume;
+					    ++bytesWritten;
+                    }
+                    // Note off
+                    if( bytesWritten < length )
+                    {
+                        bytesWritten += WriteVarLen( 0, (buffer+bytesWritten) );
+                    }
+                    if( bytesWritten < length )
+                    {
+					    buffer[bytesWritten] = 0x90 + channel;
+					    ++bytesWritten;
+                    }
+                    if( bytesWritten < length )
+                    {
+					    buffer[bytesWritten] = midival[_drumControl[drum]->_drumNote];
+					    ++bytesWritten;
+                    }
+                    if( bytesWritten < length )
+                    {
+					    buffer[bytesWritten] = 0;
 					    ++bytesWritten;
                     }
 				    //fwrite( &fullWord, 4, 1, fp );
@@ -3078,7 +3099,7 @@ bool AlgoRhythmia::InitializeAudio()
 bool AlgoRhythmia::InitializeMidi()
 {
     _inputChannel = 1;
-    _outputChannel = 1;
+    _outputChannel = 9;
     _midiInDevice = new RtMidiIn();
     _midiOutDevice = new RtMidiOut();
     EnableMidiOutput(false);
