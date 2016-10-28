@@ -3273,7 +3273,10 @@ void AlgoRhythmia::SendMidiMessage(unsigned char byte1, unsigned char byte2, uns
         msg.push_back(byte1);
       }
 #ifndef VST
-      _midiOutDevice->sendMessage(&msg);
+      if( _midiOutDevice != NULL )
+      {
+          _midiOutDevice->sendMessage(&msg);
+      }
 #endif
     }
 }
