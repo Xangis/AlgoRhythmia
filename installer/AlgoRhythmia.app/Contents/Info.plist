@@ -9,7 +9,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.zetacentauri.AlgoRhythmia</string>
 	<key>CFBundleVersion</key>
-	<string>4.2.1</string>
+	<string>4.2.2</string>
 	<key>CFBundleSignature</key>
 	<string>ttxt</string>
 	<key>CFBundleExecutable</key>
@@ -25,7 +25,7 @@
 	<key>CFBundleName</key>
 	<string>Algorhythmia</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2016 Jason Champion. All rights reserved.</string>
+	<string>Copyright © 2017 Jason Champion. All rights reserved.</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
