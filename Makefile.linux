@@ -9,23 +9,22 @@ PROGRAM = AlgoRhythmia
 
 # Directory containing library portions of code.
 INCLUDEDIR = ../AudioFile/
-INCLUDEDIR3 = ../../lib/rtmidi-2.1.0
 
 # Object files
-OBJECTS = AboutDlg.o DrumControl.o EffectsDlg.o PresetDrumPattern.o SoundFxManager.o ../AudioFile/wavefile.o ../wxAudioControls/wxSettingsFile.o AlgoRhythmiaApp.o AlgoRhythmia.o drumgrid.o $(INCLUDEDIR3)/RtMidi.o
+OBJECTS = AboutDlg.o DrumControl.o EffectsDlg.o PresetDrumPattern.o SoundFxManager.o ../AudioFile/wavefile.o ../wxAudioControls/wxSettingsFile.o AlgoRhythmiaApp.o AlgoRhythmia.o drumgrid.o
 
 CXX = $(shell $(WX_CONFIG) --cxx)
 
 .SUFFIXES:	.o .cpp
 
 .cpp.o :
-#	$(CXX) -c -D__LINUX_ALSASEQ__ -I$(INCLUDEDIR) -I$(INCLUDEDIR3) `$(WX_CONFIG) --cxxflags` -o $@ $<
-	$(CXX) -c -g -ggdb -D__LINUX_ALSASEQ__ -I$(INCLUDEDIR) -I$(INCLUDEDIR3) `$(WX_CONFIG) --cxxflags` -o $@ $<
+#	$(CXX) -c -D__LINUX_ALSASEQ__ -I$(INCLUDEDIR) `$(WX_CONFIG) --cxxflags` -o $@ $<
+	$(CXX) -c -g -ggdb -D__LINUX_ALSASEQ__ -I$(INCLUDEDIR) `$(WX_CONFIG) --cxxflags` -o $@ $<
 
 all:    $(PROGRAM)
 
 $(PROGRAM):	$(OBJECTS)
-	$(CXX) -o $(PROGRAM) $(OBJECTS) `$(WX_CONFIG) --libs` -lasound -lpthread -lsndfile -lSDL2 -lSDL2_mixer
+	$(CXX) -o $(PROGRAM) $(OBJECTS) `$(WX_CONFIG) --libs` -lasound -lpthread -lsndfile -lSDL2 -lSDL2_mixer -lrtmidi
 
 clean: 
 	rm -f *.o ../wxAudioControls/*.o ../AudioFile/*.o $(PROGRAM)
