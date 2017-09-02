@@ -12,9 +12,9 @@ AppPublisher=Jason Champion
 AppPublisherURL=http://zetacentauri.com
 AppSupportURL=http://zetacentauri.com
 AppUpdatesURL=http://zetacentauri.com
-DefaultDirName={pf}\Zeta Centauri\AlgoRhythmia
-DefaultGroupName=Zeta Centauri\AlgoRhythmia
-LicenseFile=C:\Users\Xangis\code\AlgoRhythmia\Release\License.txt
+DefaultDirName={pf}\AlgoRhythmia
+DefaultGroupName=AlgoRhythmia
+LicenseFile=C:\Users\Xangis\code\AlgoRhythmia\LICENSE
 OutputDir=C:\Users\Xangis\code\AlgoRhythmia\installer
 OutputBaseFilename=AlgoRhythmia4.21Setup
 Compression=lzma
@@ -33,7 +33,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 Source: "C:\Users\Xangis\code\AlgoRhythmia\Release\AlgoRhythmia.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\Xangis\code\AlgoRhythmia\Release\AlgoRhythmia Manual.pdf"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\Xangis\code\AlgoRhythmia\Release\algo.ico"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Xangis\code\AlgoRhythmia\Release\License.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Xangis\code\AlgoRhythmia\LICENSE"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\Xangis\code\AlgoRhythmia\Release\libsndfile-1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\Xangis\code\AlgoRhythmia\Release\SDL2.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\Xangis\code\AlgoRhythmia\Release\SDL2_mixer.dll"; DestDir: "{app}"; Flags: ignoreversion
