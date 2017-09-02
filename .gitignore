@@ -30,7 +30,6 @@
 *.lib
 
 # Executables and Visual Studio stuff
-*.exe
 *.out
 *.res
 *.sdf
@@ -39,5 +38,8 @@
 *.suo
 *.manifest
 *.cache
+/Debug
+/ipch
+AlgoRhythmia.exe
 
 .DS_Store
