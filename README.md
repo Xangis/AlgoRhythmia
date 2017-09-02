@@ -30,16 +30,51 @@ source of free .wav samples is http://freewavesamples.com and that's where all o
 original samples came from. However, that site has far more samples than were ever
 included in AlgoRhythmia thanks massive growth of the free sample library in 2015 and 2016.
 
-# Requirements
+## Building
 
-This requires wxWidgets 3.0, libportaudio-dev, and libsndfile-dev. On Windows it
-uses DirectX, and on Linux it theoeretically used libasound2-dev.
+This application is written in C++ and requires wxWidgets 3.0, SDL2, SDL2_mixer, 
+RtMidi, and libsndfile-dev.
+
+It also requires the following libraries:
+
+- AudioFile via https://github.com/Xangis/AudioFile
+- wxAudioControls via https://github.com/Xangis/wxAudioControls
+
+Each of these should be checked out into directories adjacent to Sigmatizm (same parent).
+
+### Windows
+
+A Visual Studio solution is included, but you'll need to edit the include and library paths
+to match where you've put the library dependencies.
+
+In addition, you'll need to copy SDL2.dll and SDL2_mixer.dll into the directory you want to
+run the application from (Debug, or Release, for example).
+
+### Linux
+
+You may need to edit paths in the Makefile.linux makefile in order to build. To build, run
+make -f Makefile.linux
+
+### OSX
+
+At one point I tried to build a version of this for the Apple store. I did not succeed,
+but did get a working OSX build on my machine.
+
+This application will theoretically build on OSX, but the process probably needs some work.
+There is a shell script called OSXLibraryPaths.sh in the installer directory that should
+help with setting library paths, and a package.sh script in the same file that goes through
+some of the process of code signing.
 
 ## Changelog
 
 ### Changes Still Needed
 
 Windows version needs to be ported to SDL.
+
+### Changes from AlgoRhythmia Version 4.2 to 4.21 (September 2017):
+
+- Ported Windows version to use SDL and SDL_mixer instead of XAudio2 so
+  that it matches the Linux and OSX versions.
 
 ### Changes from AlgoRhtyhmia Version 4.1 to 4.2 (October 2016):
 

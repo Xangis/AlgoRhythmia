@@ -145,7 +145,6 @@ BEGIN_EVENT_TABLE( AlgoRhythmia, wxDialog )
 	EVT_BUTTON( ID_FX6, AlgoRhythmia::OnFx6Click )
 	EVT_BUTTON( ID_FX7, AlgoRhythmia::OnFx7Click )
 	EVT_BUTTON( ID_FX8, AlgoRhythmia::OnFx8Click )
-    EVT_BUTTON( ID_PURCHASE, AlgoRhythmia::OnPurchase )
 END_EVENT_TABLE()
 
 #ifdef WIN32
@@ -185,13 +184,7 @@ bool AlgoRhythmia::Create( wxWindow* parent, wxWindowID id, const wxString& capt
 	{
 		_drumControl[count] = NULL;
 		_wave[count] = NULL;
-#ifdef WIN32
-		_sourceVoice[count] = NULL;
-#endif
 	}
-#ifdef WIN32
-	_masteringVoice = NULL;
-#endif
 	_measureEditDlg = NULL;
     _aboutDlg = NULL;
 	_chcDivision = NULL;
@@ -1050,21 +1043,6 @@ AlgoRhythmia::~AlgoRhythmia()
                 _midiOutDevice->closePort();
 	}
 
-#ifdef WIN32
-	// Uninitialize XAudio2
-	int count;
-	for( count = 0; count < DRUM_MAX; count++ )
-	{
-		if( _sourceVoice[count] )
-		{
-			_sourceVoice[count]->DestroyVoice();
-			_sourceVoice[count] = NULL;
-		}
-	}
-    SAFE_RELEASE( _xaudio2 );
-	CoUninitialize();
-
-#endif
 	_mutex.Unlock();
 
 #ifndef WIN32
@@ -1631,13 +1609,7 @@ void* AlgoRhythmia::Entry( )
 					}
 					if( _drumControl[0]->_sampleOn )
 					{
-#ifdef WIN32
-						_sourceVoice[0]->Stop(XAUDIO2_PLAY_TAILS, XAUDIO2_COMMIT_NOW);
-						_sourceVoice[0]->SubmitSourceBuffer(_wave[0]->GetXAudio2Buffer());
-						_sourceVoice[0]->Start(0, XAUDIO2_COMMIT_NOW);
-#else
 						Mix_PlayChannel(-1, _wave[0], 0);
-#endif
 					}
 				}
 				bool hihatEnabled = true;
@@ -1684,20 +1656,11 @@ void* AlgoRhythmia::Entry( )
                                                 	SendMidiMessage( 0, volume, midival[_drumControl[counter]->_drumNote], (144 + _outputChannel) );
                                                 	SendMidiMessage( 0, volume, midival[_drumControl[counter]->_drumNote], (160 + _outputChannel) );
 						}
-#ifdef WIN32
-						if( _drumControl[counter]->_sampleOn && _sourceVoice[counter] != NULL )
-						{
-							_sourceVoice[counter]->Stop(XAUDIO2_PLAY_TAILS, XAUDIO2_COMMIT_NOW);
-							XAUDIO2_BUFFER* buffer = _wave[counter]->GetXAudio2Buffer();
-							_sourceVoice[counter]->SubmitSourceBuffer(buffer);
-							_sourceVoice[counter]->Start(0, XAUDIO2_COMMIT_NOW);
-						}
-#else
+
 						if( _drumControl[counter]->_sampleOn && _wave[counter] != NULL )
 						{
 							Mix_PlayChannel(-1, _wave[counter], 0);
 						}
-#endif
 					}
 				}
 				// Set our time so we know when to play the next beat.
@@ -1735,22 +1698,10 @@ void AlgoRhythmia::SampleBrowse( int drumNumber )
 		return;
 	}
 
-	// Free the old sample
-#ifdef WIN32
-	if( _sourceVoice[drumNumber] )
-	{
-		_sourceVoice[drumNumber]->DestroyVoice();
-		_sourceVoice[drumNumber] = NULL;
-	}
-#endif
-
 	_filenames[drumNumber] = fdialog.GetPath();
 
-#ifdef WIN32
-	_wave[drumNumber]->Load(_filenames[drumNumber].wchar_str());
-#else
-        _wave[drumNumber] = Mix_LoadWAV(_filenames[drumNumber].mb_str().data());
-#endif
+    _wave[drumNumber] = Mix_LoadWAV(_filenames[drumNumber].mb_str().data());
+
 	if( _wave[drumNumber] == NULL )
 	{
                 //printf("Failed to load sample %s", _filenames[drumNumber].mb_str().data());
@@ -1759,16 +1710,6 @@ void AlgoRhythmia::SampleBrowse( int drumNumber )
 	}
 
 	_drumControl[drumNumber]->_sampleName->SetValue( wxFileName(_filenames[drumNumber]).GetName() );
-
-	// Load the new sample.
-#ifdef WIN32
-	HRESULT hr;
-	if( FAILED(hr = _xaudio2->CreateSourceVoice( &_sourceVoice[drumNumber], _wave[drumNumber]->GetWaveFormatEx(),
-         0, XAUDIO2_DEFAULT_FREQ_RATIO, NULL, NULL, NULL ) ) )
-	{
-		return;
-	}
-#endif
 
 	return;
 }
@@ -2127,20 +2068,14 @@ void AlgoRhythmia::OnAboutClick( wxCommandEvent& event )
 {
 	// Show about box.
     wxAboutDialogInfo info;
-#ifdef _DEMOVERSION
-	info.SetName(_("AlgoRhythmia Demo"));
-    info.SetLicense(_("The demo version of AlgoRhythmia is free software and may be distributed freely.  The full version of AlgoRhythmia is copyrighted software and may not be used without a license."));
-#else
-	info.SetName(_("AlgoRhythmia"));
-    info.SetLicense(_("AlgoRhythmia is copyrighted software and may not be distributed without a license."));
-#endif
-    info.SetVersion(_("4.2"));
-    info.SetCopyright(_("(c) 2005-2016 Zeta Centauri"));
-	info.AddDeveloper(_("Jason Champion"));
-	info.SetIcon(_icon);
-	info.SetLicense(_("AlgoRhythmia is copyrighted software and may not be distributed without a license."));
-	info.SetWebSite(_("http://zetacentauri.com"));
-	info.SetDescription(_("AlgoRhythmia uses the wxWidgets and libsndfile libraries."));
+    info.SetName(_("AlgoRhythmia"));
+    info.SetLicense(_("AlgoRhythmia is distributed under the terms of the MIT license."));
+    info.SetVersion(_("4.21"));
+    info.SetCopyright(_("(c) 2005-2017 Jason Champion"));
+    info.AddDeveloper(_("Jason Champion"));
+    info.SetIcon(_icon);
+    info.SetWebSite(_("http://zetacentauri.com"));
+    info.SetDescription(_("AlgoRhythmia uses the wxWidgets, SDL2, SDL2_mixer, and libsndfile libraries."));
 
     wxAboutBox(info);
 
@@ -2264,16 +2199,7 @@ void AlgoRhythmia::OnStopClick( wxCommandEvent& event )
 {
 	_mutex.Lock();
 	_playing = false;
-#ifdef WIN32
-	for( int i = 0; i < DRUM_MAX; i++ )
-	{
-		if( _sourceVoice[i] != NULL )
-		{
-			_sourceVoice[i]->Stop();
-			_sourceVoice[i]->FlushSourceBuffers();
-		}
-	}
-#endif
+
 	// Make sure all notes are off.
 	if(  _midiOutDevice != NULL )
 	{
@@ -2527,35 +2453,16 @@ void AlgoRhythmia::LoadPattern( wxString& filename )
 		name = _configData->GetValue( wxString::Format(_("drumcontrol%dsamplename"), count ) );
 		_filenames[count] = name;
 		_drumControl[count]->_sampleName->SetValue( wxFileName(_filenames[count]).GetName() );
-#ifdef WIN32
-		if( _sourceVoice[count] )
-		{
-			_sourceVoice[count]->DestroyVoice();
-                        delete _sourceVoice[count];
-			_sourceVoice[count] = NULL;
-		}
-#endif
 
-#ifdef WIN32
-		_wave[count]->Load(_filenames[count].wchar_str());
-#else
-            _wave[count] = Mix_LoadWAV(_filenames[count].mb_str().data());
-#endif
-            if( _wave[count] == NULL )
-            {
-                //printf("Failed to load sample %s", _filenames[count].mb_str().data());
-                wxMessageBox(wxString::Format(_("Failed to load sample %s"), _filenames[count]), _("Sample Load Failed."));
-                continue;
-            }
+        _wave[count] = Mix_LoadWAV(_filenames[count].mb_str().data());
 
-#ifdef WIN32
-		if( FAILED(hr = _xaudio2->CreateSourceVoice( &_sourceVoice[count], _wave[count]->GetWaveFormatEx(),
-            0, XAUDIO2_DEFAULT_FREQ_RATIO, NULL, NULL, NULL ) ) )
-		{
-			wxMessageBox(wxString::Format(_("Could not load sample %s, CreateSourceVoice returned %d"), _wave[count], hr));
-			return;
-		}
-#endif
+		if( _wave[count] == NULL )
+        {
+            //printf("Failed to load sample %s", _filenames[count].mb_str().data());
+            wxMessageBox(wxString::Format(_("Failed to load sample %s"), _filenames[count]), _("Sample Load Failed."));
+            continue;
+        }
+
 		// End set up sample.
 		name = _configData->GetValue( wxString::Format(_("drumcontrol%davgdensity"), count ) );
 		_drumControl[count]->_avgDensity->SetStringSelection( name );
@@ -2728,11 +2635,9 @@ void AlgoRhythmia::UpdateVolume( int channel )
     int value = _drumControl[channel]->_volSlider->GetValue();
 	float newValue = (float)value / 100.0;
 #ifdef WIN32
-    _sourceVoice[channel]->SetVolume( newValue, 0 );
-#else
 #pragma message ("TODO: Fix volume setting on non-Windows builds")
 #endif
-    // Convert range 0 to 200 range 0 to 127.
+	// Convert range 0 to 200 range 0 to 127.
     _drumControl[channel]->_midiVolume = (value * 127 / 200);
 }
 
@@ -2865,11 +2770,9 @@ int AlgoRhythmia::PrepareMIDIBuffer( char* buffer, int length )
 						int value = _drumControl[drum]->_volSlider->GetValue();
 						float newValue = (float)(value + rand() % 20) / 100.0;
 #ifdef WIN32
-						_sourceVoice[drum]->SetVolume( newValue, 0 );
-#else
 #pragma message ("TODO: Fix volume setting on non-Windows builds")
 #endif
-                    }
+					}
                     if( bytesWritten < length )
                     {
 					    buffer[bytesWritten] = 0x90 + channel;
@@ -3023,51 +2926,8 @@ void AlgoRhythmia::ShowFxDialog( int channel )
 	//_drumControl[channel]->_fxDialog->Show();
 }
 
-// User has clicked the purchase button, start eSellerate transaction.
-void AlgoRhythmia::OnPurchase( wxCommandEvent& event )
-{
-#ifdef WIN32
-	system("start http://sites.fastspring.com/zetacentauri/product/algorhythmia");
-#endif
-	// Avoid linking in unnecessary libraries, even though this button is only shown in the demo version.
-//#ifdef _DEMOVERSION
-//	eSellerate_ResultData result = NULL;
-//	// Use the preview certificate in debug version, use the real deal in release version.
-//#ifdef _DEBUG
-//	eSellerate_ErrorCode error = eSellerate_Purchase( "PUB2158959366", "ES8597071575", "PC8597071575-1062", NULL, NULL,
-//		NULL, true, NULL, NULL, NULL, NULL, NULL, &result );
-//#else
-//	eSellerate_ErrorCode error = eSellerate_Purchase( "PUB2158959366", "ES8597071575", NULL, NULL, NULL, 
-//		NULL, true, NULL, NULL, NULL, NULL, NULL, &result );
-//#endif
-//	eSellerate_DeleteResultData( result );
-//#endif
-    event.Skip();
-}
-
 bool AlgoRhythmia::InitializeAudio()
 {
-#ifdef WIN32
-	// XAudio2 and Mastering Voice
-#ifndef _XBOX
-    CoInitializeEx(NULL, COINIT_MULTITHREADED);
-#endif
-    HRESULT hr;
-#ifdef DEBUG
-    if ( FAILED(hr = XAudio2Create( &_xaudio2, XAUDIO2_DEBUG_ENGINE, XAUDIO2_DEFAULT_PROCESSOR ) ) )
-#else
-    if ( FAILED(hr = XAudio2Create( &_xaudio2, 0, XAUDIO2_DEFAULT_PROCESSOR ) ) )
-#endif
-    return hr;
-	//
-	// TODO: Enumerate audio devices instead of just using the default.
-	//
-	// Mastering Voice
-	if ( FAILED(hr = _xaudio2->CreateMasteringVoice( &_masteringVoice, XAUDIO2_DEFAULT_CHANNELS,
-                            XAUDIO2_DEFAULT_SAMPLERATE, 0, 0, NULL ) ) )
-    return hr;
-	// End XAudio Setup
-#else
     // Initialize the SDL library with the audio subsystem
     _sampleRate = 44100;
     _sampleBlockSize = 1024;
@@ -3087,7 +2947,6 @@ bool AlgoRhythmia::InitializeAudio()
         wxMessageBox("Unable to allocate mixing channels: %s\n", SDL_GetError());
         exit(-1);
     }
-#endif
 
 	for( int count = 0; count < DRUM_MAX; count++ )
 	{
@@ -3099,51 +2958,13 @@ bool AlgoRhythmia::InitializeAudio()
 	for( int count = 0; count < DRUM_MAX; count++ )
 	{
 		if( _wave[count] != NULL ) delete _wave[count];
-#ifdef WIN32
-            _wave[count] = WaveFile::Load(_filenames[count].wchar_str(), false);
-#else
             _wave[count] = Mix_LoadWAV(_filenames[count].mb_str().data());
-#endif
             if( _wave[count] == NULL )
             {
                 //printf("Failed to load sample %s", _filenames[count].mb_str().data());
-#ifndef WIN32
                 wxMessageBox(wxString::Format(_("Failed to load sample %s: %s"), _filenames[count], Mix_GetError()), _("Sample Load Failed."));
-#else
-                wxMessageBox(wxString::Format(_("Failed to load sample %s"), _filenames[count]), _("Sample Load Failed."));
-#endif
                 continue;
             }
-
-
-#ifdef WIN32
-		if( FAILED(hr = _xaudio2->CreateSourceVoice( &_sourceVoice[count], _wave[count]->GetWaveFormatEx(),
-              0, XAUDIO2_DEFAULT_FREQ_RATIO, NULL, NULL, NULL ) ) )
-		{
-			wxMessageBox(wxString::Format(_("Could not load sample %s, CreateSourceVoice returned %d"), _wave[count], hr));
-		    return hr;
-		}
-
-		// TODO: FIX THIS.  THE EFFECTS MANAGER IS BROKEN BECAUSE IT REQUIRES DIRECTMUSIC.
-		//_drumControl[count]->_fxManager->Initialize( _path[count], true );
-		// We have to create the effects dialogs in order to load settings properly [the dialogs hold on/off settings for effects].
-		//if( _drumControl[count]->_fxDialog == NULL )
-		//{
-		//	_drumControl[count]->_fxDialog = new EffectsDlg(this, _drumControl[count]->_fxManager, ID_EFFECTSDIALOG, wxString::Format( "Edit Channel %d Effects", count ) );
-		//}
-		// This should not be necessary because it's one of the things that Initialize() covers.
-		//_drumControl[count]->_fxManager->DisableAllFX();
-        // We're not going to activate any effects here because they will all be disabled by
-        // default and they can be enabled one by one on the effects dialog on a per-drum basis.
-		//int effectNum;
-		//for( effectNum = 0; effectNum < eNUM_SFX; effectNum++ )
-		//{
-		//	_drumControl[count]->_fxManager->SetFXEnable( effectNum );
-		//}
-		//_drumControl[count]->_fxManager->ActivateFX();
-		// This should not be necessary since we called Initialize with true for load parameters.
-		// _drumControl[count]->_fxManager->LoadCurrentFXParameters();
-#endif
 	}
 
     return true;

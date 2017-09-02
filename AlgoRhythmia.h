@@ -24,7 +24,6 @@
 // High-performance timer.
 #ifdef WIN32
 #define INITGUID
-#include <XAudio2.h>
 #endif
 #ifdef linux
 #include <time.h>
@@ -46,7 +45,7 @@
 
 #define ID_ALGORHYTHMIA_DIALOG 11000
 #define SYMBOL_ALGORHYTHMIA_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX
-#define SYMBOL_ALGORHYTHMIA_TITLE _("AlgoRhythmia 4.2")
+#define SYMBOL_ALGORHYTHMIA_TITLE _("AlgoRhythmia 4.21")
 #define SYMBOL_ALGORHYTHMIA_IDNAME ID_ALGORHYTHMIA_DIALOG
 #define SYMBOL_ALGORHYTHMIA_SIZE wxSize(399, 299)
 #define SYMBOL_ALGORHYTHMIA_POSITION wxDefaultPosition
@@ -429,7 +428,6 @@ public:
 	void OnFx7Click( wxCommandEvent& event );
 	void OnFx8Click( wxCommandEvent& event );
 	void OnDivisionSelected( wxCommandEvent& event );
-    void OnPurchase( wxCommandEvent& event );
     void LoadPattern( wxString& filename );
     void SavePattern( wxString& filename );
     int PrepareMIDIBuffer( char* buffer, int bufferSize );    
@@ -455,29 +453,21 @@ private:
 	int _periodicmutatemeasures; // Number of measures to wait before mutating.
 	double _mutateRate;	// Mutation rate.
 	double _swingRatio;	// Swing ratio.
+    Mix_Chunk* _wave[DRUM_MAX];
 #ifdef WIN32
-	WaveFile* pLoader;
-	WaveFile* _wave[DRUM_MAX];
 	LARGE_INTEGER _currtime;
 	LARGE_INTEGER _lasttime;
 	LARGE_INTEGER _tickspersec;
-	// Global Variables:
-	IXAudio2* _xaudio2;
-	IXAudio2MasteringVoice* _masteringVoice;
-	IXAudio2SourceVoice* _sourceVoice[DRUM_MAX];
-	IXAudio2SubmixVoice* _path[DRUM_MAX];
 #endif
 #ifdef linux
     // SDL implementation to substitute for XAudio2.
     struct timespec _currtime;
     struct timespec _lasttime;
-    Mix_Chunk* _wave[DRUM_MAX];
 #endif
 #ifdef __APPLE__
     clock_serv_t _clock;
     mach_timespec_t _currtime;
     mach_timespec_t _lasttime;
-    Mix_Chunk* _wave[DRUM_MAX];
 #endif
     AboutDlg* _aboutDlg;
     DrumDialog* _measureEditDlg;

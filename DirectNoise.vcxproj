@@ -74,7 +74,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules />
     <CodeAnalysisRuleAssemblies />
-    <LibraryPath>F:\lib\rtmidi-2.1.0\lib;C:\Users\Xangis\code\AudioFile;C:\Users\Xangis\code\wxAudioControls\Debug;F:\lib\wxWidgets-3.0.2\lib\vc_lib;F:\lib\libsndfile-1.0.27\lib;$(LibraryPath);$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
+    <LibraryPath>F:\lib\SDL2_mixer-2.0.0\lib\x86;F:\lib\SDL_2-2.0.3\lib\x86;F:\lib\rtmidi-2.1.0\lib;C:\Users\Xangis\code\AudioFile;C:\Users\Xangis\code\wxAudioControls\Debug;F:\lib\wxWidgets-3.0.2\lib\vc_lib;F:\lib\libsndfile-1.0.27\lib;$(LibraryPath);$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
     <IncludePath>F:\lib\SDL_2-2.0.3\include;F:\lib\SDL2_mixer-2.0.0\include;F:\lib\rtmidi-2.1.0;C:\Users\Xangis\code\AudioFile;F:\lib\libsndfile-1.0.27\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;F:\lib\wxWidgets-3.0.2\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -109,7 +109,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>F:\Zeta Centauri\trunk\lib\xercesc-2.6;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>USE_XAUDIO;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -118,7 +118,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>rtmidid.lib;winmm.lib;wxmsw30ud_core.lib;wxmsw30ud_adv.lib;wxbase30ud_xml.lib;wxbase30ud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comctl32.lib;rpcrt4.lib;wxtiff.lib;wxpng.lib;wxjpeg.lib;wxzlib.lib;AudioFiled.lib;libsndfile-1.lib;wxAudioControlsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2_mixer.lib;rtmidid.lib;winmm.lib;wxmsw30ud_core.lib;wxmsw30ud_adv.lib;wxbase30ud_xml.lib;wxbase30ud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comctl32.lib;rpcrt4.lib;wxtiff.lib;wxpng.lib;wxjpeg.lib;wxzlib.lib;AudioFiled.lib;libsndfile-1.lib;wxAudioControlsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)AlgoRhythmia.exe</OutputFile>
       <AdditionalLibraryDirectories>F:\Zeta Centauri\trunk\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
