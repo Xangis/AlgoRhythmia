@@ -35,9 +35,78 @@ included in AlgoRhythmia thanks massive growth of the free sample library in 201
 This requires wxWidgets 3.0, libportaudio-dev, and libsndfile-dev. On Windows it
 uses DirectX, and on Linux it theoeretically used libasound2-dev.
 
+## Changelog
+
+### Changes Still Needed
+
+Windows version needs to be ported to SDL.
+
+### Changes from AlgoRhtyhmia Version 4.1 to 4.2 (October 2016):
+
+- Replaced WinMM MIDI engine with RtMidi engine for cross-platform compatibility.
+- Ported XAudio2 to SDL for OSX version (Windows version still uses XAudio2).
+- Help button for OSX to launch PDF manual.
+
+### Changes from AlgoRhythmia Version 4.1 to 4.2 (October 2016):
+
+- Improved MIDI file writing -- includes note off messages and always writes to channel 10.
+- Switched to SDL for OSX and Linux. (should switch for Windows too, but need to verify).
+- Switched to RtMidi for MIDI messages.
+- Default MIDI output channel is now 10.
+
+### Changes from AlgoRhythmia Version 4 to 4.1 (August 2016):
+
+- Replaced entire sample set of 76 files with one ENTIRELY from freewavesamples.com,
+with 100 samples, AND with names identical to those from FWS instead of those weird
+DOS-style filenames we had. Also adjusted default starting drum sounds.
+- Updated libsndfile and wxWidgets libraries.
+- Added General MIDI Level 2 drum notes to MIDI note list.
+- Bug fixes related to sample loading and voice allocation.
+- Bug fixes in pattern save and load.
+
+### Changes from AlgoRhythmia Version 3 to 4:
+
+- Replaced the DirectMusic sound generation engine with XAudio2. DirectMusic
+is no longer supported by Microsoft and does not work on 64-bit systems. 
+AlgoRhythmia 4 now works on 64-bit Windows.
+- User interface was modified to properly handle the 125% zoom level on Windows 
+7 and Vista.
+- Added more samples to the full version.
+
+Changes version 2 to 3:
+
+- Added Fibonacci, Sierpinski, and Sierpinski inverted to base pattern list.
+- Converted application to use wxWidgets.
+- Kick sample (first sample) also plays when 'kick on first beat' is selected.
+- Added save and load of settings.
+- Added ability to edit individual drum notes on a grid.
+- Added swing setting.
+- Added volume setting for individual samples which affects both MIDI and sample volume.
+- Added 58 samples recorded from the Yamaha TG-55 tone generator.
+- Now accepts mutation rate values of 0.
+- Added ability to save to MIDI.
+- Added 8 different effect types: Chorus, compression, distortion, echo, flange, 
+gargle, parameteric eq, and reverb
+
+Changes version 1 to 2:
+
+- Added invert buttons.
+- Changed from fixed drum sounds to user-selectable drum sounds.
+- Switched to a multithreaded model so that changes could be made to settings 
+without causing playback to stop or stutter.
+- Added sample playback.
+- Added ability to select MIDI channel and device.
+- Added mutation every X bars.
+- Added display and hand-editing of pattern data.
+- Added ability to vary volume to make pattern sound vaguely more "Human".
+- Added "emphasize beats" option to emphasize the one beat of each measure.
+   Technically it actually de-emphasizes every other beat.
+- Added base patterns so that drum beats could be initialized with "normal"
+   sounding beats and tweaked from there.
+
 ## Problems
 
-On Windows, the app thrives. It requires AudioFile and wxAudioControls
+On Windows, the app thrives. It requires AudioFile and wxAudioControls.
 
 On Linux, the app probably does not build, and if it did, would not produce any sound. That's
 because the Windows version uses XAudio2 and the Linux version doesn't have a replacement
