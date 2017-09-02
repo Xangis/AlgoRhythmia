@@ -229,7 +229,7 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="DirectNoise.rc" />
+    <ResourceCompile Include="AlgoRhythmia.rc" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Changes.txt" />
