@@ -2957,7 +2957,11 @@ bool AlgoRhythmia::InitializeAudio()
 	// _filenames is populated in CreateControls().
 	for( int count = 0; count < DRUM_MAX; count++ )
 	{
-		if( _wave[count] != NULL ) delete _wave[count];
+            if( _wave[count] != NULL )
+            {
+                delete _wave[count];
+                _wave[count] = NULL;
+            }
             _wave[count] = Mix_LoadWAV(_filenames[count].mb_str().data());
             if( _wave[count] == NULL )
             {
