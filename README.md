@@ -1,7 +1,10 @@
 # AlgoRhythmia
 
 AlgoRhythmia is a programmable virtual drum machine based on algorhythmic and
-evolving beats. It was originally available at http://zetacentauri.com
+evolving beats. 
+
+It was originally available at http://zetacentauri.com and was downloaded more 
+than 50,000 times before being open-sourced.
 
 Main Window:
 
@@ -139,15 +142,18 @@ without causing playback to stop or stutter.
 - Added base patterns so that drum beats could be initialized with "normal"
    sounding beats and tweaked from there.
 
-## Problems
+## Known Issues
 
-On Windows, the app thrives. It requires AudioFile and wxAudioControls.
+Individual sample .wav file volume controls are not working right now, but MIDI
+volume controls do work.
 
-On Linux, the app probably does not build, and if it did, would not produce any sound. That's
-because the Windows version uses XAudio2 and the Linux version doesn't have a replacement
-(that code is just commented out).
+## Development Status
 
-In the installer version, saving and loading of data files does not currently work.
-The app uses XML files to save and load data, but they aren't written correctly.
+I currently maintain this application and am willing to accept pull requests if
+you have improvements to contribute.
 
-This was recently fixed in SigmaTizm, so should be fixable in AlgoRhythmia.
+Since this has only been developed on my own machines, some of the build process
+and environment settings may be specific to how I do things, so there is 
+probably room to contribute build process improvements.
+
+There are not currently any new features planned.
