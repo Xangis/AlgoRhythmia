@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        AlgoRhythmia.h
-// Purpose:     
-// Author:      Jason Champion
-// Modified by: 
-// Created:     26/09/2006 04:34:30
-// RCS-ID:      
-// Copyright:   Copyright (c) 2006 Zeta Centauri
-// Licence:     
-/////////////////////////////////////////////////////////////////////////////
-
 #ifndef _ALGORHYTHMIA_H_
 #define _ALGORHYTHMIA_H_
 

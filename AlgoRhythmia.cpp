@@ -1,13 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        AlgoRhythmia.cpp
-// Purpose:     
-// Author:      Jason Champion
-// Modified by: 
-// Created:     26/09/2006 04:34:30
-// RCS-ID:      
-// Copyright:   Copyright (c) 2006 Zeta Centauri
-// Licence:     
-/////////////////////////////////////////////////////////////////////////////
 #include "AlgoRhythmia.h"
 #include "drumgrid.h"
 #include "wx/aboutdlg.h"
@@ -2070,11 +2060,11 @@ void AlgoRhythmia::OnAboutClick( wxCommandEvent& event )
     wxAboutDialogInfo info;
     info.SetName(_("AlgoRhythmia"));
     info.SetLicense(_("AlgoRhythmia is distributed under the terms of the MIT license."));
-    info.SetVersion(_("4.21"));
-    info.SetCopyright(_("(c) 2005-2017 Jason Champion"));
+    info.SetVersion(_("4.22"));
+    info.SetCopyright(_("(c) 2005-2018 Jason Champion"));
     info.AddDeveloper(_("Jason Champion"));
     info.SetIcon(_icon);
-    info.SetWebSite(_("http://zetacentauri.com"));
+    info.SetWebSite(_("https://github.com/Xangis/AlgoRhythmia"));
     info.SetDescription(_("AlgoRhythmia uses the wxWidgets, SDL2, SDL2_mixer, and libsndfile libraries."));
 
     wxAboutBox(info);
@@ -3065,8 +3055,11 @@ void AlgoRhythmia::SelectMidiInputDevice(int number)
         _midiInDevice->openPort(number);
         _midiInDevice->setCallback(MidiMessageHandler, this);
     }
-    //catch( RtMidiError &error )
+#ifndef RtMidiError
+    catch( RtError &error )
+#else
     catch( RtMidiError &error )
+#endif
     {
         //wxMessageBox(wxString::FromAscii(error.what()));
         wxMessageBox(wxString::FromAscii(error.what()));
@@ -3086,7 +3079,11 @@ void AlgoRhythmia::SelectMidiOutputDevice(int number)
         _midiOutDevice->closePort();
         _midiOutDevice->openPort(number);
     }
+#ifndef RtMidiError
+    catch( RtError &error )
+#else
     catch( RtMidiError &error )
+#endif
     {
         wxMessageBox(wxString::FromAscii(error.what()));
     }

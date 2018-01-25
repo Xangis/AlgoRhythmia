@@ -1,9 +1,9 @@
 # AlgoRhythmia
 
-AlgoRhythmia is a programmable virtual drum machine based on algorhythmic and
+AlgoRhythmia is a programmable virtual drum machine based on algorithmic and
 evolving beats. 
 
-It was originally available at http://zetacentauri.com and was downloaded more 
+It was originally available on the Zeta Centauri website and was downloaded more 
 than 50,000 times before being open-sourced.
 
 Main Window:
@@ -43,7 +43,7 @@ It also requires the following libraries:
 - AudioFile via https://github.com/Xangis/AudioFile
 - wxAudioControls via https://github.com/Xangis/wxAudioControls
 
-Each of these should be checked out into directories adjacent to Sigmatizm (same parent).
+Each of these should be checked out into directories adjacent to AlgoRhythmia (same parent).
 
 ### Windows
 
@@ -54,6 +54,10 @@ In addition, you'll need to copy SDL2.dll and SDL2_mixer.dll into the directory 
 run the application from (Debug, or Release, for example).
 
 ### Linux
+
+You'll need libsndfile-dev in order to build along with the SDL and rtmidi libraries.
+
+sudo apt-get install libsndfile-dev libsdl2-dev libsdl2-mixer-dev librtmidi-dev
 
 You may need to edit paths in the Makefile.linux makefile in order to build. To build, run
 make -f Makefile.linux
@@ -70,9 +74,9 @@ some of the process of code signing.
 
 ## Changelog
 
-### Changes Still Needed
-
-Windows version needs to be ported to SDL.
+### Changes from AlgoRhythmia Version 4.21 to 4.22 (January 2018):
+- Changed about box to point to GitHub.
+- Make app work with older versions of RtMidi (like that in the Ubuntu 16.04 repository).
 
 ### Changes from AlgoRhythmia Version 4.2 to 4.21 (September 2017):
 

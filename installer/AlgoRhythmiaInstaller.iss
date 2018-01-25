@@ -7,16 +7,16 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{10BE0872-DCBB-4680-AD19-F270B41D33B7}
 AppName=AlgoRhythmia
-AppVerName=AlgoRhythmia 4.21
+AppVerName=AlgoRhythmia 4.22
 AppPublisher=Jason Champion
-AppPublisherURL=http://zetacentauri.com
-AppSupportURL=http://zetacentauri.com
-AppUpdatesURL=http://zetacentauri.com
+AppPublisherURL=https://github.com/Xangis/AlgoRhythmia
+AppSupportURL=https://github.com/Xangis/AlgoRhythmia
+AppUpdatesURL=https://github.com/Xangis/AlgoRhythmia
 DefaultDirName={pf}\AlgoRhythmia
 DefaultGroupName=AlgoRhythmia
 LicenseFile=C:\Users\Xangis\code\AlgoRhythmia\LICENSE
 OutputDir=C:\Users\Xangis\code\AlgoRhythmia\installer
-OutputBaseFilename=AlgoRhythmia4.21Setup
+OutputBaseFilename=AlgoRhythmia4.22Setup
 Compression=lzma
 SolidCompression=yes
 SetupIconFile=C:\Users\Xangis\code\AlgoRhythmia\Release\algo.ico
@@ -44,7 +44,7 @@ Source: "C:\Users\Xangis\code\AlgoRhythmia\installer\vcredist2010_x86.exe"; Dest
 Name: "{group}\AlgoRhythmia"; Filename: "{app}\AlgoRhythmia.exe"; WorkingDir: "{app}"
 Name: "{group}\AlgoRhythmia Manual"; Filename: "{app}\AlgoRhythmia Manual.pdf"; WorkingDir: "{app}"
 Name: "{group}\Free Wave Samples Website"; Filename: "http://freewavesamples.com"
-Name: "{group}\{cm:ProgramOnTheWeb,AlgoRhythmia}"; Filename: "http://zetacentauri.com/software_algorhythmia.htm"
+Name: "{group}\{cm:ProgramOnTheWeb,AlgoRhythmia}"; Filename: "https://github.com/Xangis/AlgoRhythmia"
 Name: "{commondesktop}\AlgoRhythmia"; Filename: "{app}\AlgoRhythmia.exe"; Tasks: desktopicon; WorkingDir: "{app}"
 Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\AlgoRhythmia"; Filename: "{app}\AlgoRhythmia.exe"; Tasks: quicklaunchicon; WorkingDir: "{app}"
 
