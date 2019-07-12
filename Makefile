@@ -10,9 +10,9 @@ PROGRAM = installer/AlgoRhythmia.app/Contents/MacOS/AlgoRhythmia
 # Directory containing library portions of code.
 INCLUDEDIR = ../../lib/libsndfile-1.0.27/include/
 INCLUDEDIR2 = ../AudioFile
-INCLUDEDIR3 = ../../lib/rtmidi-2.1.0
-INCLUDEDIR4 = ../../lib/SDL_2-2.0.3/include
-INCLUDEDIR5 = ../../lib/SDL2_mixer-2.0.1
+INCLUDEDIR3 = ../../lib/rtmidi-4.0.0
+INCLUDEDIR4 = ../../lib/SDL2-2.0.9/include
+INCLUDEDIR5 = ../../lib/SDL2_mixer-2.0.4
 LIBDIR = ../../lib/libsndfile-1.0.27/lib/
 
 # Object files
