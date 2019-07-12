@@ -3055,11 +3055,7 @@ void AlgoRhythmia::SelectMidiInputDevice(int number)
         _midiInDevice->openPort(number);
         _midiInDevice->setCallback(MidiMessageHandler, this);
     }
-#ifndef RtMidiError
-    catch( RtError &error )
-#else
     catch( RtMidiError &error )
-#endif
     {
         //wxMessageBox(wxString::FromAscii(error.what()));
         wxMessageBox(wxString::FromAscii(error.what()));
@@ -3079,11 +3075,7 @@ void AlgoRhythmia::SelectMidiOutputDevice(int number)
         _midiOutDevice->closePort();
         _midiOutDevice->openPort(number);
     }
-#ifndef RtMidiError
-    catch( RtError &error )
-#else
     catch( RtMidiError &error )
-#endif
     {
         wxMessageBox(wxString::FromAscii(error.what()));
     }

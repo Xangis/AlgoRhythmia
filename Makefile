@@ -8,12 +8,12 @@ WX_CONFIG := wx-config
 PROGRAM = installer/AlgoRhythmia.app/Contents/MacOS/AlgoRhythmia
 
 # Directory containing library portions of code.
-INCLUDEDIR = ../../lib/libsndfile-1.0.27/include/
+INCLUDEDIR = ../../lib/libsndfile-1.0.28/src/
 INCLUDEDIR2 = ../AudioFile
 INCLUDEDIR3 = ../../lib/rtmidi-4.0.0
 INCLUDEDIR4 = ../../lib/SDL2-2.0.9/include
 INCLUDEDIR5 = ../../lib/SDL2_mixer-2.0.4
-LIBDIR = ../../lib/libsndfile-1.0.27/lib/
+LIBDIR = ../../lib/libsndfile-1.0.28/lib/
 
 # Object files
 OBJECTS = AboutDlg.o DrumControl.o EffectsDlg.o PresetDrumPattern.o SoundFxManager.o ../AudioFile/wavefile.o ../wxAudioControls/wxSettingsFile.o AlgoRhythmiaApp.o drumgrid.o AlgoRhythmia.o $(INCLUDEDIR3)/RtMidi.o
