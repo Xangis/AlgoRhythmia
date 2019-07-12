@@ -13,7 +13,8 @@ INCLUDEDIR2 = ../AudioFile
 INCLUDEDIR3 = ../../lib/rtmidi-4.0.0
 INCLUDEDIR4 = ../../lib/SDL2-2.0.9/include
 INCLUDEDIR5 = ../../lib/SDL2_mixer-2.0.4
-LIBDIR = ../../lib/libsndfile-1.0.28/lib/
+LIBDIR = ../../lib/libsndfile-1.0.28/src/.libs/
+LIBDIR2 = ../../lib/SDL2_mixer-2.0.4/build/.libs/
 
 # Object files
 OBJECTS = AboutDlg.o DrumControl.o EffectsDlg.o PresetDrumPattern.o SoundFxManager.o ../AudioFile/wavefile.o ../wxAudioControls/wxSettingsFile.o AlgoRhythmiaApp.o drumgrid.o AlgoRhythmia.o $(INCLUDEDIR3)/RtMidi.o
@@ -30,7 +31,7 @@ CXX = $(shell $(WX_CONFIG) --cxx) -O3
 all:    $(PROGRAM)
 
 $(PROGRAM):	$(OBJECTS)
-	$(CXX) -o $(PROGRAM) $(OBJECTS) -L$(LIBDIR) `$(WX_CONFIG) --libs` -lportaudio -lpthread -lsndfile -lSDL2 -lSDL2_mixer -framework CoreMidi -framework CoreAudio -framework CoreFoundation
+	$(CXX) -o $(PROGRAM) $(OBJECTS) -L$(LIBDIR) -L$(LIBDIR2) `$(WX_CONFIG) --libs` -lpthread -lsndfile -lSDL2 -lSDL2_mixer -framework CoreMidi -framework CoreAudio -framework CoreFoundation
 
 clean: 
 	rm -f *.o ../wxAudioControls/*.o $(PROGRAM)
