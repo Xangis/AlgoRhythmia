@@ -10,5 +10,7 @@ cp /usr/local/lib/libwx_osx_cocoau_qa-3.1.dylib AlgoRhythmia.app/Contents/Framew
 cp /usr/local/lib/libwx_baseu_xml-3.1.dylib AlgoRhythmia.app/Contents/Frameworks/
 cp /usr/local/lib/libwx_osx_cocoau_xrc-3.1.dylib AlgoRhythmia.app/Contents/Frameworks/
 cp /usr/local/lib/libwx_baseu-3.1.dylib AlgoRhythmia.app/Contents/Frameworks/
+cp ../../../lib/SDL2-2.0.9/build/.libs/libSDL2-2.0.0.dylib AlgoRhythmia.app/Contents/Frameworks/
+cp ../../../lib/SDL2_mixer-2.0.4/build/.libs/libSDL2_mixer-2.0.0.dylib AlgoRhythmia.app/Contents/Frameworks/
 cp ../../../lib/SDL2_ttf-2.0.15/.libs/libSDL2_ttf-2.0.0.dylib AlgoRhythmia.app/Contents/Frameworks/
-cp ../../..//lib/rtmidi-4.0.0/.libs/librtmidi.5.dylib AlgoRhythmia.app/Contents/Frameworks/
+cp ../../../lib/rtmidi-4.0.0/.libs/librtmidi.5.dylib AlgoRhythmia.app/Contents/Frameworks/
