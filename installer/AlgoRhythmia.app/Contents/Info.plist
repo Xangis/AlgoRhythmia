@@ -2,11 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-        <key>LSEnvironment</key>
-        <dict>
-           <key>LSMinimumSystemVersion</key>
-           <string>10.11.0</string>
-        </dict>
+    <key>LSMinimumSystemVersion</key>
+    <string>10.11.0</string>
 	<key>CFBundleIconFile</key>
 	<string>algorhythmia.icns</string>
 	<key>CFBundlePackageType</key>
@@ -14,19 +11,19 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.zetacentauri.AlgoRhythmia</string>
 	<key>CFBundleVersion</key>
-	<string>4.2.3</string>
+	<string>4.2.4</string>
 	<key>CFBundleSignature</key>
 	<string>ttxt</string>
 	<key>CFBundleExecutable</key>
-        <string>AlgoRhythmia</string>
+    <string>AlgoRhythmia</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
 	<string>4.2</string>
-        <key>LSApplicationCategoryType</key>
-        <string>public.app-category.music</string>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.music</string>
 	<key>CFBundleName</key>
 	<string>Algorhythmia</string>
 	<key>NSHumanReadableCopyright</key>
@@ -44,6 +41,8 @@
 			<string>AlgoRhythmia file</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+            <key>LSHandlerRank</key>
+            <string>Owner</string>
 		</dict>
 	</array>
 </dict>

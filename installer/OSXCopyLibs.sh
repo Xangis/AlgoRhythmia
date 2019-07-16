@@ -14,3 +14,6 @@ cp ../../../lib/SDL2-2.0.9/build/.libs/libSDL2-2.0.0.dylib AlgoRhythmia.app/Cont
 cp ../../../lib/SDL2_mixer-2.0.4/build/.libs/libSDL2_mixer-2.0.0.dylib AlgoRhythmia.app/Contents/Frameworks/
 cp ../../../lib/SDL2_ttf-2.0.15/.libs/libSDL2_ttf-2.0.0.dylib AlgoRhythmia.app/Contents/Frameworks/
 cp ../../../lib/rtmidi-4.0.0/.libs/librtmidi.5.dylib AlgoRhythmia.app/Contents/Frameworks/
+# Not libs, but this is when we should copy samples.
+mkdir -p AlgoRhythmia.app/Contents/Resources/
+cp -R ../samples AlgoRhythmia.app/Contents/Resources/
