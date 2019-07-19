@@ -180,7 +180,7 @@
 
 class DrumDialog;
 
-class AlgoRhythmia : public wxDialog, public wxThread, public MidiSettingsInterface
+class AlgoRhythmia : public wxFrame, public wxThread, public MidiSettingsInterface
 {
     DECLARE_DYNAMIC_CLASS( AlgoRhythmia )
     DECLARE_EVENT_TABLE()

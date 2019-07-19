@@ -18,9 +18,9 @@
 
 #define SAFE_RELEASE(p)      { if(p) { (p)->Release(); (p)=NULL; } }
 
-IMPLEMENT_DYNAMIC_CLASS( AlgoRhythmia, wxDialog )
+IMPLEMENT_DYNAMIC_CLASS( AlgoRhythmia, wxFrame )
 
-BEGIN_EVENT_TABLE( AlgoRhythmia, wxDialog )
+BEGIN_EVENT_TABLE( AlgoRhythmia, wxFrame )
     EVT_CLOSE( AlgoRhythmia::OnCloseWindow )
     EVT_RADIOBUTTON( ID_DRUM1_ON, AlgoRhythmia::OnDrum1OnSelected )
     EVT_RADIOBUTTON( ID_DRUM1_OFF, AlgoRhythmia::OnDrum1OffSelected )
@@ -135,6 +135,8 @@ BEGIN_EVENT_TABLE( AlgoRhythmia, wxDialog )
 	EVT_BUTTON( ID_FX6, AlgoRhythmia::OnFx6Click )
 	EVT_BUTTON( ID_FX7, AlgoRhythmia::OnFx7Click )
 	EVT_BUTTON( ID_FX8, AlgoRhythmia::OnFx8Click )
+    EVT_MENU( wxID_ABOUT, AlgoRhythmia::OnAboutClick )
+    EVT_MENU( wxID_HELP, AlgoRhythmia::OnHelpClick )
 END_EVENT_TABLE()
 
 #ifdef WIN32
@@ -220,7 +222,7 @@ bool AlgoRhythmia::Create( wxWindow* parent, wxWindowID id, const wxString& capt
 	_step = 0; // Keep track of which sequencer step we are on.
 	_timesignature = 16; // Initial time signature is 4/4
     SetExtraStyle(GetExtraStyle()|wxWS_EX_BLOCK_EVENTS);
-    wxDialog::Create( parent, id, caption, pos, size, style );
+    wxFrame::Create( parent, id, caption, pos, size, style );
     CreateControls();
     GetSizer()->Fit(this);
     GetSizer()->SetSizeHints(this);
@@ -274,9 +276,16 @@ void AlgoRhythmia::CreateControls()
     AlgoRhythmia* itemDialog1 = this;
 
 #ifdef __APPLE__
-        wxString folderName = wxString::Format(_("%s/samples/"), wxStandardPaths::Get().GetResourcesDir());
+    wxString folderName = wxString::Format(_("%s/samples/"), wxStandardPaths::Get().GetResourcesDir());
+    // Create menu bar (for Mac)
+    wxMenu* helpMenu = new wxMenu();
+    helpMenu->Append(wxID_HELP);
+    helpMenu->Append(wxID_ABOUT);
+    wxMenuBar* menuBar = new wxMenuBar();
+    menuBar->Append( helpMenu, "&Help" );
+    SetMenuBar(menuBar);
 #else
-        wxString folderName = _("./samples/");
+    wxString folderName = _("./samples/");
 #endif
 	_filenames[0] = wxString::Format(_("%sKick-Drum-1.wav"), folderName);
 	_filenames[1] = wxString::Format(_("%sSnare-Drum-1.wav"), folderName);
@@ -2059,12 +2068,12 @@ void AlgoRhythmia::OnAboutClick( wxCommandEvent& event )
 	// Show about box.
     wxAboutDialogInfo info;
     info.SetName(_("AlgoRhythmia"));
-    info.SetLicense(_("AlgoRhythmia is distributed under the terms of the MIT license."));
+    info.SetLicense(_("AlgoRhythmia is copyrighted software and requires a license to use."));
     info.SetVersion(_("4.22"));
-    info.SetCopyright(_("(c) 2005-2018 Jason Champion"));
+    info.SetCopyright(_("(c) 2005-2019 Jason Champion"));
     info.AddDeveloper(_("Jason Champion"));
     info.SetIcon(_icon);
-    info.SetWebSite(_("https://github.com/Xangis/AlgoRhythmia"));
+    info.SetWebSite(_("https://zetacentauri.com/software_algorhythmia.htm"));
     info.SetDescription(_("AlgoRhythmia uses the wxWidgets, SDL2, SDL2_mixer, and libsndfile libraries."));
 
     wxAboutBox(info);
